@@ -33,7 +33,7 @@ Vivian Liu
 ## Notes
 
 - From Piazza clarifications
-  - Ucross goals
+  - Uncross goals
   - Tasks roll over at 2am, not midnight. Don’t need to continuously watch the date, just need to check the date and time once when the app launches
   - Probably don’t need a user story for speech to text since it’s built into the keyboard. Keep things simple and follow the “Android way”
 - Starter code and GitHub project template released
