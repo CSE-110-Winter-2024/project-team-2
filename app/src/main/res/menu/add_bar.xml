@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/add_bar_menu_swap_views"
+        android:title="Swap Views"
+        android:icon="@drawable/add"
+        android:orderInCategory="1"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+</menu>

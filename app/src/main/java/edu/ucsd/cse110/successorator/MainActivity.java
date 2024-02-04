@@ -1,8 +1,11 @@
 package edu.ucsd.cse110.successorator;
 
-import android.app.Activity;
-import android.os.Bundle;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,8 +17,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
-        view.placeholderText.setText(R.string.hello_world);
+        view.placeholderText.setText(R.string.default_text);
 
         setContentView(view.getRoot());
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        var itemId = item.getItemId();
+
+        if (itemId == R.id.add_bar_menu_swap_views){
+            setContentView(R.layout.enter_goal);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

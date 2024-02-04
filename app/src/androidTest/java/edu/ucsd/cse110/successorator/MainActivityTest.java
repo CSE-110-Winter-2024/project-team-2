@@ -1,10 +1,10 @@
 package edu.ucsd.cse110.successorator;
 
-import static androidx.test.core.app.ActivityScenario.launch;
+//import static androidx.test.core.app.ActivityScenario.launch;
 
 import static junit.framework.TestCase.assertEquals;
 
-import android.content.res.Resources;
+//import android.content.res.Resources;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
@@ -31,7 +31,7 @@ public class MainActivityTest {
                 var rootView = activity.findViewById(R.id.root);
                 var binding = ActivityMainBinding.bind(rootView);
 
-                var expected = activity.getString(R.string.hello_world);
+                var expected = activity.getString(R.string.default_text);
                 var actual = binding.placeholderText.getText();
 
                 assertEquals(expected, actual);
