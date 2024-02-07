@@ -10,7 +10,7 @@ public class GoalTest {
         for( int i = 0; i < 100; i++){
             String theGoal = "Test goal " + i;
             Goal goal = new Goal(0, theGoal, 0);
-            assertEquals(goal.getGoal(), theGoal);
+            assertEquals(goal.getGoalText(), theGoal);
         }
     }
 

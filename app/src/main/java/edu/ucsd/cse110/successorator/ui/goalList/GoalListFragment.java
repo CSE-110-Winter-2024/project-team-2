@@ -22,7 +22,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 public class GoalListFragment  extends Fragment{
     private FragmentGoalListBinding view;
     private MainViewModel activityModel;
-    private CardListAdapter adapter;
+    private GoalListAdapter adapter;
 
     /**
      * Required empty public constructor
@@ -58,7 +58,7 @@ public class GoalListFragment  extends Fragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         //Initialize the Adapter (with empty list for now)
-        this.adapter = new CardListAdapter(requireContext(), List.of());
+        this.adapter = new GoalListAdapter(requireContext(), List.of());
         activityModel.getOrderedGoals().observe(cards -> {
             if (cards == null) return;
             adapter.clear();

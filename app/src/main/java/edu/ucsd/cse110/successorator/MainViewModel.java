@@ -18,7 +18,7 @@ public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
 
     // UI state
-    private final SimpleSubject<List<Integer>> cardOrdering;
+    private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -34,31 +34,31 @@ public class MainViewModel extends ViewModel {
         this.goalRepository = goalRepository;
 
         // Create the observable subjects.
-        this.cardOrdering = new SimpleSubject<>();
+        this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
 
-        // When the list of cards changes (or is first loaded), reset the ordering.
-        goalRepository.findAll().observe(cards -> {
-            if (cards == null) return; // not ready yet, ignore
+        // When the list of goals changes (or is first loaded), reset the ordering.
+        goalRepository.findAll().observe(goals -> {
+            if (goals == null) return; // not ready yet, ignore
 
             var ordering = new ArrayList<Integer>();
-            for (int i = 0; i < cards.size(); i++) {
+            for (int i = 0; i < goals.size(); i++) {
                 ordering.add(i);
             }
-            cardOrdering.setValue(ordering);
+            goalOrdering.setValue(ordering);
         });
 
-        // when ordering changes, update the ordered cards
-        cardOrdering.observe(ordering -> {
+        // when ordering changes, update the ordered goals
+        goalOrdering.observe(ordering -> {
             if(ordering == null) return;
 
-            var cards = new ArrayList<Goal>();
+            var goals = new ArrayList<Goal>();
             for(var id : ordering) {
-                var card = goalRepository.find(id).getValue();
-                if(card == null) return;
-                cards.add(card);
+                var goal = goalRepository.find(id).getValue();
+                if(goal == null) return;
+                goals.add(goal);
             }
-            this.orderedGoals.setValue(cards);
+            this.orderedGoals.setValue(goals);
         });
 
     }

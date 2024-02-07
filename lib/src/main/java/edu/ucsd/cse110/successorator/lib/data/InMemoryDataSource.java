@@ -29,14 +29,14 @@ public class InMemoryDataSource {
 
     public InMemoryDataSource() { }
 
-    public final static List<Goal> DEFAULT_CARDS = List.of();
+    public final static List<Goal> DEFAULT_GOALS = List.of();
 
     /**
      * @return data from default cards
      */
     public static InMemoryDataSource fromDefault() {
         var data = new InMemoryDataSource();
-        data.putGoals(DEFAULT_CARDS);
+        data.putGoals(DEFAULT_GOALS);
         return data;
     }
 
@@ -145,7 +145,7 @@ public class InMemoryDataSource {
         maxSortOrder = goals.values().stream()
                 .map(Goal::getSortOrder)
                 .max(Integer::compareTo)
-                .orElse((Integer) 0);
+                .orElse(0);
     }
 
     /**

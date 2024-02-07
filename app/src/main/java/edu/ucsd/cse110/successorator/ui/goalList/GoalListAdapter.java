@@ -17,8 +17,8 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 /**
  * This class maintains the list of goals
  */
-public class CardListAdapter extends ArrayAdapter<Goal> {
-    public CardListAdapter(Context context, List<Goal> goals) {
+public class GoalListAdapter extends ArrayAdapter<Goal> {
+    public GoalListAdapter(Context context, List<Goal> goals) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -46,7 +46,7 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         }
 
         // Populate the view with the flashcard's data.
-        binding.goalTextView.setText(goal.getGoal());
+        binding.goalTextView.setText(goal.getGoalText());
 
         return binding.getRoot();
     }

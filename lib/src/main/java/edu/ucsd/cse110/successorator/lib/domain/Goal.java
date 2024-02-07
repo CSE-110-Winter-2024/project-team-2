@@ -5,18 +5,18 @@ import androidx.annotation.NonNull;
 import java.util.Objects;
 
 public class Goal {
-    public final @NonNull String goal;
+    public final @NonNull String goalText;
     public final @NonNull Integer id;
     public final @NonNull Integer sortOrder;
 
-    public Goal(@NonNull Integer id, @NonNull String goal, @NonNull Integer sortOrder ) {
-        this.goal = goal;
+    public Goal(@NonNull Integer id, @NonNull String goalText, @NonNull Integer sortOrder ) {
+        this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
     }
 
-    public @NonNull String getGoal() {
-        return goal;
+    public @NonNull String getGoalText() {
+        return goalText;
     }
 
     public @NonNull Integer getId() { return id; }
@@ -29,7 +29,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goal, sortOrder);
+        return new Goal(id, goalText, sortOrder);
     }
 
     /**
@@ -38,7 +38,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goal, sortOrder);
+        return new Goal(id, goalText, sortOrder);
     }
 
     @Override
@@ -46,11 +46,11 @@ public class Goal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal1 = (Goal) o;
-        return Objects.equals(goal, goal1.goal) && Objects.equals(id, goal1.id) && Objects.equals(sortOrder, goal1.sortOrder);
+        return Objects.equals(goalText, goal1.goalText) && Objects.equals(id, goal1.id) && Objects.equals(sortOrder, goal1.sortOrder);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goal, id, sortOrder);
+        return Objects.hash(goalText, id, sortOrder);
     }
 }

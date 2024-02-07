@@ -74,7 +74,7 @@ public class AddGoalDialogFragment extends DialogFragment {
                 .setTitle("New Goal")
                 .setMessage("Please enter your goal")
                 .setView(view.getRoot())
-                .setPositiveButton("Leave Here!", this::onPositiveButtonClick) // needs text to later set check image
+                .setPositiveButton(" ", this::onPositiveButtonClick) // needs text to later set check image
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
 
