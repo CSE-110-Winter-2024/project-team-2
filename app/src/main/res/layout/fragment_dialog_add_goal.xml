@@ -14,7 +14,7 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="@string/enter_your_goal"
-        android:autofillHints=""
+        android:autofillHints="@string/enter_your_goal"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
