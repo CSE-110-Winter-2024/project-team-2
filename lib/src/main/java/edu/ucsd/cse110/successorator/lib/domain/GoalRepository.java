@@ -12,10 +12,6 @@ public class GoalRepository {
         this.dataSource = dataSource;
     }
 
-    public Integer count() {
-        return dataSource.getGoals().size();
-    }
-
     public Subject<Goal> find(int id) {
         return dataSource.getGoalSubject(id);
     }
@@ -24,12 +20,24 @@ public class GoalRepository {
         return dataSource.getAllGoalsSubject();
     }
 
-    public void save(Goal goal) {
-        dataSource.putGoal(goal);
+    /**
+     * Append goal to end of list
+     * @param goal the goal to append
+     */
+    public void append(Goal goal) {
+        dataSource.putGoal(
+                goal.withSortOrder(dataSource.getMaxSortOrder() + 1)
+        );
     }
 
-//    public void save(List<Goal> goals) {
-//        dataSource.putGoal(goals);
-//    }
 
+    // prepend code from lab 5, wasn't working
+//    public void prepend(Goal goal) {
+//        //shift all existing goals up by one.
+//        dataSource.shiftSortOrders(0, dataSource.getMaxSortOrder(), 1);
+//        // Then insert the new goal before the first one
+//        dataSource.putGoal(
+//                goal.withSortOrder(dataSource.getMinSortOrder() - 1)
+//        );
+//    }
 }

@@ -9,12 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.ui.goalList.GoalListFragment;
-import edu.ucsd.cse110.successorator.ui.noGoals.noGoalsFragment;
+import edu.ucsd.cse110.successorator.ui.goalList.dialog.AddGoalDialogFragment;
 
+/**
+ * the main activity sets up the initial screen and triggers the Alert Dialog when user taps +
+ */
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
-    private boolean isShowingGoalList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,35 +24,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view.getRoot());
     }
 
+    /**
+     * Set up options menu to include + icon in right corner
+     *
+     * @param menu The options menu in which you place your items.
+     *
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_bar, menu);
         return true;
     }
 
+    /**
+     * When the user taps the + icon in the right, trigger
+     * AlertDialog to allow user to enter new goal
+     *
+     * @param item The menu item that was selected.
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
 
         if (itemId == R.id.add_bar_manu_swap_views) {
-            swapFragments();
+            var dialogFragment = AddGoalDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "AddGoalDialogFragment");
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void swapFragments() {
-        if(!isShowingGoalList) { //change to based on if there are goals in the list later
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, noGoalsFragment.newInstance())
-                    .commit();
-
-        } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, GoalListFragment.newInstance())
-                    .commit();
-        }
-        isShowingGoalList = !isShowingGoalList;
     }
 }

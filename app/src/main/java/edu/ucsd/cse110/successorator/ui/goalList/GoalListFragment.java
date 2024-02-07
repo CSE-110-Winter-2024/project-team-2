@@ -16,15 +16,24 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 
+/**
+ * This class displays the goal list in a Fragment view
+ */
 public class GoalListFragment  extends Fragment{
     private FragmentGoalListBinding view;
     private MainViewModel activityModel;
     private CardListAdapter adapter;
 
-    public GoalListFragment () {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public GoalListFragment () { }
 
+    /**
+     * construct new fragment instance
+     *
+     * @return GoalListFragment
+     */
     public static GoalListFragment newInstance() {
         GoalListFragment fragment = new GoalListFragment();
         Bundle args = new Bundle();
@@ -32,6 +41,12 @@ public class GoalListFragment  extends Fragment{
         return fragment;
     }
 
+    /**
+     * On creation of this fragment gets the order of goals to display
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +67,18 @@ public class GoalListFragment  extends Fragment{
         });
     }
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view
+     */
     @Nullable
     @Override
     public View onCreateView(

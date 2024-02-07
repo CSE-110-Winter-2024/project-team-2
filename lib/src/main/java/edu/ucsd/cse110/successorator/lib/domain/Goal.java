@@ -23,7 +23,21 @@ public class Goal {
 
     public @NonNull Integer getSortOrder() { return sortOrder; }
 
+    /**
+     * set sortOrder of Goal
+     * @param sortOrder to set
+     * @return goal with sortOrder
+     */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
+        return new Goal(id, goal, sortOrder);
+    }
+
+    /**
+     * set id of Goal
+     * @param id to set
+     * @return goal with id
+     */
+    public @NonNull Goal withId(Integer id) {
         return new Goal(id, goal, sortOrder);
     }
 

@@ -14,6 +14,9 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
+/**
+ * This class maintains the list of goals
+ */
 public class CardListAdapter extends ArrayAdapter<Goal> {
     public CardListAdapter(Context context, List<Goal> goals) {
         // This sets a bunch of stuff internally, which we can access

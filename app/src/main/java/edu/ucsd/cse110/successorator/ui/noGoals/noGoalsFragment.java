@@ -13,15 +13,22 @@ import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
 
-
+/**
+ * This class is currently not in use, but will display the defualt no goals text on the screen as a fragment
+ */
 public class noGoalsFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentNoGoalsBinding view;
 
-    public noGoalsFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Required empty public constructor
+     */
+    public noGoalsFragment() { }
 
+    /**
+     * creates new fragment
+     * @return noGoalsFragment
+     */
     public static noGoalsFragment newInstance() {
         noGoalsFragment fragment = new noGoalsFragment();
         Bundle args = new Bundle();
@@ -29,6 +36,12 @@ public class noGoalsFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * On creation initialize the model
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +53,18 @@ public class noGoalsFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

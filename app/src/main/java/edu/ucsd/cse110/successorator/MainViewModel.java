@@ -20,7 +20,6 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final SimpleSubject<List<Integer>> cardOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
-    private final SimpleSubject<String> displayedText;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -36,7 +35,6 @@ public class MainViewModel extends ViewModel {
 
         // Create the observable subjects.
         this.cardOrdering = new SimpleSubject<>();
-        this.displayedText = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
 
         // When the list of cards changes (or is first loaded), reset the ordering.
@@ -65,11 +63,18 @@ public class MainViewModel extends ViewModel {
 
     }
 
-    public SimpleSubject<String> getDisplayedText() {
-        return displayedText;
-    }
-
     public Subject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
     }
+
+    /**
+     * Append goal to the end of the list
+     * @param goal goal to be appended
+     */
+    public void append(Goal goal) {
+        goalRepository.append(goal);
+    }
+
+    // Prepend code from lab 5, wasn't working
+    // public void prepend(Goal goal) { goalRepository.prepend(goal); }
 }
