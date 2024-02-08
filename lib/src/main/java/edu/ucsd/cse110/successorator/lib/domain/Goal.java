@@ -1,15 +1,16 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
 public class Goal {
     public final @NonNull String goalText;
-    public final @NonNull Integer id;
+    public final @Nullable Integer id;
     public final @NonNull Integer sortOrder;
 
-    public Goal(@NonNull Integer id, @NonNull String goalText, @NonNull Integer sortOrder ) {
+    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder ) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
@@ -19,7 +20,7 @@ public class Goal {
         return goalText;
     }
 
-    public @NonNull Integer getId() { return id; }
+    public @Nullable Integer getId() { return id; }
 
     public @NonNull Integer getSortOrder() { return sortOrder; }
 

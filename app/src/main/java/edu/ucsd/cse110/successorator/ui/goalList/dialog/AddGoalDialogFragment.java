@@ -74,25 +74,10 @@ public class AddGoalDialogFragment extends DialogFragment {
                 .setTitle("New Goal")
                 .setMessage("Please enter your goal")
                 .setView(view.getRoot())
-                .setPositiveButton(" ", this::onPositiveButtonClick) // needs text to later set check image
+                .setPositiveButton("", this::onPositiveButtonClick)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
+                .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_check))
                 .create();
-
-        // On showing the dialog set positive button to check mark svg
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                if (positiveButton != null) {
-                    // Set a checkmark drawable as the button icon
-                    Drawable checkmark = ContextCompat.getDrawable(getContext(), R.drawable.ic_check); // Your checkmark drawable here
-                    positiveButton.setCompoundDrawablesWithIntrinsicBounds(checkmark, null, null, null);
-                    positiveButton.setCompoundDrawablePadding(5); // Adjust padding as needed
-                    positiveButton.setText(""); // Remove text
-                }
-            }
-        });
-        return dialog;
     }
 
     /**
