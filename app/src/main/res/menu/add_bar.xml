@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/add_bar_manu_swap_views"
+        android:title="@string/add_goal"
+        android:icon="@drawable/ic_addgoal"
+        android:orderInCategory="1"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+</menu>
