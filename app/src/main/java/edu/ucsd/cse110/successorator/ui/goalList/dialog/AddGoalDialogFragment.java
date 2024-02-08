@@ -1,11 +1,9 @@
 package edu.ucsd.cse110.successorator.ui.goalList.dialog;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,7 +68,7 @@ public class AddGoalDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
 
-        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
                 .setMessage("Please enter your goal")
                 .setView(view.getRoot())
