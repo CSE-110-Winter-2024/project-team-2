@@ -44,7 +44,7 @@ public class GoalsDaoTest {
         List<GoalEntity> allGoals = goalsDao.findAll();
         assertEquals(1, allGoals.size());
         GoalEntity goalEntityFromDb = goalsDao.find(Math.toIntExact(goal1Id));
-        assertEquals(goalEntity.text, goalEntityFromDb.text);
+        assertEquals(goalEntity.goalText, goalEntityFromDb.goalText);
     }
 
     @Test
@@ -101,6 +101,6 @@ public class GoalsDaoTest {
         int goalsCount = goalsDao.count();
         assertEquals(3, goalsCount);
         GoalEntity appendedGoalFromDb = goalsDao.find(appendedGoalId);
-        assertEquals(appendedGoalFromDb.text, goalEntityToAppend.text);
+        assertEquals(appendedGoalFromDb.goalText, goalEntityToAppend.goalText);
     }
 }

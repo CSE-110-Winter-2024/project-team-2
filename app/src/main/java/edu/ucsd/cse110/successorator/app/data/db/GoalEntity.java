@@ -13,14 +13,14 @@ public class GoalEntity {
     @ColumnInfo(name = "id")
     public Integer id = null;
 
-    @ColumnInfo(name = "text")
-    public String text;
+    @ColumnInfo(name = "goalText")
+    public String goalText;
 
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
-    public GoalEntity(@NonNull String text, int sortOrder) {
-        this.text = text;
+    public GoalEntity(@NonNull String goalText, int sortOrder) {
+        this.goalText = goalText;
         this.sortOrder = sortOrder;
     }
 
@@ -31,6 +31,6 @@ public class GoalEntity {
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, text, sortOrder);
+        return new Goal(id, goalText, sortOrder);
     }
 }
