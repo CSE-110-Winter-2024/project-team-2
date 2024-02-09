@@ -14,15 +14,11 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
+import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 public class GoalsDaoTest {
-    private edu.ucsd.cse110.successorator.app.data.db.GoalsDao goalsDao;
+    private GoalsDao goalsDao;
     private SuccessoratorDatabase db;
 
     @Before

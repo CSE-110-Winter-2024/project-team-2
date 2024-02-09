@@ -23,6 +23,19 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     /**
+     * These save methods are no-ops for now since we are not using the SimpleGoalRepository anyway.
+     * These methods are just required in order to implement the GoalRepository interface.
+     */
+
+    public void save(Goal goal) {
+
+    }
+
+    public void save(List<Goal> goals) {
+
+    }
+
+    /**
      * Append goal to end of list
      * @param goal the goal to append
      */
