@@ -16,21 +16,21 @@ import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
 /**
  * This class is currently not in use, but will display the defualt no goals text on the screen as a fragment
  */
-public class noGoalsFragment extends Fragment {
+public class NoGoalsFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentNoGoalsBinding view;
 
     /**
      * Required empty public constructor
      */
-    public noGoalsFragment() { }
+    public NoGoalsFragment() { }
 
     /**
      * creates new fragment
      * @return noGoalsFragment
      */
-    public static noGoalsFragment newInstance() {
-        noGoalsFragment fragment = new noGoalsFragment();
+    public static NoGoalsFragment newInstance() {
+        NoGoalsFragment fragment = new NoGoalsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -76,7 +76,6 @@ public class noGoalsFragment extends Fragment {
     }
 
     public void setupMvp() {
-        //Observe Model -> call view
-        //activityModel.getDisplayedText().observe(text -> view.cardText.setText(text));
+
     }
 }

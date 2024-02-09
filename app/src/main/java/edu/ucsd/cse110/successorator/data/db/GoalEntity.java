@@ -25,7 +25,7 @@ public class GoalEntity {
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var goalEntity = new GoalEntity(goal.getGoal(), goal.getSortOrder());
+        var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder());
         goalEntity.id = goal.getId();
         return goalEntity;
     }
