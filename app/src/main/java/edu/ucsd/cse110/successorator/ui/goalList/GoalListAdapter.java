@@ -30,7 +30,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the flashcard for this position.
+        // Get the goal for this position.
         var goal = getItem(position);
         assert goal != null;
 
@@ -45,7 +45,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             binding = GoalListItemBinding.inflate(layoutInflater, parent, false);
         }
 
-        // Populate the view with the flashcard's data.
+        // Populate the view with the goal's data.
         binding.goalTextView.setText(goal.getGoalText());
 
         return binding.getRoot();

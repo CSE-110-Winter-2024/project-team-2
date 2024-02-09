@@ -15,7 +15,7 @@ public interface GoalsDao {
     Long insert(GoalEntity goal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<GoalEntity> flashcards);
+    List<Long> insert(List<GoalEntity> goals);
 
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
@@ -40,7 +40,7 @@ public interface GoalsDao {
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newFlashcard = new GoalEntity(goal.text, maxSortOrder + 1);
-        return Math.toIntExact(insert(newFlashcard));
+        var newGoal = new GoalEntity(goal.text, maxSortOrder + 1);
+        return Math.toIntExact(insert(newGoal));
     }
 }

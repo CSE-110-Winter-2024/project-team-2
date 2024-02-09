@@ -39,8 +39,8 @@ public class RoomGoalRepository implements GoalRepository {
         goalsDao.insert(GoalEntity.fromGoal(goal));
     }
 
-    public void save(List<Goal> flashcards) {
-        var entities = flashcards.stream()
+    public void save(List<Goal> goals) {
+        var entities = goals.stream()
                 .map(GoalEntity::fromGoal)
                 .collect(Collectors.toList());
         goalsDao.insert(entities);
