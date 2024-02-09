@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.ui.goalList;
+package edu.ucsd.cse110.successorator.app.ui.goalList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 
 /**

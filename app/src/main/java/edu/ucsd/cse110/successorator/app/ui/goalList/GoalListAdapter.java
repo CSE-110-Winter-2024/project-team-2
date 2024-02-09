@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.ui.goalList;
+package edu.ucsd.cse110.successorator.app.ui.goalList;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator;
+package edu.ucsd.cse110.successorator.app;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,8 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.ui.goalList.dialog.AddGoalDialogFragment;
+import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 
 /**
  * the main activity sets up the initial screen and triggers the Alert Dialog when user taps +

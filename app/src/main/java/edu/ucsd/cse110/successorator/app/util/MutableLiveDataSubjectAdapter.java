@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.util;
+package edu.ucsd.cse110.successorator.app.util;
 
 import androidx.lifecycle.MutableLiveData;
 
