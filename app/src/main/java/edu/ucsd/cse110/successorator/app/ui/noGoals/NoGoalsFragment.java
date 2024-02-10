@@ -14,7 +14,7 @@ import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
 
 /**
- * This class is currently not in use, but will display the defualt no goals text on the screen as a fragment
+ * This class is currently not in use, but will display the default no goals text on the screen as a fragment
  */
 public class NoGoalsFragment extends Fragment {
     private MainViewModel activityModel;

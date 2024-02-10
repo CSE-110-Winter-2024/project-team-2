@@ -60,9 +60,8 @@ public class GoalListFragment  extends Fragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         //Initialize the Adapter (with empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of(), goal -> {
-            var completed = goal.getCompleted();
-            goal.setCompleted(!completed);
+        this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeIsCompleteStatus(id);
         });
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

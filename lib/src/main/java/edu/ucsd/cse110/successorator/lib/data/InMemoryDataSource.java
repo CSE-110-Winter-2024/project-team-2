@@ -172,6 +172,11 @@ public class InMemoryDataSource {
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
 
+    public void changeIsCompleteStatus(Integer id) {
+        Goal goal = goals.get(id);
+        goal.changeIsCompleteStatus();
+    }
+
     // Remove flashcard code from lab 5
 //    public void removeGoals(int id) {
 //        var card = goals.get(id);

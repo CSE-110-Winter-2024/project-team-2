@@ -22,17 +22,12 @@ public interface GoalsDao {
 
     @Query("SELECT * FROM goals ORDER BY sort_order")
     List<GoalEntity> findAll();
+
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
-//    @Query("SELECT * FROM goals ORDER BY sort_order")
-//    LiveData<List<GoalEntity>> findAllAsLiveData();
-
-    @Query("SELECT * FROM goals WHERE completed = false ORDER BY sort_order")
-    LiveData<List<GoalEntity>> findAllIncompleteAsLiveData();
-
-    @Query("SELECT * FROM goals WHERE completed = true ORDER BY sort_order")
-    LiveData<List<GoalEntity>> findAllCompleteAsLiveData();
+    @Query("SELECT * FROM goals ORDER BY sort_order")
+    LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
     int count();
@@ -43,10 +38,13 @@ public interface GoalsDao {
     @Query("SELECT MAX(sort_order) FROM goals")
     int getMaxSortOrder();
 
+    @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
+    void changeIsCompleteStatus(Integer id);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete);
         return Math.toIntExact(insert(newGoal));
     }
 }

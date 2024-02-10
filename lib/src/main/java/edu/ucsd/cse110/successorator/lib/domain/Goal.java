@@ -9,13 +9,13 @@ public class Goal {
     public final @NonNull String goalText;
     public final @Nullable Integer id;
     public final @NonNull Integer sortOrder;
-    public @NonNull Boolean completed;
+    public @NonNull Boolean isComplete;
 
-    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder ) {
+    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder, @NonNull Boolean isComplete) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
-        this.completed = false;
+        this.isComplete = isComplete;
     }
 
     public @NonNull String getGoalText() {
@@ -26,12 +26,12 @@ public class Goal {
 
     public @NonNull Integer getSortOrder() { return sortOrder; }
 
-    public @NonNull Boolean getCompleted() {
-        return completed;
+    public @NonNull Boolean getIsComplete() {
+        return isComplete;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void changeIsCompleteStatus() {
+        this.isComplete = !this.isComplete;
     }
 
     /**
@@ -40,7 +40,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder);
+        return new Goal(id, goalText, sortOrder, isComplete);
     }
 
     /**
@@ -49,20 +49,19 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder);
+        return new Goal(id, goalText, sortOrder, isComplete);
     }
 
-    // NOTE: EQUALS AND HASHCODE NEED TO BE UPDATED SINCE WE ADDED A NEW INSTANCE VARIABLE
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Goal goal1 = (Goal) o;
-        return Objects.equals(goalText, goal1.goalText) && Objects.equals(id, goal1.id) && Objects.equals(sortOrder, goal1.sortOrder);
+        Goal goal = (Goal) o;
+        return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(isComplete, goal.isComplete);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder);
+        return Objects.hash(goalText, id, sortOrder, isComplete);
     }
 }

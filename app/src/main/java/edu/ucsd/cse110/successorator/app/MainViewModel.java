@@ -22,7 +22,7 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
-    private final SimpleSubject<List<Boolean>> completed;
+    private final SimpleSubject<List<Boolean>> isComplete;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -39,7 +39,7 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
-        this.completed = new SimpleSubject<>(); // INCOMPLETE
+        this.isComplete = new SimpleSubject<>(); // INCOMPLETE
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
@@ -81,4 +81,8 @@ public class MainViewModel extends ViewModel {
 
     // Prepend code from lab 5, wasn't working
     // public void prepend(Goal goal) { goalRepository.prepend(goal); }
+
+    public void changeIsCompleteStatus(Integer id) {
+        goalRepository.changeIsCompleteStatus(id);
+    }
 }

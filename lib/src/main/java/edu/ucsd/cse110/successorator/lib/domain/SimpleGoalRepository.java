@@ -46,6 +46,10 @@ public class SimpleGoalRepository implements GoalRepository {
         );
     }
 
+    @Override
+    public void changeIsCompleteStatus(Integer id) {
+        dataSource.changeIsCompleteStatus(id);
+    }
 
     // prepend code from lab 5, wasn't working
 //    public void prepend(Goal goal) {

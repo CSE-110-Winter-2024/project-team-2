@@ -9,7 +9,7 @@ public class GoalTest {
     public void getGoal() {
         for( int i = 0; i < 100; i++){
             String theGoal = "Test goal " + i;
-            Goal goal = new Goal(0, theGoal, 0);
+            Goal goal = new Goal(0, theGoal, 0, false);
             assertEquals(goal.getGoalText(), theGoal);
         }
     }
@@ -17,7 +17,7 @@ public class GoalTest {
     @Test
     public void getId() {
         for( int i = 0; i < 100; i++){
-            Goal goal = new Goal(i, "Test Goal", 0);
+            Goal goal = new Goal(i, "Test Goal", 0, false);
             assertEquals(Integer.valueOf(i), goal.getId());
         }
     }
@@ -25,7 +25,7 @@ public class GoalTest {
     @Test
     public void getSortOrder() {
         for( int i = 0; i < 100; i++){
-            Goal goal = new Goal(0, "Test Goal", i);
+            Goal goal = new Goal(0, "Test Goal", i, false);
             assertEquals(Integer.valueOf(i), goal.getSortOrder());
         }
     }
@@ -33,7 +33,7 @@ public class GoalTest {
     @Test
     public void withSortOrder() {
         for( int i = 0; i < 100; i++){
-            Goal goal = new Goal(0, "Test Goal", 0);
+            Goal goal = new Goal(0, "Test Goal", 0, false);
             Goal actual = goal.withSortOrder(i);
             assertEquals(Integer.valueOf(i), actual.getSortOrder());
         }
@@ -42,7 +42,7 @@ public class GoalTest {
     @Test
     public void withId() {
         for( int i = 0; i < 100; i++){
-            Goal goal = new Goal(0, "Test Goal", 0);
+            Goal goal = new Goal(0, "Test Goal", 0, false);
             Goal actual = goal.withId(i);
             assertEquals(Integer.valueOf(i), actual.getId());
         }
@@ -51,9 +51,9 @@ public class GoalTest {
     @Test
     public void testEquals() {
         for( int i = 0; i < 100; i++){
-            Goal goal1 = new Goal(i, "Test Goal", i+5);
-            Goal goal2 = new Goal(i, "Test Goal", i+5);
-            Goal goal3 = new Goal(i, "Test Goal", i);
+            Goal goal1 = new Goal(i, "Test Goal", i+5, false);
+            Goal goal2 = new Goal(i, "Test Goal", i+5, false);
+            Goal goal3 = new Goal(i, "Test Goal", i, false);
             assertTrue(goal1.equals(goal2));
             assertFalse(goal1.equals(goal3));
         }
@@ -62,9 +62,9 @@ public class GoalTest {
     @Test
     public void testHashCode() {
         for( int i = 0; i < 100; i++){
-            Goal goal1 = new Goal(i, "Test Goal", i+5);
-            Goal goal2 = new Goal(i, "Test Goal", i+5);
-            Goal goal3 = new Goal(i, "Test Goal", i);
+            Goal goal1 = new Goal(i, "Test Goal", i+5, false);
+            Goal goal2 = new Goal(i, "Test Goal", i+5, false);
+            Goal goal3 = new Goal(i, "Test Goal", i, false);
             assertEquals(goal1.hashCode(), goal2.hashCode());
             assertNotEquals(goal1.hashCode(), goal3.hashCode());
         }
