@@ -12,8 +12,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.R;
-import edu.ucsd.cse110.successorator.databinding.FragmentDialogAddGoalBinding;
+import edu.ucsd.cse110.successorator.app.R;
+import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 /**

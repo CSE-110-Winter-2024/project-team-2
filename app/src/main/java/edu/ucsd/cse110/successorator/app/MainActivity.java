@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import edu.ucsd.cse110.successorator.R;
-import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.R;
+import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 
 /**

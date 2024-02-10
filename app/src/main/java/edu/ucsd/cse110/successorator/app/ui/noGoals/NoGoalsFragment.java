@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.R;
-import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
+import edu.ucsd.cse110.successorator.app.R;
+import edu.ucsd.cse110.successorator.app.databinding.FragmentNoGoalsBinding;
 
 /**
  * This class is currently not in use, but will display the defualt no goals text on the screen as a fragment
