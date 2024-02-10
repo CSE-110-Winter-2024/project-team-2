@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,14 +70,31 @@ public class AddGoalDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
 
-        return new AlertDialog.Builder(getActivity())
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
                 .setMessage("Please enter your goal")
                 .setView(view.getRoot())
-                .setPositiveButton("", this::onPositiveButtonClick)
+                .setPositiveButton("", null)
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_check))
                 .create();
+
+        /**
+         * Once the dialog is shown, we can grab the positive button and set its
+         * click listener to override the default behavior of dismissing the dialog.
+         * This way, we can prevent the dialog from being dismissed if the user
+         * didn't enter any goal text.
+         */
+        dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            if (positiveButton != null) {
+                positiveButton.setOnClickListener(view -> {
+                    onPositiveButtonClick(dialog, AlertDialog.BUTTON_POSITIVE);
+                });
+            }
+        });
+
+        return dialog;
     }
 
     /**
@@ -87,7 +106,7 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if(!goalText.equals("")){
+        if (!goalText.equals("")) {
             var goal = new Goal(null, goalText,  -1);
             activityModel.append(goal);
             dialog.dismiss();
