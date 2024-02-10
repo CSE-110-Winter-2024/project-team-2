@@ -19,9 +19,13 @@ public class GoalEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
+    @ColumnInfo(name = "completed")
+    public boolean completed;
+
     public GoalEntity(@NonNull String goalText, int sortOrder) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
+        this.completed = false;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {

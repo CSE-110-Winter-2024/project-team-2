@@ -26,7 +26,7 @@ public class RoomGoalRepository implements GoalRepository {
 
     @Override
     public Subject<List<Goal>> findAll() {
-        var entitiesLiveData = goalsDao.findAllAsLiveData();
+        var entitiesLiveData = goalsDao.findAllIncompleteAsLiveData(); // will need to update this later
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)

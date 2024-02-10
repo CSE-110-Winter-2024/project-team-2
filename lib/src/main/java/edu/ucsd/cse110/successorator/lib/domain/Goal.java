@@ -9,11 +9,13 @@ public class Goal {
     public final @NonNull String goalText;
     public final @Nullable Integer id;
     public final @NonNull Integer sortOrder;
+    public @NonNull Boolean completed;
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder ) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
+        this.completed = false;
     }
 
     public @NonNull String getGoalText() {
@@ -23,6 +25,14 @@ public class Goal {
     public @Nullable Integer getId() { return id; }
 
     public @NonNull Integer getSortOrder() { return sortOrder; }
+
+    public @NonNull Boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 
     /**
      * set sortOrder of Goal
@@ -42,6 +52,7 @@ public class Goal {
         return new Goal(id, goalText, sortOrder);
     }
 
+    // NOTE: EQUALS AND HASHCODE NEED TO BE UPDATED SINCE WE ADDED A NEW INSTANCE VARIABLE
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -22,6 +22,7 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
+    private final SimpleSubject<List<Boolean>> completed;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -38,6 +39,7 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
+        this.completed = new SimpleSubject<>(); // INCOMPLETE
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
