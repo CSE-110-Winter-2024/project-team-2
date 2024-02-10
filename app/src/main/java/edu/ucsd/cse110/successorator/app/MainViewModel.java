@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator;
+package edu.ucsd.cse110.successorator.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import  edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -41,11 +43,11 @@ public class MainViewModel extends ViewModel {
         goalRepository.findAll().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
-            var ordering = new ArrayList<Integer>();
-            for (int i = 0; i < goals.size(); i++) {
-                ordering.add(i);
-            }
-            goalOrdering.setValue(ordering);
+            var newOrderedGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::getSortOrder))
+                    .collect(Collectors.toList());
+
+            orderedGoals.setValue(newOrderedGoals);
         });
 
         // when ordering changes, update the ordered goals

@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.ui.noGoals;
+package edu.ucsd.cse110.successorator.app.ui.noGoals;
 
 import android.os.Bundle;
 
@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
 

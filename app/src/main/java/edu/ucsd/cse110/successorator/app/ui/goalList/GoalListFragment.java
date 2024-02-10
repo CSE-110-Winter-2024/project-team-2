@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.ui.goalList;
+package edu.ucsd.cse110.successorator.app.ui.goalList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 
 /**
@@ -59,10 +59,10 @@ public class GoalListFragment  extends Fragment{
 
         //Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of());
-        activityModel.getOrderedGoals().observe(cards -> {
-            if (cards == null) return;
+        activityModel.getOrderedGoals().observe(goals -> {
+            if (goals == null) return;
             adapter.clear();
-            adapter.addAll(new ArrayList<>(cards)); //remember the mutable copy here
+            adapter.addAll(new ArrayList<>(goals)); //remember the mutable copy here
             adapter.notifyDataSetChanged();
         });
     }

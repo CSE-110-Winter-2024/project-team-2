@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator;
+package edu.ucsd.cse110.successorator.app;
 
 
 import static junit.framework.TestCase.assertEquals;
@@ -10,6 +10,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import edu.ucsd.cse110.successorator.R;
+import edu.ucsd.cse110.successorator.app.MainActivity;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
 
 /**

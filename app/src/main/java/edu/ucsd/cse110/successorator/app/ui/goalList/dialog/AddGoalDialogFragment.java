@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.ui.goalList.dialog;
+package edu.ucsd.cse110.successorator.app.ui.goalList.dialog;
 
 import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -88,8 +88,8 @@ public class AddGoalDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
         if(!goalText.equals("")){
-            var card = new Goal(null, goalText,  -1);
-            activityModel.append(card);
+            var goal = new Goal(null, goalText,  -1);
+            activityModel.append(goal);
             dialog.dismiss();
         }
     }
