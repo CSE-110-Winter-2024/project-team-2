@@ -10,9 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import edu.ucsd.cse110.successorator.R;
-import edu.ucsd.cse110.successorator.app.MainActivity;
-import edu.ucsd.cse110.successorator.databinding.FragmentNoGoalsBinding;
+import edu.ucsd.cse110.successorator.app.databinding.FragmentNoGoalsBinding;
 
 /**
  * Instrumented test, which will execute on an Android device.
