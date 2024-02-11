@@ -1,7 +1,7 @@
 # Week 4 Friday 2/2
 
 ## Attendees
-Andy Huynh, Benjamin Johnson, Hannah Coates, Keisuke Hirano, Vivian Liu, Tianlin Zhao (late)
+Andy Huynh, Benjamin Johnson, Hannah Coates, Keisuke Hirano, Vivian Liu, Tianlin Zhao
 
 ## Notes
 
