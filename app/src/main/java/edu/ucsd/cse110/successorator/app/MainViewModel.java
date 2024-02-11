@@ -39,15 +39,13 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
-        this.isComplete = new SimpleSubject<>(); // INCOMPLETE
+        this.isComplete = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::getSortOrder))
-                    .collect(Collectors.toList());
+            var newOrderedGoals = new ArrayList<>(goals);
 
             orderedGoals.setValue(newOrderedGoals);
         });
