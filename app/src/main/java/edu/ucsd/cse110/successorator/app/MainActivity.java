@@ -16,7 +16,9 @@ import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragmen
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
 
 /**
- * the main activity sets up the initial screen and triggers the Alert Dialog when user taps +
+ * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
+ * It also handles switching between showing NoGoalsFragment and GoalListFragment, depending
+ * on whether there are any goals to display.
  */
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding view;
