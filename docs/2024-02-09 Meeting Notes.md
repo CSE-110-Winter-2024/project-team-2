@@ -16,7 +16,7 @@ Benjamin Johnson
 - Goals for next standup: N/A
 
 Keisuke Hirano + Vivian Liu
-- What you’ve been working on: 
+- What you’ve been working on: US2 (cross and uncross goals) is in progress
 - Blockers: N/A
 - Goals for next standup: N/A
 
@@ -27,7 +27,7 @@ Keisuke Hirano + Vivian Liu
 - New velocity: 0.5
   - Took longer than expected to set up, get familiar with code other pairs have written, etc.
 - Keep our planning to 10 hours/week/person
-- Iteration 2: stories 5, 6, 3, 4, 9
+- Iteration 2: stories 5, 6, 3, 4, 7, 9
   - Same pairs for pair programming
   - Ben and Tian: 3, 7 (at the end if we have time)
   - Hannah and Andy: 4, 5
