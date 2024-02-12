@@ -14,6 +14,10 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 
 /**
  * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
@@ -37,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE M/dd", Locale.getDefault());
+        String formattedDate = dateFormat.format(calendar.getTime());
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(formattedDate);
+        }
+
 
         // Listen for changes to goals so we can update which fragment to show
         activityModel.getOrderedGoals().observe(goals -> {
