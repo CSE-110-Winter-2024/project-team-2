@@ -10,7 +10,7 @@ Andy Huynh + Hannah Coates
 - Blockers: N/A
 - Goals for next standup: still need to figure out no goals screen
 
-Benjamin Johnson
+Benjamin Johnson + Tianlin Zhao
 - What you’ve been working on: PR up for US8 (persistence)
 - Blockers: N/A
 - Goals for next standup: N/A
