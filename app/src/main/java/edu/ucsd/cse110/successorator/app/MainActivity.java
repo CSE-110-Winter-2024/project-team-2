@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     // Replace GoalsListFragment with NoGoalsFragment
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_container, NoGoalsFragment.newInstance())
+                            .replace(R.id.goals_container, NoGoalsFragment.newInstance())
                             .commit();
                 }
                 isShowingNoGoals = true;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     // Replace NoGoalsFragment with GoalsListFragment
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_container, GoalListFragment.newInstance())
+                            .replace(R.id.goals_container, GoalListFragment.newInstance())
                             .commit();
                 }
                 isShowingNoGoals = false;
