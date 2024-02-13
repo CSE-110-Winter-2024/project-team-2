@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import androidx.room.Room;
@@ -87,16 +88,26 @@ public class GoalsDaoTest {
     }
 
     @Test
+    public void changeIsCompleteStatus() {
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false);
+        goalEntity1.id = 1;
+        goalsDao.insert(goalEntity1);
+        goalsDao.changeIsCompleteStatus(1);
+        assertTrue(goalsDao.find(1).isComplete);
+    }
+
+    @Test
     public void append() {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false);
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
-        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100);
+        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100, false);
         int appendedGoalId = goalsDao.append(goalEntityToAppend);
         int goalsCount = goalsDao.count();
         assertEquals(3, goalsCount);
         GoalEntity appendedGoalFromDb = goalsDao.find(appendedGoalId);
         assertEquals(appendedGoalFromDb.goalText, goalEntityToAppend.goalText);
     }
+
 }
