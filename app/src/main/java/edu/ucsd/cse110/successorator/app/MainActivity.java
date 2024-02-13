@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import edu.ucsd.cse110.successorator.app.util.CurrentDateProvider;
+
 
 /**
  * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
@@ -41,10 +43,15 @@ public class MainActivity extends AppCompatActivity {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
-        Calendar calendar = Calendar.getInstance();
+
+        //Get the current date from imported calendar
+        Calendar calendar = new CurrentDateProvider().getCurrentDate();
+
+        //Sets current date into desired format
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE M/dd", Locale.getDefault());
         String formattedDate = dateFormat.format(calendar.getTime());
 
+        //Displays the date on the action bar where the title used to be
         if (getSupportActionBar() != null){
             getSupportActionBar().setTitle(formattedDate);
         }
