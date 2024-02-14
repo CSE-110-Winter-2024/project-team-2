@@ -14,12 +14,10 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import edu.ucsd.cse110.successorator.app.util.CurrentDateProvider;
-
+import edu.ucsd.cse110.successorator.app.util.DateFormatter;
 
 /**
  * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
@@ -44,24 +42,21 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        //Get the current date from imported calendar
-        Calendar calendar = new CurrentDateProvider().getCurrentDate();
+        // Get the current date (set 2 hours back) from imported calendar
+        CurrentDateProvider cdp = new CurrentDateProvider();
+        Calendar calendar = cdp.setTwoHoursBack(cdp.getCurrentDate());
 
-        //Sets current date into desired format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE M/dd", Locale.getDefault());
-        String formattedDate = dateFormat.format(calendar.getTime());
-
-        //Displays the date on the action bar where the title used to be
-        if (getSupportActionBar() != null){
+        //Displays the formattedDate on the action bar where the title used to be
+        String formattedDate = new DateFormatter().formatDate(calendar);
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(formattedDate);
         }
-
 
         // Listen for changes to goals so we can update which fragment to show
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
 
-            /**
+            /*
              * If there are no goals, we want to show NoGoalsFragment. If there 
              * is at least one goal, we want to show GoalListFragment. 
              * We use isShowingNoGoals to track whether we are currently showing 

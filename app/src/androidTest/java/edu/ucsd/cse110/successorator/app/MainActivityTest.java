@@ -38,5 +38,4 @@ public class MainActivityTest {
             scenario.moveToState(Lifecycle.State.STARTED);
         }
     }
-
 }
