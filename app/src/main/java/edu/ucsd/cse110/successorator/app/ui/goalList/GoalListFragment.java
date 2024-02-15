@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 /**
  * This class displays the goal list in a Fragment view

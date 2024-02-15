@@ -70,11 +70,6 @@ public class NoGoalsFragment extends Fragment {
         // Inflate the layout for this fragment
         view = FragmentNoGoalsBinding.inflate(inflater,container,false);
         view.placeholderText.setText(R.string.noGoalsText);
-        setupMvp();
         return view.getRoot();
-    }
-
-    public void setupMvp() {
-
     }
 }
