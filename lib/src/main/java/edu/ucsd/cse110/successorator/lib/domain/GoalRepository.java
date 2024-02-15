@@ -16,4 +16,6 @@ public interface GoalRepository {
     public void append(Goal goal);
 
     public void changeIsCompleteStatus(Integer id);
+
+    public void moveToTop(Integer id);
 }

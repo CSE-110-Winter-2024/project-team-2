@@ -55,4 +55,9 @@ public class RoomGoalRepository implements GoalRepository {
     public void changeIsCompleteStatus(Integer id) {
         goalsDao.changeIsCompleteStatus(id);
     }
+
+    @Override
+    public void moveToTop(Integer id) {
+        goalsDao.moveToTop(id);
+    }
 }

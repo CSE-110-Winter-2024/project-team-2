@@ -51,6 +51,11 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.changeIsCompleteStatus(id);
     }
 
+    @Override
+    public void moveToTop(Integer id) {
+        //
+    }
+
     // prepend code from lab 5, wasn't working
 //    public void prepend(Goal goal) {
 //        //shift all existing goals up by one.

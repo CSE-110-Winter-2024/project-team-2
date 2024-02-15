@@ -92,7 +92,7 @@ public class GoalsDaoTest {
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false);
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
-        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100);
+        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100, false);
         int appendedGoalId = goalsDao.append(goalEntityToAppend);
         int goalsCount = goalsDao.count();
         assertEquals(3, goalsCount);

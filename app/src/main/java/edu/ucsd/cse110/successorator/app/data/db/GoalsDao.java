@@ -39,12 +39,23 @@ public interface GoalsDao {
     int getMaxSortOrder();
 
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
-    void changeIsCompleteStatus(Integer id);
+    void changeIsCompleteStatus(int id);
+
+    @Query("DELETE FROM goals WHERE id = :id")
+    void delete(int id);
 
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete);
         return Math.toIntExact(insert(newGoal));
+    }
+
+    @Transaction
+    default int moveToTop(Integer id) {
+        GoalEntity goal = find(id);
+        goal.sortOrder = getMinSortOrder() - 1;
+        delete(id);
+        return Math.toIntExact(insert(goal));
     }
 }
