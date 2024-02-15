@@ -49,9 +49,7 @@ public class MainViewModel extends ViewModel {
         goalRepository.findAll().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::getSortOrder))
-                    .collect(Collectors.toList());
+            var newOrderedGoals = new ArrayList<>(goals);
 
             orderedGoals.setValue(newOrderedGoals);
         });
