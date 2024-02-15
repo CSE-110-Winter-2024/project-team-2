@@ -10,6 +10,10 @@ import java.util.GregorianCalendar;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 
+/**
+ * Tests for the DateRepository class; specifically, testing getting the current date and advancing
+ * the date one day forward, and ensuring observers are called.
+ */
 public class DateRepositoryTest {
     private int observeCallsMade = 0;
     private Calendar lastObservedDate = null;

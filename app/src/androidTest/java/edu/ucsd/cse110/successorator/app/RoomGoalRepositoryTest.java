@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -17,16 +16,17 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import kotlinx.coroutines.Dispatchers;
 
+/**
+ * Tests the RoomGoalRepository by mocking a Room database and ensuring our app's CRUD operations
+ * work correctly.
+ */
 public class RoomGoalRepositoryTest {
     private GoalsDao goalsDao;
     private GoalRepository goalRepository;

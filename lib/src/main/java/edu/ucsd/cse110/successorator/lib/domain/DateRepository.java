@@ -2,9 +2,9 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import java.util.Calendar;
 
-import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 
 public class DateRepository {
     public DateProvider dateProvider;

@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.app;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
+
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -17,6 +18,10 @@ import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 
+/**
+ * Tests the database-related methods of the GoalsDao class, i.e. CRUD operations on the goals DB
+ * using a mock Room DB.
+ */
 public class GoalsDaoTest {
     private GoalsDao goalsDao;
     private SuccessoratorDatabase db;
