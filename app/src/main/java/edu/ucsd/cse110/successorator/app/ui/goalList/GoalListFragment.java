@@ -16,6 +16,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 /**
  * This class displays the goal list in a Fragment view
@@ -70,7 +71,6 @@ public class GoalListFragment  extends Fragment{
             adapter.notifyDataSetChanged();
         });
     }
-
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate

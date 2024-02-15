@@ -22,9 +22,13 @@ public class Goal {
         return goalText;
     }
 
-    public @Nullable Integer getId() { return id; }
+    public @Nullable Integer getId() {
+        return id;
+    }
 
-    public @NonNull Integer getSortOrder() { return sortOrder; }
+    public @NonNull Integer getSortOrder() {
+        return sortOrder;
+    }
 
     public @NonNull Boolean getIsComplete() {
         return isComplete;

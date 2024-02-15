@@ -31,6 +31,19 @@ public class GoalTest {
     }
 
     @Test
+    public void getIsComplete() {
+        Goal goal = new Goal(0, "test Goal", 0, false);
+        assertFalse(goal.getIsComplete());
+    }
+
+    @Test
+    public void changeIsCompleteStatus() {
+        Goal goal = new Goal(0, "test Goal", 0, false);
+        goal.changeIsCompleteStatus();
+        assertTrue(goal.isComplete);
+    }
+
+    @Test
     public void withSortOrder() {
         for( int i = 0; i < 100; i++){
             Goal goal = new Goal(0, "Test Goal", 0, false);

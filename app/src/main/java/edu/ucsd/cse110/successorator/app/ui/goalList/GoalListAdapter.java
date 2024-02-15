@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
+import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
