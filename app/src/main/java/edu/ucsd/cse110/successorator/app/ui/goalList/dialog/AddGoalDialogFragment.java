@@ -106,8 +106,8 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if (!goalText.equals("")) {
-            var goal = new Goal(null, goalText,  -1);
+        if(!goalText.equals("")) {
+            var goal = new Goal(null, goalText, -1, false);
             activityModel.append(goal);
             dialog.dismiss();
         }
