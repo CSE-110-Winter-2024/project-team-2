@@ -1,17 +1,16 @@
-package edu.ucsd.cse110.successorator.app;
+package edu.ucsd.cse110.successorator.lib.domain;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import edu.ucsd.cse110.successorator.app.util.CurrentDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 
-@RunWith(AndroidJUnit4.class)
 public class DateProviderTest {
     /**
      * Tests to make sure that the format of the date is correct when running the app
@@ -21,7 +20,7 @@ public class DateProviderTest {
         Calendar fakedCalendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE M/dd", Locale.getDefault());
         String formattedDate = dateFormat.format(fakedCalendar.getTime());
-        assert (formattedDate.equals("Monday 2/12"));
+        assertEquals("Monday 2/12", formattedDate);
     }
 
     /**

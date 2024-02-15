@@ -1,8 +1,8 @@
-package edu.ucsd.cse110.successorator.app.data.db;
+package edu.ucsd.cse110.successorator.lib.domain;
 
 import java.util.Calendar;
 
-import edu.ucsd.cse110.successorator.app.util.DateProvider;
+import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
@@ -14,7 +14,8 @@ public class DateRepository {
         calendar = new SimpleSubject<>();
         calendar.setValue(dateProvider.getCurrentDate());
     }
-    public void advanceDateOneDayForward (){
+
+    public void advanceDateOneDayForward() {
         Calendar value = calendar.getValue();
         if (value == null) {
             return;
