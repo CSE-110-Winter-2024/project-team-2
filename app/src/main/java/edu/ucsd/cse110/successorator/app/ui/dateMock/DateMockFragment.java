@@ -74,7 +74,7 @@ public class DateMockFragment extends Fragment {
 
         // Set up click listener for when advance date button is pressed
         view.dateMockButton.setOnClickListener(view -> {
-            // TODO: advance date 1 day forward in data model
+            activityModel.advanceDateOneDayForward();
         });
 
         return view.getRoot();

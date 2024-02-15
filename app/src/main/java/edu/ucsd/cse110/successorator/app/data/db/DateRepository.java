@@ -8,19 +8,23 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class DateRepository {
     public DateProvider dateProvider;
-    private SimpleSubject<Calendar> calendar;
+    private final SimpleSubject<Calendar> calendar;
     public DateRepository(DateProvider dateProvider) {
         this.dateProvider = dateProvider;
         calendar = new SimpleSubject<>();
         calendar.setValue(dateProvider.getCurrentDate());
     }
-    public void AdvanceOneDateForward (){
+    public void advanceDateOneDayForward (){
         Calendar value = calendar.getValue();
+        if (value == null) {
+            return;
+        }
+
         value.add(Calendar.DATE,1);
         calendar.setValue(value);
     }
 
-    public Subject<Calendar> getdata(){
+    public Subject<Calendar> getDate(){
         return calendar;
     }
 }

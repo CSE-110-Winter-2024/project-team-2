@@ -42,15 +42,22 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        // Get the current date (set 2 hours back) from imported calendar
-        CurrentDateProvider cdp = new CurrentDateProvider();
-        Calendar calendar = cdp.setTwoHoursBack(cdp.getCurrentDate());
+        this.activityModel.getDate().observe(date -> {
+            if (date == null) {
+                return;
+            }
 
-        //Displays the formattedDate on the action bar where the title used to be
-        String formattedDate = new DateFormatter().formatDate(calendar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(formattedDate);
-        }
+            // Make a copy of the date so we don't change the original
+            Calendar mutableDate = (Calendar) date.clone();
+            // Set our mutable date 2 hours back
+            mutableDate.add(Calendar.HOUR_OF_DAY, -2);
+
+            // Displays the formattedDate on the action bar where the title used to be
+            String formattedDate = new DateFormatter().formatDate(mutableDate);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(formattedDate);
+            }
+        });
 
         // Listen for changes to goals so we can update which fragment to show
         activityModel.getOrderedGoals().observe(goals -> {
