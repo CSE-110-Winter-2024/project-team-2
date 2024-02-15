@@ -79,4 +79,8 @@ public class MainViewModel extends ViewModel {
 
     // Prepend code from lab 5, wasn't working
     // public void prepend(Goal goal) { goalRepository.prepend(goal); }
+
+    public void changeIsCompleteStatus(Integer id) {
+        goalRepository.changeIsCompleteStatus(id);
+    }
 }
