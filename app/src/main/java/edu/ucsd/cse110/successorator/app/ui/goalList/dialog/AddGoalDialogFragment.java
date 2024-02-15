@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -79,7 +78,7 @@ public class AddGoalDialogFragment extends DialogFragment {
                 .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_check))
                 .create();
 
-        /**
+        /*
          * Once the dialog is shown, we can grab the positive button and set its
          * click listener to override the default behavior of dismissing the dialog.
          * This way, we can prevent the dialog from being dismissed if the user
