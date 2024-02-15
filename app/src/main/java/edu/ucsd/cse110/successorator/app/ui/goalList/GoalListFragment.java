@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 /**
  * This class displays the goal list in a Fragment view
@@ -58,7 +60,9 @@ public class GoalListFragment  extends Fragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         //Initialize the Adapter (with empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of());
+        this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeIsCompleteStatus(id);
+        });
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
@@ -66,7 +70,6 @@ public class GoalListFragment  extends Fragment{
             adapter.notifyDataSetChanged();
         });
     }
-
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -93,5 +96,4 @@ public class GoalListFragment  extends Fragment{
 
         return view.getRoot();
     }
-
 }

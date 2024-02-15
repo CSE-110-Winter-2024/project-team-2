@@ -1,16 +1,21 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
+import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
@@ -18,13 +23,16 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
  * This class maintains the list of goals
  */
 public class GoalListAdapter extends ArrayAdapter<Goal> {
-    public GoalListAdapter(Context context, List<Goal> goals) {
+    Consumer<Integer> onClick;
+
+    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onClick) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
         // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         // or it will crash!
         super(context, 0, new ArrayList<>(goals));
+        this.onClick = onClick;
     }
 
     @NonNull
@@ -47,6 +55,28 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Populate the view with the goal's data.
         binding.goalTextView.setText(goal.getGoalText());
+
+        // Display as strikethrough if isComplete is true
+        if (goal.getIsComplete()) {
+            binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
+        // Bind the goal text view to the callback.
+        binding.goalTextView.setOnClickListener(v -> {
+            var id = goal.getId();
+            onClick.accept(id);
+
+            TextView textView = (TextView) v;
+            int flags = textView.getPaintFlags();
+            // Toggle the strike through
+            if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
+                textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            } else {
+                textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+        });
 
         return binding.getRoot();
     }

@@ -8,8 +8,12 @@ public interface GoalRepository {
     Subject<Goal> find(int id);
 
     Subject<List<Goal>> findAll();
+
     public void save(Goal goal);
+
     public void save(List<Goal> goals);
 
-    void append(Goal goal);
+    public void append(Goal goal);
+
+    public void changeIsCompleteStatus(Integer id);
 }

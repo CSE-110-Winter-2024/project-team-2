@@ -50,4 +50,9 @@ public class RoomGoalRepository implements GoalRepository {
     public void append(Goal goal) {
         goalsDao.append(GoalEntity.fromGoal(goal));
     }
+
+    @Override
+    public void changeIsCompleteStatus(Integer id) {
+        goalsDao.changeIsCompleteStatus(id);
+    }
 }
