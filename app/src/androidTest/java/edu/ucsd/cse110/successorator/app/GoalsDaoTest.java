@@ -17,6 +17,7 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class GoalsDaoTest {
     private GoalsDao goalsDao;
@@ -110,4 +111,21 @@ public class GoalsDaoTest {
         assertEquals(appendedGoalFromDb.goalText, goalEntityToAppend.goalText);
     }
 
+    @Test
+    public void findAll() {
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false);
+        GoalEntity goalEntity4 = new GoalEntity("goal4", 4, true);
+        GoalEntity goalEntity5 = new GoalEntity("goal5", 5, false);
+        List<GoalEntity> goals = List.of(goalEntity1, goalEntity2, goalEntity3, goalEntity4, goalEntity5);
+        goalsDao.insert(goals);
+        List<GoalEntity> allGoals = goalsDao.findAll();
+        List<GoalEntity> sortedGoals = List.of(goalEntity1, goalEntity3, goalEntity5, goalEntity2, goalEntity4);
+        for (int i = 0; i < 5; i++) {
+            assertEquals(sortedGoals.get(i).goalText, allGoals.get(i).goalText);
+            assertEquals(sortedGoals.get(i).sortOrder, allGoals.get(i).sortOrder);
+            assertEquals(sortedGoals.get(i).isComplete, allGoals.get(i).isComplete);
+        }
+    }
 }
