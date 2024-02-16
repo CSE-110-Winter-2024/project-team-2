@@ -5,10 +5,10 @@ import androidx.lifecycle.Transformations;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.app.util.LiveDataSubjectAdapter;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import edu.ucsd.cse110.successorator.app.util.LiveDataSubjectAdapter;
 
 public class RoomGoalRepository implements GoalRepository {
     private final GoalsDao goalsDao;
@@ -49,5 +49,10 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void append(Goal goal) {
         goalsDao.append(GoalEntity.fromGoal(goal));
+    }
+
+    @Override
+    public void changeIsCompleteStatus(Integer id) {
+        goalsDao.changeIsCompleteStatus(id);
     }
 }

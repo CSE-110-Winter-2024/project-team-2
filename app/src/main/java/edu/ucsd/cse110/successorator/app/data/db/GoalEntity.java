@@ -19,18 +19,22 @@ public class GoalEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
-    public GoalEntity(@NonNull String goalText, int sortOrder) {
+    @ColumnInfo(name = "isComplete")
+    public boolean isComplete;
+
+    public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
+        this.isComplete = isComplete;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder());
+        var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete());
         goalEntity.id = goal.getId();
         return goalEntity;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, goalText, sortOrder);
+        return new Goal(id, goalText, sortOrder, isComplete);
     }
 }

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -17,16 +16,17 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import kotlinx.coroutines.Dispatchers;
 
+/**
+ * Tests the RoomGoalRepository by mocking a Room database and ensuring our app's CRUD operations
+ * work correctly.
+ */
 public class RoomGoalRepositoryTest {
     private GoalsDao goalsDao;
     private GoalRepository goalRepository;
@@ -60,7 +60,7 @@ public class RoomGoalRepositoryTest {
         allGoalsSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.append(new Goal(null, "goal1", 1));
+        goalRepository.append(new Goal(null, "goal1", 1, false));
         // Our observer should have been called once upon creation, and again upon appending a goal.
         assertEquals(2, notifiedCount);
         assertEquals(1, allGoalsSubject.getValue().size());
@@ -68,7 +68,7 @@ public class RoomGoalRepositoryTest {
 
     @Test
     public void observeUpdateGoal() {
-        Goal goal = new Goal(1, "goal1", 1);
+        Goal goal = new Goal(1, "goal1", 1, false);
         goalRepository.save(goal);
         Subject<List<Goal>> allGoalsSubject = goalRepository.findAll();
         Subject<Goal> goalSubject = goalRepository.find(goal.id);
@@ -79,7 +79,7 @@ public class RoomGoalRepositoryTest {
         goalSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.save(new Goal(1, "goalTextChanged", 2));
+        goalRepository.save(new Goal(1, "goalTextChanged", 2, false));
 
         // Each observer should have been called once upon creation, and again upon saving the goal.
         assertEquals(4, notifiedCount);
@@ -100,8 +100,8 @@ public class RoomGoalRepositoryTest {
             notifiedCount++;
         });
         List<Goal> goalsToSave = List.of(
-                new Goal(null, "goal1", 1),
-                new Goal(null, "goal2", 2)
+                new Goal(null, "goal1", 1, false),
+                new Goal(null, "goal2", 2, false)
         );
         goalRepository.save(goalsToSave);
 

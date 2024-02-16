@@ -1,14 +1,13 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList.dialog;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -79,7 +78,7 @@ public class AddGoalDialogFragment extends DialogFragment {
                 .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_check))
                 .create();
 
-        /**
+        /*
          * Once the dialog is shown, we can grab the positive button and set its
          * click listener to override the default behavior of dismissing the dialog.
          * This way, we can prevent the dialog from being dismissed if the user
@@ -106,8 +105,8 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if(!goalText.equals("")) {
-            var goal = new Goal(null, goalText, -1, false);
+        if (!goalText.equals("")) {
+            var goal = new Goal(null, goalText,  -1, false);
             activityModel.append(goal);
             dialog.dismiss();
         }

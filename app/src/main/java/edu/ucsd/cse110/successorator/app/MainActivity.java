@@ -9,11 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import edu.ucsd.cse110.successorator.app.R;
+import java.util.Calendar;
+
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 /**
  * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
@@ -38,11 +40,28 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        this.activityModel.getDate().observe(date -> {
+            if (date == null) {
+                return;
+            }
+
+            // Make a copy of the date so we don't change the original
+            Calendar mutableDate = (Calendar) date.clone();
+            // Set our mutable date 2 hours back
+            mutableDate.add(Calendar.HOUR_OF_DAY, -2);
+
+            // Displays the formattedDate on the action bar where the title used to be
+            String formattedDate = new DateFormatter().formatDate(mutableDate);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(formattedDate);
+            }
+        });
+
         // Listen for changes to goals so we can update which fragment to show
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
 
-            /**
+            /*
              * If there are no goals, we want to show NoGoalsFragment. If there 
              * is at least one goal, we want to show GoalListFragment. 
              * We use isShowingNoGoals to track whether we are currently showing 
@@ -55,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     // Replace GoalsListFragment with NoGoalsFragment
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_container, NoGoalsFragment.newInstance())
+                            .replace(R.id.goals_container, NoGoalsFragment.newInstance())
                             .commit();
                 }
                 isShowingNoGoals = true;
@@ -64,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     // Replace NoGoalsFragment with GoalsListFragment
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragment_container, GoalListFragment.newInstance())
+                            .replace(R.id.goals_container, GoalListFragment.newInstance())
                             .commit();
                 }
                 isShowingNoGoals = false;

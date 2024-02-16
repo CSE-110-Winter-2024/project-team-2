@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -58,7 +58,9 @@ public class GoalListFragment  extends Fragment{
         this.activityModel = modelProvider.get(MainViewModel.class);
 
         //Initialize the Adapter (with empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of());
+        this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
+            activityModel.changeIsCompleteStatus(id);
+        });
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
@@ -66,7 +68,6 @@ public class GoalListFragment  extends Fragment{
             adapter.notifyDataSetChanged();
         });
     }
-
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -93,5 +94,4 @@ public class GoalListFragment  extends Fragment{
 
         return view.getRoot();
     }
-
 }
