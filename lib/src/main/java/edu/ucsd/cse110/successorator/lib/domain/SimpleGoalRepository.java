@@ -1,12 +1,17 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class SimpleGoalRepository implements GoalRepository {
     private final InMemoryDataSource dataSource;
+
+    private final SimpleSubject<List<Goal>> activeGoalsSubject = new SimpleSubject<>();
 
     public SimpleGoalRepository(InMemoryDataSource dataSource) {
         this.dataSource = dataSource;
@@ -37,6 +42,7 @@ public class SimpleGoalRepository implements GoalRepository {
 
     /**
      * Append goal to end of list
+     *
      * @param goal the goal to append
      */
     @Override
@@ -49,6 +55,33 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id) {
         dataSource.changeIsCompleteStatus(id);
+        updateActiveGoals(); //Update active goals and notify observers
+    }
+
+    public Subject<List<Goal>> getActiveGoalsSubject() {
+        updateActiveGoals(); // Ensure the subject has the initial state
+        return activeGoalsSubject;
+    }
+
+    private void updateActiveGoals(){
+        List<Goal> activeGoals = getActiveGoals();
+        activeGoalsSubject.setValue(activeGoals);
+    }
+
+    private List<Goal> getActiveGoals() {
+        return dataSource.getGoals().stream()
+                .filter(goal -> !goal.getIsComplete() || isCompletedToday(goal.getDateCompleted()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isCompletedToday(Calendar dateCompleted) {
+        if (dateCompleted == null) {
+            return false;
+        }
+        Calendar today = Calendar.getInstance();
+        return dateCompleted.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && dateCompleted.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && dateCompleted.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
 
     // prepend code from lab 5, wasn't working

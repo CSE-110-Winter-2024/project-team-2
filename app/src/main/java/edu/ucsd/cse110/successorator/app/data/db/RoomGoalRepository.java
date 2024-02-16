@@ -1,7 +1,9 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,28 @@ public class RoomGoalRepository implements GoalRepository {
 
     @Override
     public void changeIsCompleteStatus(Integer id) {
-        goalsDao.changeIsCompleteStatus(id);
+        GoalEntity goalEntity = goalsDao.find(id);
+        if (goalEntity != null){
+            goalEntity.isComplete = !goalEntity.isComplete;
+            if(goalEntity.isComplete){
+                goalEntity.dateCompleted = Calendar.getInstance();
+            } else{
+                goalEntity.dateCompleted = null;
+            }
+            goalsDao.updateGoal(goalEntity);
+        }
     }
+
+    public LiveData<List<Goal>> getActiveGoals() {
+        return Transformations.map(goalsDao.getActiveGoals(), entities -> {
+            return entities.stream().map(GoalEntity::toGoal).collect(Collectors.toList());
+        });
+    }
+
+    @Override
+    public Subject<List<Goal>> getActiveGoalsSubject() {
+        LiveData<List<Goal>> activeGoalsLiveData = getActiveGoals();
+        return new LiveDataSubjectAdapter<>(activeGoalsLiveData);
+    }
+
 }

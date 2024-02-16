@@ -40,4 +40,6 @@ public class SimpleSubject<T> implements MutableSubject<T> {
             observer.onChanged(value);
         }
     }
+
+
 }

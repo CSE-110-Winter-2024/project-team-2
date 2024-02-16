@@ -2,6 +2,11 @@ package edu.ucsd.cse110.successorator.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -14,6 +19,7 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
@@ -103,4 +109,45 @@ public class MainViewModel extends ViewModel {
     public Subject<Calendar> getDate() {
         return date;
     }
+
+    private LiveData<List<Goal>> convertSubjectToLiveData(Subject<List<Goal>> subject) {
+        MutableLiveData<List<Goal>> liveData = new MutableLiveData<>();
+        subject.observe(liveData::setValue);
+        return liveData;
+    }
+    public LiveData<List<Goal>> getActiveGoals() {
+        LiveData<List<Goal>> activeGoals = convertSubjectToLiveData(goalRepository.getActiveGoalsSubject());
+        return Transformations.map(activeGoals, goals -> {
+            // Get the current date with time set to midnight for comparison
+            Calendar currentDate = Calendar.getInstance();
+            currentDate.set(Calendar.HOUR_OF_DAY, 0);
+            currentDate.set(Calendar.MINUTE, 0);
+            currentDate.set(Calendar.SECOND, 0);
+            currentDate.set(Calendar.MILLISECOND, 0);
+
+//            // Filter out completed goals from previous days
+//            return goals.stream()
+//                    .filter(goal -> !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0))
+//                    .collect(Collectors.toList());
+            // Log the current date for debugging
+            Log.d("getActiveGoals", "Current date (12 AM): " + currentDate.getTime());
+
+            // Filter out completed goals from previous days (before 2 AM)
+            List<Goal> filteredGoals = goals.stream()
+                    .filter(goal -> {
+                        boolean isGoalActive = !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0);
+                        // Log each goal's status for debugging
+                        Log.d("getActiveGoals", "Goal: " + goal.getGoalText() + ", IsComplete: " + goal.getIsComplete() + ", DateCompleted: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null") + ", IsActive: " + isGoalActive);
+                        Log.d("getActiveGoals", "Current date: " + currentDate.getTime());
+                        Log.d("getActiveGoals", "Goal completion date: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null"));
+
+                        return isGoalActive;
+                    })
+                    .collect(Collectors.toList());
+
+            return filteredGoals;
+        });
+    }
+
+
 }

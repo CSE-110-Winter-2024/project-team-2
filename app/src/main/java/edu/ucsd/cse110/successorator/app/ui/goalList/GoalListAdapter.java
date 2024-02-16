@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
@@ -68,15 +70,37 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
             TextView textView = (TextView) v;
             int flags = textView.getPaintFlags();
+            boolean isComplete = (flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG;
+
             // Toggle the strike through
-            if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
+            if (isComplete) {
                 textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
             } else {
                 textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
             }
+
+            //Notify listener about change in completion status
+            if (onCompletionStatusChangeListener != null){
+                onCompletionStatusChangeListener.onCompletionStatusChanged(id, !isComplete);
+            }
         });
 
         return binding.getRoot();
+    }
+
+    public interface OnCompletionStatusChangeListener{
+        void onCompletionStatusChanged(int id, boolean isComplete);
+    }
+
+    private OnCompletionStatusChangeListener onCompletionStatusChangeListener;
+    public void setOnCompletionStatusChangeListener(OnCompletionStatusChangeListener listener){
+        this.onCompletionStatusChangeListener = listener;
+    }
+
+    public void setGoals(List<Goal> goals){
+        clear();
+        addAll(goals);
+        notifyDataSetChanged();
     }
 
     // The below methods aren't strictly necessary, usually.

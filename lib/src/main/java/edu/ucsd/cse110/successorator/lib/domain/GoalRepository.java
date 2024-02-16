@@ -16,4 +16,7 @@ public interface GoalRepository {
     void append(Goal goal);
 
     void changeIsCompleteStatus(Integer id);
+
+    Subject<List<Goal>> getActiveGoalsSubject();
+
 }

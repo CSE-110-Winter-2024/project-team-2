@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -41,10 +42,17 @@ public interface GoalsDao {
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(Integer id);
 
+    @Query("SELECT * FROM goals WHERE isComplete = 0 OR date(date_completed) = date('now')")
+    LiveData<List<GoalEntity>> getActiveGoals();
+
+    @Update
+    void updateGoal(GoalEntity goal);
+
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete,goal.dateCompleted);
         return Math.toIntExact(insert(newGoal));
     }
 }
