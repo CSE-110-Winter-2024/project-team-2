@@ -2,7 +2,7 @@
     <string name="app_name">Successorator</string>
     <string name="placeholder">Placeholder</string>
     <string name="noGoalsText">No goals for the Day.  Click the + at the upper right to enter your Most Important Thing.</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_goal">Add Goal</string>
     <string name="enter_your_goal">Enter your goal</string>
+    <string name="date_mock_button_description">Advance date forward</string>
 </resources>

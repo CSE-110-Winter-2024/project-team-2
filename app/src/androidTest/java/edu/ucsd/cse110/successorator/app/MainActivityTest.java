@@ -13,9 +13,7 @@ import org.junit.runner.RunWith;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentNoGoalsBinding;
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Tests for the rendering of the MainActivity class.
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {

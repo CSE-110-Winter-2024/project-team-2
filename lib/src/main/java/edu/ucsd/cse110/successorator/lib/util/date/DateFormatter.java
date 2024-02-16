@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.app.util;
+package edu.ucsd.cse110.successorator.lib.util.date;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

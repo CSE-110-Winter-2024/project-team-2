@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.successorator.app.ui.noGoals;
+package edu.ucsd.cse110.successorator.app.ui.dateMock;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,27 +9,26 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.R;
-import edu.ucsd.cse110.successorator.app.databinding.FragmentNoGoalsBinding;
+import edu.ucsd.cse110.successorator.app.databinding.FragmentDateMockBinding;
 
 /**
- * This class displays the default no goals text on the screen
+ * This class displays a button that can be used to advance the date 1 day forward
  */
-public class NoGoalsFragment extends Fragment {
+public class DateMockFragment extends Fragment {
     private MainViewModel activityModel;
-    private FragmentNoGoalsBinding view;
+    private FragmentDateMockBinding view;
 
     /**
      * Required empty public constructor
      */
-    public NoGoalsFragment() { }
+    public DateMockFragment() { }
 
     /**
      * creates new fragment
-     * @return noGoalsFragment
+     * @return DateMockFragment
      */
-    public static NoGoalsFragment newInstance() {
-        NoGoalsFragment fragment = new NoGoalsFragment();
+    public static DateMockFragment newInstance() {
+        DateMockFragment fragment = new DateMockFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -68,8 +67,13 @@ public class NoGoalsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = FragmentNoGoalsBinding.inflate(inflater,container,false);
-        view.placeholderText.setText(R.string.noGoalsText);
+        view = FragmentDateMockBinding.inflate(inflater,container,false);
+
+        // Set up click listener for when advance date button is pressed
+        view.dateMockButton.setOnClickListener(view -> {
+            activityModel.advanceDateOneDayForward();
+        });
+
         return view.getRoot();
     }
 }
