@@ -1,16 +1,12 @@
-package edu.ucsd.cse110.successorator.app;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+package edu.ucsd.cse110.successorator.lib.domain;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import edu.ucsd.cse110.successorator.app.util.DateFormatter;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
-@RunWith(AndroidJUnit4.class)
 public class DateFormatterTest {
     /**
      * Tests to make sure that the format of the date is correct when running the app

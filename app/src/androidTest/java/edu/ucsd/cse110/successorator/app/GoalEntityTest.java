@@ -9,6 +9,9 @@ import org.junit.Test;
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
+/**
+ * Tests the methods of the GoalEntity class
+ */
 public class GoalEntityTest {
     @Test
     public void goalEntityConstructor() {

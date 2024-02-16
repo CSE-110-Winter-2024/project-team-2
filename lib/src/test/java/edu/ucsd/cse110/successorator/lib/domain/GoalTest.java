@@ -1,10 +1,16 @@
 package edu.ucsd.cse110.successorator.lib.domain;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Tests for the methods of the Goal class.
+ */
 public class GoalTest {
-
     @Test
     public void getGoal() {
         for( int i = 0; i < 100; i++){
