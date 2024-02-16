@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -49,6 +50,10 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id) {
         dataSource.changeIsCompleteStatus(id);
+    }
+
+    public void setDateCompleted(Integer id) {
+        dataSource.setDateCompleted(id);
     }
 
     // prepend code from lab 5, wasn't working

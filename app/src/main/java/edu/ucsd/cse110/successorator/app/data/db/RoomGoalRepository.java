@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.lifecycle.Transformations;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,5 +55,9 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id) {
         goalsDao.changeIsCompleteStatus(id);
+    }
+
+    public void setDateCompleted(Integer id) {
+        goalsDao.setDateCompleted(id);
     }
 }

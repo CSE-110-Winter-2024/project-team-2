@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
@@ -60,6 +61,7 @@ public class GoalListFragment  extends Fragment{
         // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeIsCompleteStatus(id);
+            activityModel.setDateCompleted(id); // idk if casting this works right DELETE THIS
         });
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

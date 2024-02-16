@@ -100,7 +100,13 @@ public class MainViewModel extends ViewModel {
         goalRepository.changeIsCompleteStatus(id);
     }
 
+    public void setDateCompleted(Integer id) {
+        goalRepository.setDateCompleted(id);
+    }
+
     public Subject<Calendar> getDate() {
         return date;
     }
+
+
 }

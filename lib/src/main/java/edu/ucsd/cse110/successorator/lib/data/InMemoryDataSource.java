@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.data;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,6 +176,11 @@ public class InMemoryDataSource {
     public void changeIsCompleteStatus(Integer id) {
         Goal goal = goals.get(id);
         goal.changeIsCompleteStatus();
+    }
+
+    public void setDateCompleted(Integer id) {
+        Goal goal = goals.get(id);
+        goal.setDateCompleted(Calendar.getInstance());
     }
 
     // Remove flashcard code from lab 5
