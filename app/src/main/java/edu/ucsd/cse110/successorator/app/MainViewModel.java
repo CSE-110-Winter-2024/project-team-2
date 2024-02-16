@@ -102,8 +102,8 @@ public class MainViewModel extends ViewModel {
         dateRepository.advanceDateOneDayForward();
     }
   
-    public void changeIsCompleteStatus(Integer id) {
-        goalRepository.changeIsCompleteStatus(id);
+    public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
+        goalRepository.changeIsCompleteStatus(id, dateCompleted);
     }
 
     public Subject<Calendar> getDate() {

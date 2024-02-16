@@ -79,8 +79,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-            //Notify listener about change in completion status
-            if (onCompletionStatusChangeListener != null){
+            // Notify listener about change in completion status
+            if (onCompletionStatusChangeListener != null) {
                 onCompletionStatusChangeListener.onCompletionStatusChanged(id, !isComplete);
             }
         });
@@ -88,12 +88,12 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         return binding.getRoot();
     }
 
-    public interface OnCompletionStatusChangeListener{
+    public interface OnCompletionStatusChangeListener {
         void onCompletionStatusChanged(int id, boolean isComplete);
     }
 
     private OnCompletionStatusChangeListener onCompletionStatusChangeListener;
-    public void setOnCompletionStatusChangeListener(OnCompletionStatusChangeListener listener){
+    public void setOnCompletionStatusChangeListener(OnCompletionStatusChangeListener listener) {
         this.onCompletionStatusChangeListener = listener;
     }
 

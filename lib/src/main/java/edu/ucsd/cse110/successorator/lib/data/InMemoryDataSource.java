@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.data;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,9 +173,10 @@ public class InMemoryDataSource {
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
 
-    public void changeIsCompleteStatus(Integer id) {
+    public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
         Goal goal = goals.get(id);
         goal.changeIsCompleteStatus();
+        goal.setDateCompleted(dateCompleted);
     }
 
     // Remove flashcard code from lab 5

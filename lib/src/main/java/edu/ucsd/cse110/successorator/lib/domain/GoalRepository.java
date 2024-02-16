@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -15,8 +16,7 @@ public interface GoalRepository {
 
     void append(Goal goal);
 
-    void changeIsCompleteStatus(Integer id);
+    void changeIsCompleteStatus(Integer id, Calendar dateCompleted);
 
     Subject<List<Goal>> getActiveGoalsSubject();
-
 }

@@ -107,7 +107,7 @@ public class GoalListFragment  extends Fragment{
 
         // Initialize the Adapter
         adapter = new GoalListAdapter(requireContext(), new ArrayList<>(), id -> {
-            activityModel.changeIsCompleteStatus(id);
+            activityModel.changeIsCompleteStatus(id, activityModel.getDate().getValue());
         });
 
 

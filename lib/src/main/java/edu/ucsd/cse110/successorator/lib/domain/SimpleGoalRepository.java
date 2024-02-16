@@ -53,8 +53,8 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsCompleteStatus(Integer id) {
-        dataSource.changeIsCompleteStatus(id);
+    public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
+        dataSource.changeIsCompleteStatus(id, dateCompleted);
         updateActiveGoals(); //Update active goals and notify observers
     }
 

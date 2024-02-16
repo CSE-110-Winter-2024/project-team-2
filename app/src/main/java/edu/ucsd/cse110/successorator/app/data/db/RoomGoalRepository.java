@@ -54,12 +54,12 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsCompleteStatus(Integer id) {
+    public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
         GoalEntity goalEntity = goalsDao.find(id);
         if (goalEntity != null){
             goalEntity.isComplete = !goalEntity.isComplete;
             if(goalEntity.isComplete){
-                goalEntity.dateCompleted = Calendar.getInstance();
+                goalEntity.dateCompleted = dateCompleted;
             } else{
                 goalEntity.dateCompleted = null;
             }
