@@ -57,7 +57,7 @@ public class RoomGoalRepository implements GoalRepository {
         goalsDao.changeIsCompleteStatus(id);
     }
 
-    public void setDateCompleted(Integer id) {
-        goalsDao.setDateCompleted(id);
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        goalsDao.setDateCompleted(id, dateCompleted);
     }
 }

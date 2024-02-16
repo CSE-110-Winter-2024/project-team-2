@@ -45,8 +45,8 @@ public interface GoalsDao {
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(Integer id);
 
-    @Query("UPDATE goals SET dateCompleted = 0 WHERE id = :id")
-    void setDateCompleted(Integer id);
+    @Query("UPDATE goals SET dateCompleted = :date_Completed WHERE id = :id")
+    void setDateCompleted(Integer id, Calendar date_Completed);
 
     @Transaction
     default int append(GoalEntity goal) {

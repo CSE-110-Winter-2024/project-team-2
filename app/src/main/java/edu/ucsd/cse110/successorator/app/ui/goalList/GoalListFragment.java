@@ -61,7 +61,7 @@ public class GoalListFragment  extends Fragment{
         // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeIsCompleteStatus(id);
-            activityModel.setDateCompleted(id); // idk if casting this works right DELETE THIS
+            activityModel.setDateCompleted(id, Calendar.getInstance()); // idk if casting this works right DELETE THIS
         });
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

@@ -52,8 +52,8 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.changeIsCompleteStatus(id);
     }
 
-    public void setDateCompleted(Integer id) {
-        dataSource.setDateCompleted(id);
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        dataSource.setDateCompleted(id, dateCompleted);
     }
 
     // prepend code from lab 5, wasn't working

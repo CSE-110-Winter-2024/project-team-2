@@ -178,9 +178,9 @@ public class InMemoryDataSource {
         goal.changeIsCompleteStatus();
     }
 
-    public void setDateCompleted(Integer id) {
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
         Goal goal = goals.get(id);
-        goal.setDateCompleted(Calendar.getInstance());
+        goal.setDateCompleted(dateCompleted);
     }
 
     // Remove flashcard code from lab 5

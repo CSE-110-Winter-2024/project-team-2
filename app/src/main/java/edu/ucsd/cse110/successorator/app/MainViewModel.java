@@ -100,8 +100,8 @@ public class MainViewModel extends ViewModel {
         goalRepository.changeIsCompleteStatus(id);
     }
 
-    public void setDateCompleted(Integer id) {
-        goalRepository.setDateCompleted(id);
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        goalRepository.setDateCompleted(id, dateCompleted);
     }
 
     public Subject<Calendar> getDate() {
