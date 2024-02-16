@@ -28,7 +28,6 @@ public class DateProviderTest {
      */
     @Test
     public void setTwoHoursBackTest() {
-        CurrentDateProvider cdp = new CurrentDateProvider();
         int expectedDay;
 
         // Iterate through every hour and minute over 24 hour period
