@@ -57,7 +57,7 @@ public class GoalListFragment  extends Fragment{
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        //Initialize the Adapter (with empty list for now)
+        // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeIsCompleteStatus(id);
         });
@@ -69,7 +69,6 @@ public class GoalListFragment  extends Fragment{
         });
     }
     /**
-     *
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's

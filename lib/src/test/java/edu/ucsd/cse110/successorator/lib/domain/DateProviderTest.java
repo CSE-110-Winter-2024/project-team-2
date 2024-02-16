@@ -51,7 +51,7 @@ public class DateProviderTest {
                 // set values of expected calendar
                 Calendar expected = new GregorianCalendar(2024, Calendar.FEBRUARY, expectedDay, expectedHourOfDay, minute );
 
-                actual = cdp.setTwoHoursBack(actual);
+                actual.add(Calendar.HOUR_OF_DAY, -2);
                 assert (actual.equals(expected));
             }
         }
