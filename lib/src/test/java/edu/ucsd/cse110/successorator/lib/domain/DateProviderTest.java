@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-
 public class DateProviderTest {
     /**
      * Tests to make sure that the format of the date is correct when running the app

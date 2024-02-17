@@ -56,6 +56,7 @@ public class GoalsDaoTest {
     public void insertMultipleGoals() {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
+
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
         List<GoalEntity> allGoals = goalsDao.findAll();
@@ -67,6 +68,7 @@ public class GoalsDaoTest {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
         GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true);
+
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
         int goalsCount = goalsDao.count();
@@ -78,6 +80,7 @@ public class GoalsDaoTest {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
         GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true);
+
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
         int minSortOrder = goalsDao.getMinSortOrder();
@@ -89,6 +92,7 @@ public class GoalsDaoTest {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
         GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true);
+
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
         int maxSortOrder = goalsDao.getMaxSortOrder();
@@ -133,6 +137,7 @@ public class GoalsDaoTest {
     public void append() {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
+
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
         GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100, false, null, true);
@@ -150,6 +155,7 @@ public class GoalsDaoTest {
         GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true);
         GoalEntity goalEntity4 = new GoalEntity("goal4", 4, true, null, true);
         GoalEntity goalEntity5 = new GoalEntity("goal5", 5, false, null, true);
+
         List<GoalEntity> goals = List.of(goalEntity1, goalEntity2, goalEntity3, goalEntity4, goalEntity5);
         goalsDao.insert(goals);
         List<GoalEntity> allGoals = goalsDao.findAll();

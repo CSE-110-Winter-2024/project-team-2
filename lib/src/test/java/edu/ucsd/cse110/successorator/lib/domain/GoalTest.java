@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class GoalTest {
     @Test
     public void getGoal() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             String theGoal = "Test goal " + i;
             Goal goal = new Goal(0, theGoal, 0, false, null, true);
             assertEquals(goal.getGoalText(), theGoal);
@@ -24,7 +24,7 @@ public class GoalTest {
 
     @Test
     public void getId() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal = new Goal(i, "Test Goal", 0, false, null, true);
             assertEquals(Integer.valueOf(i), goal.getId());
         }
@@ -32,7 +32,7 @@ public class GoalTest {
 
     @Test
     public void getSortOrder() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal = new Goal(0, "Test Goal", i, false, null, true);
             assertEquals(Integer.valueOf(i), goal.getSortOrder());
         }
@@ -95,7 +95,7 @@ public class GoalTest {
 
     @Test
     public void withSortOrder() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal = new Goal(0, "Test Goal", 0, false, null, true);
             Goal actual = goal.withSortOrder(i);
             assertEquals(Integer.valueOf(i), actual.getSortOrder());
@@ -104,7 +104,7 @@ public class GoalTest {
 
     @Test
     public void withId() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal = new Goal(0, "Test Goal", 0, false, null, true);
             Goal actual = goal.withId(i);
             assertEquals(Integer.valueOf(i), actual.getId());
@@ -113,7 +113,7 @@ public class GoalTest {
 
     @Test
     public void testEquals() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal1 = new Goal(i, "Test Goal", i+5, false, null, true);
             Goal goal2 = new Goal(i, "Test Goal", i+5, false, null, true);
             Goal goal3 = new Goal(i, "Test Goal", i, false, null, true);
@@ -124,7 +124,7 @@ public class GoalTest {
 
     @Test
     public void testHashCode() {
-        for( int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; i++) {
             Goal goal1 = new Goal(i, "Test Goal", i+5, false, null, true);
             Goal goal2 = new Goal(i, "Test Goal", i+5, false, null, true);
             Goal goal3 = new Goal(i, "Test Goal", i, false, null, true);

@@ -17,7 +17,6 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
  */
 public class InMemoryDataSource {
     private int nextId = 0;
-
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = 0;
 
@@ -28,9 +27,9 @@ public class InMemoryDataSource {
     private final SimpleSubject<List<Goal>> allGoalsSubject
             = new SimpleSubject<>();
 
-    public InMemoryDataSource() { }
-
     public final static List<Goal> DEFAULT_GOALS = List.of();
+
+    public InMemoryDataSource() { }
 
     /**
      * @return data from default cards
@@ -73,7 +72,6 @@ public class InMemoryDataSource {
     public Subject<List<Goal>> getAllGoalsSubject() {
         return allGoalsSubject;
     }
-
 
     public int getMaxSortOrder() {
         return maxSortOrder;
@@ -188,6 +186,6 @@ public class InMemoryDataSource {
     }
 
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
-        //not sure what this should do rn
+//        Goal goal = goals.get(id);
     }
 }

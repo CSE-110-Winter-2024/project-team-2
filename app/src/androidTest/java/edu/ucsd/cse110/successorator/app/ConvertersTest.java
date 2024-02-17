@@ -18,7 +18,7 @@ public class ConvertersTest {
         //Converters converter = new Converters();
         Calendar date = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
         String expected = "2024-02-12";
-        String actual = new Converters().fromCalendar(date);
+        String actual = Converters.fromCalendar(date);
         assertEquals(expected,actual);
     }
 
@@ -26,7 +26,7 @@ public class ConvertersTest {
     public void toCalendar() {
         String strDate = "2024-02-12";
         Calendar expected = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
-        Calendar actual = new Converters().toCalendar(strDate);
+        Calendar actual = Converters.toCalendar(strDate);
         assertEquals(expected, actual);
     }
 }

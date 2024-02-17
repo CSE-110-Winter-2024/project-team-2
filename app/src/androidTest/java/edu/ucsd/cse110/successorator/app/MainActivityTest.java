@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.successorator.app;
 
-
 import static junit.framework.TestCase.assertEquals;
 
 import androidx.lifecycle.Lifecycle;

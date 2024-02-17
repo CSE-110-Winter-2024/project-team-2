@@ -59,14 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Update isDisplayed value of all goals and update database
-            if(activityModel.getOrderedGoals().getValue() != null) {
-                for(Goal goal : activityModel.getOrderedGoals().getValue()) {
-                    if(activityModel.getDate().getValue() != null) {
-                        goal.updateIsDisplayed(activityModel.getDate().getValue());
-                        activityModel.updateIsDisplayed(goal.getId(), goal.getIsDisplayed());
-                    }
-                }
-            }
+            activityModel.updateAllGoalsIsDisplayed();
         });
 
         // Listen for changes to goals so we can update which fragment to show
