@@ -55,33 +55,34 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
         dataSource.changeIsCompleteStatus(id, dateCompleted);
-        updateActiveGoals(); //Update active goals and notify observers
+        updateActiveGoals(dateCompleted); //Update active goals and notify observers
     }
 
-    public Subject<List<Goal>> getActiveGoalsSubject() {
-        updateActiveGoals(); // Ensure the subject has the initial state
+    public Subject<List<Goal>> getActiveGoalsSubject(Calendar mutableDate) {
+        updateActiveGoals(mutableDate); // Ensure the subject has the initial state
         return activeGoalsSubject;
     }
 
-    private void updateActiveGoals(){
-        List<Goal> activeGoals = getActiveGoals();
+    private void updateActiveGoals(Calendar mutableDate){
+        List<Goal> activeGoals = getActiveGoals(mutableDate);
         activeGoalsSubject.setValue(activeGoals);
     }
 
-    private List<Goal> getActiveGoals() {
+    private List<Goal> getActiveGoals(Calendar mutableDate) {
         return dataSource.getGoals().stream()
-                .filter(goal -> !goal.getIsComplete() || isCompletedToday(goal.getDateCompleted()))
-                .collect(Collectors.toList());
+            .filter(goal -> !goal.getIsComplete() || isCompletedToday(goal.getDateCompleted()))
+            .collect(Collectors.toList());
     }
 
-    private boolean isCompletedToday(Calendar dateCompleted) {
-        if (dateCompleted == null) {
-            return false;
-        }
-        Calendar today = Calendar.getInstance();
-        return dateCompleted.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                && dateCompleted.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-                && dateCompleted.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
+    private boolean isCompletedToday(String dateCompleted) {
+        return true; // Dummy value since we're not using SimpleGoalRepository
+        // if (dateCompleted == null) {
+        //     return false;
+        // }
+        // Calendar today = Calendar.getInstance();
+        // return dateCompleted.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+        //         && dateCompleted.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+        //         && dateCompleted.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
     }
 
     // prepend code from lab 5, wasn't working

@@ -16,6 +16,7 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 /**
  * This class displays the goal list in a Fragment view
@@ -110,16 +111,34 @@ public class GoalListFragment  extends Fragment{
             activityModel.changeIsCompleteStatus(id, activityModel.getDate().getValue());
         });
 
-
         // Set the adapter on the ListView
         binding.goalList.setAdapter(adapter);
 
         // Observe active goals
-        activityModel.getActiveGoals().observe(getViewLifecycleOwner(), goals -> {
+        activityModel.getActiveGoals(activityModel.getDate().getValue()).observe(getViewLifecycleOwner(), goals -> {
             if (goals != null) {
+                System.out.println("we're reaching here GoalListFragment");
+
+                for (Goal goal : goals) System.out.println(goal.getGoalText());
                 adapter.setGoals(new ArrayList<>(goals));
             }
         });
 
+        // Vivian's to attempt to observe the date. It's not working tho cuz somehow goals is always null
+        activityModel.getDate().observe(date -> {
+            if (date == null) {
+                return;
+            }
+
+            System.out.println("we're reaching here GoalListFragment on " + new DateFormatter().formatDateDatabase(activityModel.getDate().getValue()));
+
+            var goals = activityModel.getActiveGoals(activityModel.getDate().getValue()).getValue();
+            if (goals != null) {
+                System.out.println("goals is not null!!");
+                adapter.setGoals(new ArrayList<>(goals));
+            } else {
+                System.out.println("goals is null");
+            }
+        });
     }
 }

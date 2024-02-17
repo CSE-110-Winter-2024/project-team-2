@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 @Entity(tableName = "goals")
 public class GoalEntity {
@@ -25,9 +26,9 @@ public class GoalEntity {
     public boolean isComplete;
 
     @ColumnInfo(name = "date_completed")
-    public Calendar dateCompleted;
+    public String dateCompleted;
 
-    public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete, Calendar dateCompleted) {
+    public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete, String dateCompleted) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;

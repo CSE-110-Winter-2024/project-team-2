@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 /**
  * Class used as a sort of "database" of decks and flashcards that exist. This
@@ -176,7 +177,7 @@ public class InMemoryDataSource {
     public void changeIsCompleteStatus(Integer id, Calendar dateCompleted) {
         Goal goal = goals.get(id);
         goal.changeIsCompleteStatus();
-        goal.setDateCompleted(dateCompleted);
+        goal.setDateCompleted(new DateFormatter().formatDateDatabase(dateCompleted));
     }
 
     // Remove flashcard code from lab 5

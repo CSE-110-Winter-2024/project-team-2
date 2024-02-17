@@ -11,6 +11,7 @@ import edu.ucsd.cse110.successorator.app.util.LiveDataSubjectAdapter;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 public class RoomGoalRepository implements GoalRepository {
     private final GoalsDao goalsDao;
@@ -59,7 +60,7 @@ public class RoomGoalRepository implements GoalRepository {
         if (goalEntity != null){
             goalEntity.isComplete = !goalEntity.isComplete;
             if(goalEntity.isComplete){
-                goalEntity.dateCompleted = dateCompleted;
+                goalEntity.dateCompleted = new DateFormatter().formatDateDatabase(dateCompleted);
             } else{
                 goalEntity.dateCompleted = null;
             }
@@ -67,16 +68,19 @@ public class RoomGoalRepository implements GoalRepository {
         }
     }
 
-    public LiveData<List<Goal>> getActiveGoals() {
-        return Transformations.map(goalsDao.getActiveGoals(), entities -> {
+    public LiveData<List<Goal>> getActiveGoals(Calendar mutableDate) {
+        String mutableDateFormatted = new DateFormatter().formatDateDatabase(mutableDate);
+        System.out.println("\nMutable date is " + mutableDateFormatted + "\n"); // TESTING
+        System.out.println(goalsDao.getActiveGoals(mutableDateFormatted).getValue() + " in RoomGoalRepository"); // TESTING
+
+        return Transformations.map(goalsDao.getActiveGoals(mutableDateFormatted), entities -> {
             return entities.stream().map(GoalEntity::toGoal).collect(Collectors.toList());
         });
     }
 
     @Override
-    public Subject<List<Goal>> getActiveGoalsSubject() {
-        LiveData<List<Goal>> activeGoalsLiveData = getActiveGoals();
+    public Subject<List<Goal>> getActiveGoalsSubject(Calendar mutableDate) {
+        LiveData<List<Goal>> activeGoalsLiveData = getActiveGoals(mutableDate);
         return new LiveDataSubjectAdapter<>(activeGoalsLiveData);
     }
-
 }

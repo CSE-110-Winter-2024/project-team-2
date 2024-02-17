@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             mutableDate.add(Calendar.HOUR_OF_DAY, -2);
 
             // Displays the formattedDate on the action bar where the title used to be
-            String formattedDate = new DateFormatter().formatDate(mutableDate);
+            String formattedDate = new DateFormatter().formatDateActionBar(mutableDate);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(formattedDate);
             }

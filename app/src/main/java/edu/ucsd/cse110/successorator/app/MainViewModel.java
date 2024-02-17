@@ -115,39 +115,39 @@ public class MainViewModel extends ViewModel {
         subject.observe(liveData::setValue);
         return liveData;
     }
-    public LiveData<List<Goal>> getActiveGoals() {
-        LiveData<List<Goal>> activeGoals = convertSubjectToLiveData(goalRepository.getActiveGoalsSubject());
-        return Transformations.map(activeGoals, goals -> {
-            // Get the current date with time set to midnight for comparison
-            Calendar currentDate = Calendar.getInstance();
-            currentDate.set(Calendar.HOUR_OF_DAY, 0);
-            currentDate.set(Calendar.MINUTE, 0);
-            currentDate.set(Calendar.SECOND, 0);
-            currentDate.set(Calendar.MILLISECOND, 0);
 
-//            // Filter out completed goals from previous days
-//            return goals.stream()
-//                    .filter(goal -> !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0))
-//                    .collect(Collectors.toList());
-            // Log the current date for debugging
-            Log.d("getActiveGoals", "Current date (12 AM): " + currentDate.getTime());
+    public LiveData<List<Goal>> getActiveGoals(Calendar mutableDate) {
+        Subject<List<Goal>> activeGoalsSubject = goalRepository.getActiveGoalsSubject(getDate().getValue());
+        return convertSubjectToLiveData(activeGoalsSubject);
+//         return Transformations.map(activeGoals, goals -> {
+//             // Get the current date with time set to midnight for comparison
+//             Calendar currentDate = Calendar.getInstance();
+//             currentDate.set(Calendar.HOUR_OF_DAY, 0);
+//             currentDate.set(Calendar.MINUTE, 0);
+//             currentDate.set(Calendar.SECOND, 0);
+//             currentDate.set(Calendar.MILLISECOND, 0);
 
-            // Filter out completed goals from previous days (before 2 AM)
-            List<Goal> filteredGoals = goals.stream()
-                    .filter(goal -> {
-                        boolean isGoalActive = !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0);
-                        // Log each goal's status for debugging
-                        Log.d("getActiveGoals", "Goal: " + goal.getGoalText() + ", IsComplete: " + goal.getIsComplete() + ", DateCompleted: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null") + ", IsActive: " + isGoalActive);
-                        Log.d("getActiveGoals", "Current date: " + currentDate.getTime());
-                        Log.d("getActiveGoals", "Goal completion date: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null"));
+// //            // Filter out completed goals from previous days
+// //            return goals.stream()
+// //                    .filter(goal -> !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0))
+// //                    .collect(Collectors.toList());
+//             // Log the current date for debugging
+//             Log.d("getActiveGoals", "Current date (12 AM): " + currentDate.getTime());
 
-                        return isGoalActive;
-                    })
-                    .collect(Collectors.toList());
+//             // Filter out completed goals from previous days (before 2 AM)
+//             List<Goal> filteredGoals = goals.stream()
+//                 .filter(goal -> {
+//                     boolean isGoalActive = !goal.getIsComplete() || (goal.getDateCompleted() != null && goal.getDateCompleted().compareTo(currentDate) >= 0);
+//                     // Log each goal's status for debugging
+//                     Log.d("getActiveGoals", "Goal: " + goal.getGoalText() + ", IsComplete: " + goal.getIsComplete() + ", DateCompleted: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null") + ", IsActive: " + isGoalActive);
+//                     Log.d("getActiveGoals", "Current date: " + currentDate.getTime());
+//                     Log.d("getActiveGoals", "Goal completion date: " + (goal.getDateCompleted() != null ? goal.getDateCompleted().getTime() : "null"));
 
-            return filteredGoals;
-        });
+//                     return isGoalActive;
+//                 })
+//                 .collect(Collectors.toList());
+
+//             return filteredGoals;
+//         });
     }
-
-
 }

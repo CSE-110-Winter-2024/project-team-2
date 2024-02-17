@@ -18,5 +18,5 @@ public interface GoalRepository {
 
     void changeIsCompleteStatus(Integer id, Calendar dateCompleted);
 
-    Subject<List<Goal>> getActiveGoalsSubject();
+    Subject<List<Goal>> getActiveGoalsSubject(Calendar mutableDate);
 }

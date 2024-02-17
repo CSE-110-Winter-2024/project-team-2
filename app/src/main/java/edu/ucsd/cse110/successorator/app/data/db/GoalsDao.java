@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
@@ -30,6 +31,9 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
+    @Query("SELECT * FROM goals WHERE isComplete = 0 OR date_completed = :mutableDate ORDER BY isComplete, sort_order")
+    LiveData<List<GoalEntity>> getActiveGoals(String mutableDate);
+    
     @Query("SELECT COUNT(*) FROM goals")
     int count();
 
@@ -42,17 +46,13 @@ public interface GoalsDao {
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(Integer id);
 
-    @Query("SELECT * FROM goals WHERE isComplete = 0 OR date(date_completed) = date('now')")
-    LiveData<List<GoalEntity>> getActiveGoals();
-
     @Update
     void updateGoal(GoalEntity goal);
-
 
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete,goal.dateCompleted);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, goal.dateCompleted);
         return Math.toIntExact(insert(newGoal));
     }
 }

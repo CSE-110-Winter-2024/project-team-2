@@ -2,8 +2,8 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 public class Goal {
@@ -11,9 +11,9 @@ public class Goal {
     public final @Nullable Integer id;
     public final @NonNull Integer sortOrder;
     public @NonNull Boolean isComplete;
-    public @Nullable Calendar dateCompleted;
+    public @Nullable String dateCompleted; // Format is YYYY-MM-DD
 
-    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder, @NonNull Boolean isComplete, @Nullable Calendar dateCompleted) {
+    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder, @NonNull Boolean isComplete, @Nullable String dateCompleted) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
@@ -41,9 +41,9 @@ public class Goal {
         this.isComplete = !this.isComplete;
     }
 
-    public Calendar getDateCompleted(){ return dateCompleted; }
+    public String getDateCompleted(){ return dateCompleted; }
 
-    public void setDateCompleted(Calendar dateCompleted){this.dateCompleted = dateCompleted;}
+    public void setDateCompleted(String dateCompleted){this.dateCompleted = dateCompleted;}
 
     /**
      * set sortOrder of Goal
@@ -74,6 +74,6 @@ public class Goal {
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete,dateCompleted);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted);
     }
 }
