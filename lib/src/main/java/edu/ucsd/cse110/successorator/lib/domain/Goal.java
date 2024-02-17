@@ -65,6 +65,10 @@ public class Goal {
         }
     }
 
+    public void setIsDisplayed(@NonNull Boolean isDisplayed) {
+        this.isDisplayed = isDisplayed;
+    }
+
     public void updateIsDisplayed(Calendar currDate) {
         boolean completedOnCurrDate;
         if(dateCompleted != null) {

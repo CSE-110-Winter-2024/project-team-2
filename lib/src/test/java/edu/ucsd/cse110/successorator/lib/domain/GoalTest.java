@@ -65,6 +65,15 @@ public class GoalTest {
     }
 
     @Test
+    public void setIsDisplayed() {
+        Goal goal = new Goal(0, "test Goal", 0, false, null, true);
+        assertTrue(goal.getIsDisplayed());
+
+        goal.setIsDisplayed(false);
+        assertFalse(goal.getIsDisplayed());
+    }
+
+    @Test
     public void changeIsCompleteStatus() {
         Goal goal = new Goal(0, "test Goal", 0, false, null, true);
         goal.changeIsCompleteStatus();

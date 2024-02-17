@@ -18,7 +18,7 @@ public class Converters {
             return null;
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        return calendar == null ? null : dateFormat.format(calendar.getTime());
+        return dateFormat.format(calendar.getTime());
     }
 
     @TypeConverter

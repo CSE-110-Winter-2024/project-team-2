@@ -186,6 +186,7 @@ public class InMemoryDataSource {
     }
 
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
-//        Goal goal = goals.get(id);
+        Goal goal = goals.get(id);
+        goal.setIsDisplayed(isDisplayed);
     }
 }
