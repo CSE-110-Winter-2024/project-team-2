@@ -133,4 +133,20 @@ public class GoalsDaoTest {
             assertEquals(sortedGoals.get(i).isComplete, allGoals.get(i).isComplete);
         }
     }
+
+    @Test
+    public void moveToTop() {
+        Goal goal1 = new Goal(5, "goal1", 1, false);
+        GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
+        Goal goal2 = new Goal(10, "goal2", 2, false);
+        GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
+        Goal goal3 = new Goal(3, "goal3", 4, false);
+        GoalEntity goalEntity3 = GoalEntity.fromGoal(goal3);
+        List<GoalEntity> GoalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
+        goalsDao.insert(GoalsToInsert);
+        goalsDao.moveToTop(10);
+        assertEquals(0, goalsDao.find(10).sortOrder);
+        assertEquals(1, goalsDao.find(5).sortOrder);
+        assertEquals(4, goalsDao.find(3).sortOrder);
+    }
 }
