@@ -95,9 +95,6 @@ public class MainViewModel extends ViewModel {
         goalRepository.append(goal);
     }
 
-    // Prepend code from lab 5, wasn't working
-    // public void prepend(Goal goal) { goalRepository.prepend(goal); }
-
     public void advanceDateOneDayForward() {
         dateRepository.advanceDateOneDayForward();
     }

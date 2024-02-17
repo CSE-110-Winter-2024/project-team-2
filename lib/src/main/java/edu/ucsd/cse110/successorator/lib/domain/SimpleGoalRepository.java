@@ -52,7 +52,7 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.setDateCompleted(id, dateCompleted);
     }
 
-    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed){
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
         dataSource.changeIsDisplayedStatus(id, isDisplayed);
     }
 }

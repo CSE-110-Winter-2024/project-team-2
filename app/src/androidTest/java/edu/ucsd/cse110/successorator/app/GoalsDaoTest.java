@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -13,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
@@ -102,6 +105,31 @@ public class GoalsDaoTest {
     }
 
     @Test
+    public void changeIsDisplayedStatus() {
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
+        goalEntity1.id = 1;
+        goalsDao.insert(goalEntity1);
+
+        goalsDao.changeIsDisplayedStatus(1, true);
+        assertTrue(goalsDao.find(1).isDisplayed);
+
+        goalsDao.changeIsDisplayedStatus(1, false);
+        assertFalse(goalsDao.find(1).isDisplayed);
+    }
+
+    @Test
+    public void setDateCompleted() {
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
+        goalEntity1.id = 1;
+        goalsDao.insert(goalEntity1);
+        assertNull(goalsDao.find(1).dateCompleted);
+
+        Calendar dateCompleted = Calendar.getInstance();
+        goalsDao.setDateCompleted(1, dateCompleted);
+        assertEquals(dateCompleted, goalsDao.find(1).dateCompleted);
+    }
+
+    @Test
     public void append() {
         GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
@@ -130,6 +158,8 @@ public class GoalsDaoTest {
             assertEquals(sortedGoals.get(i).goalText, allGoals.get(i).goalText);
             assertEquals(sortedGoals.get(i).sortOrder, allGoals.get(i).sortOrder);
             assertEquals(sortedGoals.get(i).isComplete, allGoals.get(i).isComplete);
+            assertEquals(sortedGoals.get(i).dateCompleted, allGoals.get(i).dateCompleted);
+            assertEquals(sortedGoals.get(i).isDisplayed, allGoals.get(i).isDisplayed);
         }
     }
 }

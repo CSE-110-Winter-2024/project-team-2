@@ -83,16 +83,12 @@ public class GoalListFragment  extends Fragment{
      */
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @NonNull ViewGroup container,
-            @NonNull Bundle savedInstanceState
-    ) {
+    public View onCreateView( @NonNull LayoutInflater inflater, @NonNull ViewGroup container,
+                              @NonNull Bundle savedInstanceState) {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
 
-        // set adapter on the listView
+        // Set adapter on the listView
         view.goalList.setAdapter(adapter);
-
         return view.getRoot();
     }
 }

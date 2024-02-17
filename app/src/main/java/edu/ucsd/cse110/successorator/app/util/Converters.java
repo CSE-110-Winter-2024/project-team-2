@@ -4,8 +4,11 @@ import androidx.room.TypeConverter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
+/**
+ * Class to convert Calendar object to string and vice versa when storing
+ * calendar value in database
+ */
 public class Converters {
     @TypeConverter
     public static String fromCalendar(Calendar calendar) {

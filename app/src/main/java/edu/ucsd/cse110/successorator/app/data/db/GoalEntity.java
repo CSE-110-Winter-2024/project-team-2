@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -30,7 +31,8 @@ public class GoalEntity {
     @ColumnInfo(name = "isDisplayed")
     public boolean isDisplayed;
 
-    public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete, Calendar dateCompleted, boolean isDisplayed) {
+    public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete,
+                      @Nullable Calendar dateCompleted, boolean isDisplayed) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
@@ -39,7 +41,8 @@ public class GoalEntity {
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(), goal.getDateCompleted(), goal.getIsDisplayed());
+        var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(),
+                goal.getDateCompleted(), goal.getIsDisplayed());
         goalEntity.id = goal.getId();
         return goalEntity;
     }

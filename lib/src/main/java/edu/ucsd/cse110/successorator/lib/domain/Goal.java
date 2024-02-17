@@ -66,12 +66,16 @@ public class Goal {
     }
 
     public void updateIsDisplayed(Calendar currDate) {
-        currDate.set(Calendar.HOUR, 0);
-        currDate.set(Calendar.MINUTE, 0);
-        currDate.set(Calendar.SECOND, 0);
-        currDate.set(Calendar.MILLISECOND, 0);
-        currDate.set(Calendar.AM_PM, Calendar.AM);
-        if(!isComplete || (dateCompleted != null && dateCompleted.getTime().compareTo(currDate.getTime()) == 0)) {
+        boolean completedOnCurrDate;
+        if(dateCompleted != null) {
+            completedOnCurrDate = ( dateCompleted.get(Calendar.MONTH) == currDate.get(Calendar.MONTH) )
+                    && ( dateCompleted.get(Calendar.DAY_OF_MONTH) == currDate.get(Calendar.DAY_OF_MONTH) )
+                    && ( dateCompleted.get(Calendar.YEAR) == currDate.get(Calendar.YEAR));
+        } else {
+            completedOnCurrDate = false;
+        }
+
+        if(!isComplete || completedOnCurrDate) {
             isDisplayed = Boolean.TRUE;
         } else {
             isDisplayed = Boolean.FALSE;

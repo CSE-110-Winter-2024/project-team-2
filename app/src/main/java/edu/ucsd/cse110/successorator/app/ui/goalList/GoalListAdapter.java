@@ -24,11 +24,13 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     Consumer<Integer> onClick;
 
     public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onClick) {
-        // This sets a bunch of stuff internally, which we can access
-        // with getContext() and getItem() for example.
-        //
-        // Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
-        // or it will crash!
+       /*
+        * This sets a bunch of stuff internally, which we can access
+        * with getContext() and getItem() for example.
+        *
+        * Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
+        * or it will crash!
+        */
         super(context, 0, new ArrayList<>(goals));
         this.onClick = onClick;
     }
@@ -43,10 +45,10 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // Check if a view is being reused...
         GoalListItemBinding binding;
         if (convertView != null) {
-            // if so, bind to it
+            // If so, bind to it
             binding = GoalListItemBinding.bind(convertView);
         } else {
-            // otherwise inflate a new view from our layout XML.
+            // Otherwise inflate a new view from our layout XML.
             var layoutInflater = LayoutInflater.from(getContext());
             binding = GoalListItemBinding.inflate(layoutInflater, parent, false);
         }
@@ -79,9 +81,11 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         return binding.getRoot();
     }
 
-    // The below methods aren't strictly necessary, usually.
-    // But get in the habit of defining them because they never hurt
-    // (as long as you have IDs for each item) and sometimes you need them.
+    /*
+     * The below methods aren't strictly necessary, usually.
+     * But get in the habit of defining them because they never hurt
+     * (as long as you have IDs for each item) and sometimes you need them.
+     */
 
     @Override
     public boolean hasStableIds() {

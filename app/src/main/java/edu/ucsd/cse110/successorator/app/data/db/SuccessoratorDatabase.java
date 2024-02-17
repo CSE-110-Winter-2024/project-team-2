@@ -10,5 +10,4 @@ import edu.ucsd.cse110.successorator.app.util.Converters;
 @TypeConverters({Converters.class})
 public abstract class SuccessoratorDatabase extends RoomDatabase {
     public abstract GoalsDao goalsDao();
-
 }
