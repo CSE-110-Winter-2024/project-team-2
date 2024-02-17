@@ -9,7 +9,7 @@ Andy Huynh + Hannah Coates
 - Blockers: N/A
 - Goals for next standup: N/A
 
-Benjamin Johnson
+Benjamin Johnson + Tianlin Zhao
 - What you’ve been working on: N/A
 - Blockers: N/A
 - Goals for next standup: meeting tonight to get started on the persistence story
