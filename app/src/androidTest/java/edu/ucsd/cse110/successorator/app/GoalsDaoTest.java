@@ -130,6 +130,13 @@ public class GoalsDaoTest {
 
         Calendar dateCompleted = Calendar.getInstance();
         goalsDao.setDateCompleted(1, dateCompleted);
+
+        dateCompleted.set(Calendar.HOUR, 0);
+        dateCompleted.set(Calendar.MINUTE, 0);
+        dateCompleted.set(Calendar.SECOND, 0);
+        dateCompleted.set(Calendar.MILLISECOND, 0);
+        dateCompleted.set(Calendar.AM_PM, Calendar.AM);
+
         assertEquals(dateCompleted, goalsDao.find(1).dateCompleted);
     }
 

@@ -37,7 +37,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the goal for this position.
         var goal = getItem(position);
         assert goal != null;

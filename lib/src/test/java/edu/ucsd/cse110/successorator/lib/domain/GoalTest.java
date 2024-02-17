@@ -61,7 +61,7 @@ public class GoalTest {
         Goal goal = new Goal(0, "test Goal", 0, false, null, true);
         assertTrue(goal.getIsDisplayed());
         Goal goal2 = new Goal(0, "test Goal", 0, false, null, false);
-        assertFalse(goal.getIsDisplayed());
+        assertFalse(goal2.getIsDisplayed());
     }
 
     @Test
