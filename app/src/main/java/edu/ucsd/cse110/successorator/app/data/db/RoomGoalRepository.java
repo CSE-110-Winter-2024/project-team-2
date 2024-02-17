@@ -60,4 +60,9 @@ public class RoomGoalRepository implements GoalRepository {
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         goalsDao.setDateCompleted(id, dateCompleted);
     }
+
+    @Override
+    public void changeIsDisplayedStatus(Integer id, boolean is_displayed) {
+        goalsDao.changeIsDisplayedStatus(id, is_displayed);
+    }
 }

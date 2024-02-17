@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 /**
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        // Listen for changes to date to update displayed date and isDisplayed values of goals
         this.activityModel.getDate().observe(date -> {
             if (date == null) {
                 return;
@@ -54,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
             String formattedDate = new DateFormatter().formatDate(mutableDate);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(formattedDate);
+            }
+
+            // Update isDisplayed value of all goals and update database
+            if(activityModel.getOrderedGoals().getValue() != null) {
+                for(Goal goal : activityModel.getOrderedGoals().getValue()) {
+                    if(activityModel.getDate().getValue() != null) {
+                        goal.updateIsDisplayed(activityModel.getDate().getValue());
+                        activityModel.updateIsDisplayed(goal.getId(), goal.getIsDisplayed());
+                    }
+                }
             }
         });
 

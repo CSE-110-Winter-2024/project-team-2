@@ -6,12 +6,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
-import androidx.room.Update;
 
 import java.util.Calendar;
 import java.util.List;
-
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 @Dao
 public interface GoalsDao {
@@ -30,7 +27,7 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
@@ -45,13 +42,16 @@ public interface GoalsDao {
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(Integer id);
 
+    @Query("UPDATE goals SET isDisplayed = :is_Displayed WHERE id = :id")
+    void changeIsDisplayedStatus(Integer id, boolean is_Displayed);
+
     @Query("UPDATE goals SET dateCompleted = :date_Completed WHERE id = :id")
     void setDateCompleted(Integer id, Calendar date_Completed);
 
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null, true);
         return Math.toIntExact(insert(newGoal));
     }
 }

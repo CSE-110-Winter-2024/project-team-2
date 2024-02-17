@@ -15,7 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalEntityTest {
     @Test
     public void goalEntityConstructor() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
         assertEquals(goalEntity1.goalText, "goal1");
         assertEquals(goalEntity1.sortOrder, 1);
         assertFalse(goalEntity1.isComplete);
@@ -23,9 +23,9 @@ public class GoalEntityTest {
 
     @Test
     public void fromGoal() {
-        Goal goal1 = new Goal(5, "goal1", 1, false, null);
+        Goal goal1 = new Goal(5, "goal1", 1, false, null, true);
         GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
-        Goal goal2 = new Goal(10, "goal2", 2, true, null);
+        Goal goal2 = new Goal(10, "goal2", 2, true, null, true);
         GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
         assertEquals(goalEntity1.id, (Integer) 5);
         assertEquals(goalEntity1.goalText, "goal1");
@@ -39,8 +39,8 @@ public class GoalEntityTest {
 
     @Test
     public void toGoal() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, null);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, null, true);
         Goal goal1 = goalEntity1.toGoal();
         Goal goal2 = goalEntity2.toGoal();
         assertEquals(goal1.goalText, "goal1");

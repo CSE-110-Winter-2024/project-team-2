@@ -19,4 +19,6 @@ public interface GoalRepository {
     void changeIsCompleteStatus(Integer id);
 
     void setDateCompleted(Integer id, Calendar dateCompleted);
+
+    void changeIsDisplayedStatus(Integer id, boolean is_Displayed);
 }

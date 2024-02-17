@@ -7,9 +7,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -52,6 +50,13 @@ public class MainViewModel extends ViewModel {
             var newOrderedGoals = new ArrayList<>(goals);
 
             orderedGoals.setValue(newOrderedGoals);
+            if(orderedGoals.getValue() != null) {
+                for(Goal goal : orderedGoals.getValue()) {
+                    if(goal != null && getDate().getValue() != null){
+                        goal.updateIsDisplayed(getDate().getValue());
+                    }
+                }
+            }
         });
 
         // When ordering changes, update the ordered goals
@@ -63,6 +68,7 @@ public class MainViewModel extends ViewModel {
                 var goal = goalRepository.find(id).getValue();
                 if(goal == null) return;
                 goals.add(goal);
+                goal.updateIsDisplayed(date.getValue()); // update is displayed value when ordering changes? DELETE??
             }
             this.orderedGoals.setValue(goals);
         });
@@ -104,9 +110,11 @@ public class MainViewModel extends ViewModel {
         goalRepository.setDateCompleted(id, dateCompleted);
     }
 
+    public void updateIsDisplayed(Integer id, boolean isDisplayed) {
+        goalRepository.changeIsDisplayedStatus(id, isDisplayed);
+    }
+
     public Subject<Calendar> getDate() {
         return date;
     }
-
-
 }

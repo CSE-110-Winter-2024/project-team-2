@@ -180,34 +180,14 @@ public class InMemoryDataSource {
 
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         Goal goal = goals.get(id);
-        goal.setDateCompleted(dateCompleted);
+        if(goal.getIsComplete()) {
+            goal.setDateCompleted(dateCompleted);
+        } else {
+            goal.setDateCompleted(null);
+        }
     }
 
-    // Remove flashcard code from lab 5
-//    public void removeGoals(int id) {
-//        var card = goals.get(id);
-//        var sortOrder = card.getSortOrder();
-//
-//        goals.remove(id);
-//        shiftSortOrders(sortOrder, maxSortOrder, -1);
-//
-//        if (goalSubjects.containsKey(id)) {
-//            goalSubjects.get(id).setValue(null);
-//        }
-//        allGoalsSubject.setValue(getFlashcards());
-//    }
-
-    // Both below used with prepend function
-//    public int getMinSortOrder() {
-//        return minSortOrder;
-//    }
-
-//    public void shiftSortOrders(int from, int to, int by) {
-//        var cards = goals.values().stream()
-//                .filter(card -> card.getSortOrder() >= from && card.getSortOrder() <= to)
-//                .map(card -> card.withSortOrder(card.getSortOrder() + by))
-//                .collect(Collectors.toList());
-//
-//        putGoals(cards);
-//    }
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
+        //not sure what this should do rn
+    }
 }

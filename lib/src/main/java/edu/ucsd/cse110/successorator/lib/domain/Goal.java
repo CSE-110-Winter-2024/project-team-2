@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 public class Goal {
@@ -13,13 +12,16 @@ public class Goal {
     public final @NonNull Integer sortOrder;
     public @NonNull Boolean isComplete;
     public @Nullable Calendar dateCompleted;
+    public @NonNull Boolean isDisplayed;
 
-    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder, @NonNull Boolean isComplete, @Nullable Calendar dateCompleted) {
+    public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
+                @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
         this.dateCompleted = dateCompleted;
+        this.isDisplayed = isDisplayed;
     }
 
     public @NonNull String getGoalText() {
@@ -42,15 +44,37 @@ public class Goal {
         return dateCompleted;
     }
 
+    public @NonNull Boolean getIsDisplayed() {
+        return isDisplayed;
+    }
+
     public void changeIsCompleteStatus() {
         this.isComplete = !this.isComplete;
     }
 
     public void setDateCompleted (Calendar dateCompleted) {
         if(isComplete) {
+            dateCompleted.set(Calendar.HOUR, 0);
+            dateCompleted.set(Calendar.MINUTE, 0);
+            dateCompleted.set(Calendar.SECOND, 0);
+            dateCompleted.set(Calendar.MILLISECOND, 0);
+            dateCompleted.set(Calendar.AM_PM, Calendar.AM);
             this.dateCompleted = dateCompleted;
         } else {
             this.dateCompleted = null;
+        }
+    }
+
+    public void updateIsDisplayed(Calendar currDate) {
+        currDate.set(Calendar.HOUR, 0);
+        currDate.set(Calendar.MINUTE, 0);
+        currDate.set(Calendar.SECOND, 0);
+        currDate.set(Calendar.MILLISECOND, 0);
+        currDate.set(Calendar.AM_PM, Calendar.AM);
+        if(!isComplete || (dateCompleted != null && dateCompleted.getTime().compareTo(currDate.getTime()) == 0)) {
+            isDisplayed = Boolean.TRUE;
+        } else {
+            isDisplayed = Boolean.FALSE;
         }
     }
 
@@ -60,7 +84,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed);
     }
 
     /**
@@ -69,7 +93,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed);
     }
 
     @Override
@@ -78,11 +102,11 @@ public class Goal {
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
         return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id) && Objects.equals(sortOrder, goal.sortOrder)
-                && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted);
+                && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed);
     }
 }
