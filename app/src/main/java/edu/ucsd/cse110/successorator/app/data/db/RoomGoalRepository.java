@@ -57,6 +57,11 @@ public class RoomGoalRepository implements GoalRepository {
         goalsDao.changeIsCompleteStatus(id);
     }
 
+    @Override
+    public void moveToTop(Integer id) {
+        goalsDao.moveToTop(id);
+    }
+
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         goalsDao.setDateCompleted(id, dateCompleted);
     }

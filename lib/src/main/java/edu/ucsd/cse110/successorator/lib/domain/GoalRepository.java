@@ -18,6 +18,8 @@ public interface GoalRepository {
 
     void changeIsCompleteStatus(Integer id);
 
+    void moveToTop(Integer id);
+
     void setDateCompleted(Integer id, Calendar dateCompleted);
 
     void changeIsDisplayedStatus(Integer id, boolean isDisplayed);
