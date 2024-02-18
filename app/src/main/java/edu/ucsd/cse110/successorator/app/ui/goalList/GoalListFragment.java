@@ -71,6 +71,7 @@ public class GoalListFragment  extends Fragment{
             adapter.notifyDataSetChanged();
         });
     }
+    
     /**
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
