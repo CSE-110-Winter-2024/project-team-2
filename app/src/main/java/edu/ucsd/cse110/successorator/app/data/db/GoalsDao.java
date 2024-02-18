@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
@@ -20,13 +21,13 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
 
-    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
     List<GoalEntity> findAll();
 
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
@@ -44,10 +45,19 @@ public interface GoalsDao {
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
 
+    @Query("UPDATE goals SET isDisplayed = :isDisplayed WHERE id = :id")
+    void changeIsDisplayedStatus(Integer id, boolean isDisplayed);
+
+    // Sets date completed to the given date if the goal is marked as complete. If the goal is not
+    // marked as complete, sets date completed to null.
+    @Query("UPDATE goals SET dateCompleted = (CASE WHEN isComplete = True THEN :dateCompleted ELSE " +
+            "NULL END) WHERE id = :id")
+    void setDateCompleted(Integer id, Calendar dateCompleted);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null, true);
         return Math.toIntExact(insert(newGoal));
     }
 

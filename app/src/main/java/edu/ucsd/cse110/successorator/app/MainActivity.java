@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        // Listen for changes to date to update displayed date and isDisplayed values of goals
         this.activityModel.getDate().observe(date -> {
             if (date == null) {
                 return;
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(formattedDate);
             }
+
+            // Update isDisplayed value of all goals and update database
+            activityModel.updateAllGoalsIsDisplayed();
         });
 
         // Listen for changes to goals so we can update which fragment to show

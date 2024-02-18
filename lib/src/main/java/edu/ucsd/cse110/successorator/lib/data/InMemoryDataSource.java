@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.data;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
  */
 public class InMemoryDataSource {
     private int nextId = 0;
-
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = 0;
 
@@ -27,9 +27,9 @@ public class InMemoryDataSource {
     private final SimpleSubject<List<Goal>> allGoalsSubject
             = new SimpleSubject<>();
 
-    public InMemoryDataSource() { }
-
     public final static List<Goal> DEFAULT_GOALS = List.of();
+
+    public InMemoryDataSource() { }
 
     /**
      * @return data from default cards
@@ -72,7 +72,6 @@ public class InMemoryDataSource {
     public Subject<List<Goal>> getAllGoalsSubject() {
         return allGoalsSubject;
     }
-
 
     public int getMaxSortOrder() {
         return maxSortOrder;
@@ -177,31 +176,13 @@ public class InMemoryDataSource {
         goal.changeIsCompleteStatus();
     }
 
-    // Remove flashcard code from lab 5
-//    public void removeGoals(int id) {
-//        var card = goals.get(id);
-//        var sortOrder = card.getSortOrder();
-//
-//        goals.remove(id);
-//        shiftSortOrders(sortOrder, maxSortOrder, -1);
-//
-//        if (goalSubjects.containsKey(id)) {
-//            goalSubjects.get(id).setValue(null);
-//        }
-//        allGoalsSubject.setValue(getFlashcards());
-//    }
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        Goal goal = goals.get(id);
+        goal.setDateCompleted(dateCompleted);
+    }
 
-    // Both below used with prepend function
-//    public int getMinSortOrder() {
-//        return minSortOrder;
-//    }
-
-//    public void shiftSortOrders(int from, int to, int by) {
-//        var cards = goals.values().stream()
-//                .filter(card -> card.getSortOrder() >= from && card.getSortOrder() <= to)
-//                .map(card -> card.withSortOrder(card.getSortOrder() + by))
-//                .collect(Collectors.toList());
-//
-//        putGoals(cards);
-//    }
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
+        Goal goal = goals.get(id);
+        goal.setIsDisplayed(isDisplayed);
+    }
 }

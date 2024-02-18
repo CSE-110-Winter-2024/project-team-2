@@ -13,7 +13,7 @@ public class MockDateProvider implements DateProvider {
     }
 
     @Override
-    public Calendar getCurrentDate(){
+    public Calendar getCurrentDate() {
         return calendar;
     }
 }

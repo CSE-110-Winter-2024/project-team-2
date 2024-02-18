@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.app.data.db;
 
 import androidx.lifecycle.Transformations;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,5 +60,14 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void moveToTop(Integer id) {
         goalsDao.moveToTop(id);
+    }
+
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        goalsDao.setDateCompleted(id, dateCompleted);
+    }
+
+    @Override
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
+        goalsDao.changeIsDisplayedStatus(id, isDisplayed);
     }
 }
