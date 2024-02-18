@@ -102,6 +102,10 @@ public class MainViewModel extends ViewModel {
         goalRepository.changeIsCompleteStatus(id);
     }
 
+    public void moveToTop(Integer id) {
+        goalRepository.moveToTop(id);
+    }
+
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         goalRepository.setDateCompleted(id, dateCompleted);
     }

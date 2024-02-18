@@ -52,12 +52,7 @@ public class SimpleGoalRepository implements GoalRepository {
     public void moveToTop(Integer id) {
         //
     }
-
-    @Override
-    public void moveToTop(Integer id) {
-        //
-    }
-
+    
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         dataSource.setDateCompleted(id, dateCompleted);
     }
