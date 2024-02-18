@@ -21,7 +21,7 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
 
-    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
     List<GoalEntity> findAll();
 
     @Query("SELECT * FROM goals WHERE id = :id")
@@ -42,11 +42,14 @@ public interface GoalsDao {
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(Integer id);
 
-    @Query("UPDATE goals SET isDisplayed = :is_Displayed WHERE id = :id")
-    void changeIsDisplayedStatus(Integer id, boolean is_Displayed);
+    @Query("UPDATE goals SET isDisplayed = :isDisplayed WHERE id = :id")
+    void changeIsDisplayedStatus(Integer id, boolean isDisplayed);
 
-    @Query("UPDATE goals SET dateCompleted = :date_Completed WHERE id = :id")
-    void setDateCompleted(Integer id, Calendar date_Completed);
+    // Sets date completed to the given date if the goal is marked as complete. If the goal is not
+    // marked as complete, sets date completed to null.
+    @Query("UPDATE goals SET dateCompleted = (CASE WHEN isComplete = True THEN :dateCompleted ELSE " +
+            "NULL END) WHERE id = :id")
+    void setDateCompleted(Integer id, Calendar dateCompleted);
 
     @Transaction
     default int append(GoalEntity goal) {

@@ -13,27 +13,22 @@ import java.util.Objects;
  */
 public class Converters {
     @TypeConverter
-    public static String fromCalendar(Calendar calendar) {
-        if(calendar == null) {
-            return null;
+    public static long fromCalendar(Calendar calendar) {
+        if (calendar == null) {
+            return 0;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        return dateFormat.format(calendar.getTime());
+        return calendar.getTimeInMillis();
     }
 
     @TypeConverter
-    public static Calendar toCalendar(String dateString) {
-        if(dateString == null) {
+    public static Calendar toCalendar(long millis) {
+        // Use a timesatmp of 0 (which represents 1/1/1970) to represent a null date
+        if (millis == 0) {
             return null;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
         Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(Objects.requireNonNull(dateFormat.parse(dateString)));
-        } catch (Exception e) {
-            // Handle the exception if the date string is not in the expected format
-            e.printStackTrace();
-        }
+        calendar.setTimeInMillis(millis);
         return calendar;
     }
 }

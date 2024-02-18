@@ -50,9 +50,9 @@ public class MainViewModel extends ViewModel {
             var newOrderedGoals = new ArrayList<>(goals);
 
             orderedGoals.setValue(newOrderedGoals);
-            if(orderedGoals.getValue() != null) {
-                for(Goal goal : orderedGoals.getValue()) {
-                    if(goal != null && getDate().getValue() != null){
+            if (orderedGoals.getValue() != null) {
+                for (Goal goal : orderedGoals.getValue()) {
+                    if (goal != null && getDate().getValue() != null){
                         goal.updateIsDisplayed(getDate().getValue());
                     }
                 }
@@ -61,12 +61,12 @@ public class MainViewModel extends ViewModel {
 
         // When ordering changes, update the ordered goals
         goalOrdering.observe(ordering -> {
-            if(ordering == null) return;
+            if (ordering == null) return;
 
             var goals = new ArrayList<Goal>();
-            for(var id : ordering) {
+            for (var id : ordering) {
                 var goal = goalRepository.find(id).getValue();
-                if(goal == null) return;
+                if (goal == null) return;
                 goals.add(goal);
             }
             this.orderedGoals.setValue(goals);
@@ -107,13 +107,13 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateAllGoalsIsDisplayed() {
-        if(getOrderedGoals().getValue() != null) {
-            for(Goal goal : getOrderedGoals().getValue()) {
+        if (getOrderedGoals().getValue() != null) {
+            for (Goal goal : getOrderedGoals().getValue()) {
                 /*
                  * Iterate through all goals and updated isDisplayed value based on
                  * current system date, and update database
                  */
-                if(getDate().getValue() != null) {
+                if (getDate().getValue() != null) {
                     goal.updateIsDisplayed(getDate().getValue());
                     goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
                 }

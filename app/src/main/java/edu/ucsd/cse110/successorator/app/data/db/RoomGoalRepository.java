@@ -62,7 +62,7 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsDisplayedStatus(Integer id, boolean is_displayed) {
-        goalsDao.changeIsDisplayedStatus(id, is_displayed);
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
+        goalsDao.changeIsDisplayedStatus(id, isDisplayed);
     }
 }

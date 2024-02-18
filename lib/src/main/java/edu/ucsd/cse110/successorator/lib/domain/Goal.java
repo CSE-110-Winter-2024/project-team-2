@@ -53,16 +53,7 @@ public class Goal {
     }
 
     public void setDateCompleted (Calendar dateCompleted) {
-        if(isComplete) {
-            dateCompleted.set(Calendar.HOUR, 0);
-            dateCompleted.set(Calendar.MINUTE, 0);
-            dateCompleted.set(Calendar.SECOND, 0);
-            dateCompleted.set(Calendar.MILLISECOND, 0);
-            dateCompleted.set(Calendar.AM_PM, Calendar.AM);
-            this.dateCompleted = dateCompleted;
-        } else {
-            this.dateCompleted = null;
-        }
+        this.dateCompleted = dateCompleted;
     }
 
     public void setIsDisplayed(@NonNull Boolean isDisplayed) {
@@ -71,19 +62,22 @@ public class Goal {
 
     public void updateIsDisplayed(Calendar currDate) {
         boolean completedOnCurrDate;
-        if(dateCompleted != null) {
-            completedOnCurrDate = ( dateCompleted.get(Calendar.MONTH) == currDate.get(Calendar.MONTH) )
-                    && ( dateCompleted.get(Calendar.DAY_OF_MONTH) == currDate.get(Calendar.DAY_OF_MONTH) )
-                    && ( dateCompleted.get(Calendar.YEAR) == currDate.get(Calendar.YEAR));
+        if (dateCompleted != null) {
+            Calendar currDateCopy = (Calendar) currDate.clone();
+            Calendar dateCompletedCopy = (Calendar) dateCompleted.clone();
+
+            // Subtract 2 hours to account for 2 AM day change
+            currDateCopy.add(Calendar.HOUR, -2);
+            dateCompletedCopy.add(Calendar.HOUR, -2);
+
+            completedOnCurrDate = (dateCompletedCopy.get(Calendar.MONTH) == currDateCopy.get(Calendar.MONTH))
+                    && (dateCompletedCopy.get(Calendar.DAY_OF_MONTH) == currDateCopy.get(Calendar.DAY_OF_MONTH))
+                    && (dateCompletedCopy.get(Calendar.YEAR) == currDateCopy.get(Calendar.YEAR));
         } else {
             completedOnCurrDate = false;
         }
 
-        if(!isComplete || completedOnCurrDate) {
-            isDisplayed = Boolean.TRUE;
-        } else {
-            isDisplayed = Boolean.FALSE;
-        }
+        isDisplayed = (!isComplete || completedOnCurrDate);
     }
 
     /**

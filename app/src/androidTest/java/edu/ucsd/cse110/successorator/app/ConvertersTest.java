@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import edu.ucsd.cse110.successorator.app.util.Converters;
 
@@ -15,18 +16,31 @@ import edu.ucsd.cse110.successorator.app.util.Converters;
 public class ConvertersTest {
     @Test
     public void fromCalendar() {
-        //Converters converter = new Converters();
-        Calendar date = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
-        String expected = "2024-02-12";
-        String actual = Converters.fromCalendar(date);
-        assertEquals(expected,actual);
+        long expected = 1707724800L;
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(expected);
+        long actual = Converters.fromCalendar(date);
+        assertEquals(expected, actual);
+
+        // 0 should convert to null
+        expected = 0;
+        date = null;
+        actual = Converters.fromCalendar(date);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void toCalendar() {
-        String strDate = "2024-02-12";
-        Calendar expected = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
-        Calendar actual = Converters.toCalendar(strDate);
+        long timestampMillis = 1707724800L;
+        Calendar expected = Calendar.getInstance();
+        expected.setTimeInMillis(timestampMillis);
+        Calendar actual = Converters.toCalendar(timestampMillis);
+        assertEquals(expected, actual);
+
+        // null should convert to 0
+        timestampMillis = 0;
+        expected = null;
+        actual = Converters.toCalendar(timestampMillis);
         assertEquals(expected, actual);
     }
 }

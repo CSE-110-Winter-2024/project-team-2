@@ -178,11 +178,7 @@ public class InMemoryDataSource {
 
     public void setDateCompleted(Integer id, Calendar dateCompleted) {
         Goal goal = goals.get(id);
-        if(goal.getIsComplete()) {
-            goal.setDateCompleted(dateCompleted);
-        } else {
-            goal.setDateCompleted(null);
-        }
+        goal.setDateCompleted(dateCompleted);
     }
 
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
