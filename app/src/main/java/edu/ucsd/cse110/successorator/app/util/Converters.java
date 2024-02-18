@@ -2,10 +2,7 @@ package edu.ucsd.cse110.successorator.app.util;
 
 import androidx.room.TypeConverter;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Class to convert Calendar object to string and vice versa when working with
