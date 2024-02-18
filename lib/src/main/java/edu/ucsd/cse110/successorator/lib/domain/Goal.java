@@ -52,7 +52,7 @@ public class Goal {
         this.isComplete = !this.isComplete;
     }
 
-    public void setDateCompleted (Calendar dateCompleted) {
+    public void setDateCompleted(@Nullable Calendar dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
 

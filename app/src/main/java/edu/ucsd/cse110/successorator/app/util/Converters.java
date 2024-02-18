@@ -5,7 +5,7 @@ import androidx.room.TypeConverter;
 import java.util.Calendar;
 
 /**
- * Class to convert Calendar object to string and vice versa when working with
+ * Class to convert Calendar object to long and vice versa when working with
  * calendar value in database
  */
 public class Converters {
@@ -19,7 +19,7 @@ public class Converters {
 
     @TypeConverter
     public static Calendar toCalendar(long millis) {
-        // Use a timesatmp of 0 (which represents 1/1/1970) to represent a null date
+        // Use a timestamp of 0 (which represents 1/1/1970) to represent a null date
         if (millis == 0) {
             return null;
         }
