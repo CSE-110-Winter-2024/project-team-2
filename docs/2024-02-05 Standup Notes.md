@@ -10,7 +10,7 @@ Andy Huynh + Hannah Coates
 - Blockers: N/A
 - Goals for next standup: N/A
 
-Benjamin Johnson
+Benjamin Johnson + Tianlin Zhao
 - What you’ve been working on: Design stuff and UML diagrams, brainstorm backend format.
 - Blockers: N/A
 - Goals for next standup: N/A
