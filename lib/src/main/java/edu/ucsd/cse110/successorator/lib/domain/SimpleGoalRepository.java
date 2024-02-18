@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -27,13 +28,9 @@ public class SimpleGoalRepository implements GoalRepository {
      * These methods are just required in order to implement the GoalRepository interface.
      */
 
-    public void save(Goal goal) {
+    public void save(Goal goal) { }
 
-    }
-
-    public void save(List<Goal> goals) {
-
-    }
+    public void save(List<Goal> goals) { }
 
     /**
      * Append goal to end of list
@@ -51,13 +48,11 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.changeIsCompleteStatus(id);
     }
 
-    // prepend code from lab 5, wasn't working
-//    public void prepend(Goal goal) {
-//        //shift all existing goals up by one.
-//        dataSource.shiftSortOrders(0, dataSource.getMaxSortOrder(), 1);
-//        // Then insert the new goal before the first one
-//        dataSource.putGoal(
-//                goal.withSortOrder(dataSource.getMinSortOrder() - 1)
-//        );
-//    }
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        dataSource.setDateCompleted(id, dateCompleted);
+    }
+
+    public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
+        dataSource.changeIsDisplayedStatus(id, isDisplayed);
+    }
 }

@@ -7,9 +7,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -52,16 +50,23 @@ public class MainViewModel extends ViewModel {
             var newOrderedGoals = new ArrayList<>(goals);
 
             orderedGoals.setValue(newOrderedGoals);
+            if (orderedGoals.getValue() != null) {
+                for (Goal goal : orderedGoals.getValue()) {
+                    if (goal != null && getDate().getValue() != null){
+                        goal.updateIsDisplayed(getDate().getValue());
+                    }
+                }
+            }
         });
 
         // When ordering changes, update the ordered goals
         goalOrdering.observe(ordering -> {
-            if(ordering == null) return;
+            if (ordering == null) return;
 
             var goals = new ArrayList<Goal>();
-            for(var id : ordering) {
+            for (var id : ordering) {
                 var goal = goalRepository.find(id).getValue();
-                if(goal == null) return;
+                if (goal == null) return;
                 goals.add(goal);
             }
             this.orderedGoals.setValue(goals);
@@ -89,15 +94,31 @@ public class MainViewModel extends ViewModel {
         goalRepository.append(goal);
     }
 
-    // Prepend code from lab 5, wasn't working
-    // public void prepend(Goal goal) { goalRepository.prepend(goal); }
-
     public void advanceDateOneDayForward() {
         dateRepository.advanceDateOneDayForward();
     }
   
     public void changeIsCompleteStatus(Integer id) {
         goalRepository.changeIsCompleteStatus(id);
+    }
+
+    public void setDateCompleted(Integer id, Calendar dateCompleted) {
+        goalRepository.setDateCompleted(id, dateCompleted);
+    }
+
+    public void updateAllGoalsIsDisplayed() {
+        if (getOrderedGoals().getValue() != null) {
+            for (Goal goal : getOrderedGoals().getValue()) {
+                /*
+                 * Iterate through all goals and updated isDisplayed value based on
+                 * current system date, and update database
+                 */
+                if (getDate().getValue() != null) {
+                    goal.updateIsDisplayed(getDate().getValue());
+                    goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+                }
+            }
+        }
     }
 
     public Subject<Calendar> getDate() {

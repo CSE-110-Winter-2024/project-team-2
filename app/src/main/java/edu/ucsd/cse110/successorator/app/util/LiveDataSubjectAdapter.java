@@ -6,6 +6,10 @@ import androidx.lifecycle.LiveData;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
+/**
+ * Adapter class that implements the Subject interface,
+ * forwarding the relevant methods to the underlying LiveData.
+ */
 public class LiveDataSubjectAdapter<T> implements Subject<T> {
     private final LiveData<T> adaptee;
 

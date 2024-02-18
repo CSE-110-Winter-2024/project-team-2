@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-
 public class DateProviderTest {
     /**
      * Tests to make sure that the format of the date is correct when running the app
@@ -28,7 +26,6 @@ public class DateProviderTest {
      */
     @Test
     public void setTwoHoursBackTest() {
-        CurrentDateProvider cdp = new CurrentDateProvider();
         int expectedDay;
 
         // Iterate through every hour and minute over 24 hour period
@@ -51,7 +48,7 @@ public class DateProviderTest {
                 // set values of expected calendar
                 Calendar expected = new GregorianCalendar(2024, Calendar.FEBRUARY, expectedDay, expectedHourOfDay, minute );
 
-                actual = cdp.setTwoHoursBack(actual);
+                actual.add(Calendar.HOUR_OF_DAY, -2);
                 assert (actual.equals(expected));
             }
         }

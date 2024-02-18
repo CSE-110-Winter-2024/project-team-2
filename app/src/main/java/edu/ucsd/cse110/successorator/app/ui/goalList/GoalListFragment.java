@@ -57,10 +57,12 @@ public class GoalListFragment  extends Fragment{
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        //Initialize the Adapter (with empty list for now)
+        // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
             activityModel.changeIsCompleteStatus(id);
+            activityModel.setDateCompleted(id, activityModel.getDate().getValue());
         });
+
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
@@ -69,7 +71,6 @@ public class GoalListFragment  extends Fragment{
         });
     }
     /**
-     *
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -82,16 +83,12 @@ public class GoalListFragment  extends Fragment{
      */
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @NonNull ViewGroup container,
-            @NonNull Bundle savedInstanceState
-    ) {
+    public View onCreateView( @NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                              @Nullable Bundle savedInstanceState) {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
 
-        // set adapter on the listView
+        // Set adapter on the listView
         view.goalList.setAdapter(adapter);
-
         return view.getRoot();
     }
 }
