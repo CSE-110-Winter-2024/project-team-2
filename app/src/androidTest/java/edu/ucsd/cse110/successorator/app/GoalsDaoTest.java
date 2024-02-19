@@ -174,7 +174,7 @@ public class GoalsDaoTest {
 
     @Test
     public void moveToTop() {
-        Goal goal1 = new Goal(5, "goal1", 1,false, null,  true);
+        Goal goal1 = new Goal(5, "goal1", 1, false, null,  true);
         GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
         Goal goal2 = new Goal(10, "goal2", 2, false, null, true);
         GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
