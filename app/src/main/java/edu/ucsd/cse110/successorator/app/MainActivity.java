@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Calendar;
@@ -76,19 +77,25 @@ public class MainActivity extends AppCompatActivity {
             if (goals.size() == 0) {
                 if (!isShowingNoGoals) {
                     // Replace GoalsListFragment with NoGoalsFragment
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.goals_container, NoGoalsFragment.newInstance())
-                            .commit();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    if (!fragmentManager.isDestroyed()) {
+                        fragmentManager
+                                .beginTransaction()
+                                .replace(R.id.goals_container, NoGoalsFragment.newInstance())
+                                .commit();
+                    }
                 }
                 isShowingNoGoals = true;
             } else {
                 if (isShowingNoGoals) {
                     // Replace NoGoalsFragment with GoalsListFragment
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.goals_container, GoalListFragment.newInstance())
-                            .commit();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    if (!fragmentManager.isDestroyed()) {
+                        fragmentManager
+                                .beginTransaction()
+                                .replace(R.id.goals_container, GoalListFragment.newInstance())
+                                .commit();
+                    }
                 }
                 isShowingNoGoals = false;
             }

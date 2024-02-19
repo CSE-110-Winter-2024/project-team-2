@@ -21,6 +21,7 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 /**
  * Tests the database-related methods of the GoalsDao class, i.e. CRUD operations on the goals DB
@@ -173,11 +174,11 @@ public class GoalsDaoTest {
 
     @Test
     public void moveToTop() {
-        Goal goal1 = new Goal(5, "goal1", 1, false);
+        Goal goal1 = new Goal(5, "goal1", 1, false, null,  true);
         GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
-        Goal goal2 = new Goal(10, "goal2", 2, false);
+        Goal goal2 = new Goal(10, "goal2", 2, false, null, true);
         GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
-        Goal goal3 = new Goal(3, "goal3", 4, false);
+        Goal goal3 = new Goal(3, "goal3", 4, false, null, true);
         GoalEntity goalEntity3 = GoalEntity.fromGoal(goal3);
         List<GoalEntity> GoalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(GoalsToInsert);
