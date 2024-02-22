@@ -14,6 +14,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
@@ -97,7 +98,12 @@ public class MainViewModel extends ViewModel {
     public void advanceDateOneDayForward() {
         dateRepository.advanceDateOneDayForward();
     }
-  
+
+
+    public void setDate(DateProvider dateProvider) {
+        dateRepository.setDate(dateProvider);
+    }
+
     public void changeIsCompleteStatus(Integer id) {
         goalRepository.changeIsCompleteStatus(id);
     }

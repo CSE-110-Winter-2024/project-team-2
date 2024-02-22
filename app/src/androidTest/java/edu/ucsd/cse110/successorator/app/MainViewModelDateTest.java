@@ -81,4 +81,28 @@ public class MainViewModelDateTest {
         assertEquals(lastObservedDate, advancedCalendar);
         assertEquals(observeCallsMade, 3);
     }
+
+    @Test
+    public void setDate() {
+        Calendar calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 14);
+        GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
+        DateRepository dateRepository = new DateRepository(new MockDateProvider(calendar));
+        MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository);
+
+        assertEquals(mainViewModel.getDate().getValue(), calendar);
+        mainViewModel.getDate().observe(newDate -> {
+            this.observeCallsMade++;
+            lastObservedDate = newDate;
+        });
+        assertEquals(lastObservedDate, calendar);
+        // Our observer should have been called once when we added it
+        assertEquals(observeCallsMade, 1);
+
+        calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 25);
+        mainViewModel.setDate(new MockDateProvider(calendar));
+        assertEquals(mainViewModel.getDate().getValue(), calendar);
+        assertEquals(lastObservedDate, calendar);
+        // Our observer should have been called again when we set the date
+        assertEquals(observeCallsMade, 2);
+    }
 }
