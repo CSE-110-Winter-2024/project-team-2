@@ -16,6 +16,7 @@ import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
+import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 
 /**
@@ -99,7 +100,21 @@ public class MainActivity extends AppCompatActivity {
                 }
                 isShowingNoGoals = false;
             }
+
+            // Update isDisplayed value of all goals and update database
+            activityModel.updateAllGoalsIsDisplayed();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        /*
+         * When our activity is resumed (e.g. user swiped to another app and then back to our app,
+         * update our current date.
+         */
+        activityModel.setDate(new CurrentDateProvider());
     }
 
     /**
