@@ -124,8 +124,16 @@ public class MainViewModel extends ViewModel {
                  * current system date, and update database
                  */
                 if (getDate().getValue() != null) {
+                    boolean wasDisplayed = goal.getIsDisplayed();
                     goal.updateIsDisplayed(getDate().getValue());
-                    goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+
+                    /*
+                     * Only propagate change to database if isDisplayed actually changed, to avoid
+                     * infinite observer & updating loop
+                     */
+                    if (wasDisplayed != goal.getIsDisplayed()) {
+                        goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+                    }
                 }
             }
         }

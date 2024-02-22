@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 isShowingNoGoals = false;
             }
 
-
             // Update isDisplayed value of all goals and update database
             activityModel.updateAllGoalsIsDisplayed();
         });
