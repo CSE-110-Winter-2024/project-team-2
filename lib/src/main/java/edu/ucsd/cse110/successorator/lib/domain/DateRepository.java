@@ -13,6 +13,10 @@ public class DateRepository {
         calendar.setValue(dateProvider.getCurrentDate());
     }
 
+    public void setDate(DateProvider dateProvider) {
+        calendar.setValue(dateProvider.getCurrentDate());
+    }
+
     public void advanceDateOneDayForward() {
         Calendar value = calendar.getValue();
         if (value == null) {
