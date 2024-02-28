@@ -66,6 +66,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
             var id = goal.getId();
+            // Check if it's a pending goal here
             onClick.accept(id);
 
             TextView textView = (TextView) v;

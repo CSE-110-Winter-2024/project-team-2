@@ -30,7 +30,7 @@ public class AddGoalDialogFragment extends DialogFragment {
     AddGoalDialogFragment() { }
 
     /**
-     *  construct new fragment instance
+     * Construct new fragment instance
      * @return fragment
      */
     public static AddGoalDialogFragment newInstance() {

@@ -12,19 +12,23 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
     private final GoalRepository goalRepository;
     private final DateRepository dateRepository;
+    private final ViewRepository viewRepository;
 
     // UI state
     private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
     private final SimpleSubject<Calendar> date;
+    private final SimpleSubject<ViewOptions> view;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -32,17 +36,19 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getGoalRepository(), app.getDateRepository());
+                        return new MainViewModel(app.getGoalRepository(), app.getDateRepository(), app.getViewRepository());
                     });
 
-    public MainViewModel(GoalRepository goalRepository, DateRepository dateRepository) {
+    public MainViewModel(GoalRepository goalRepository, DateRepository dateRepository, ViewRepository viewRepository) {
         this.goalRepository = goalRepository;
         this.dateRepository = dateRepository;
+        this.viewRepository = viewRepository;
 
         // Create the observable subjects.
         this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
+        this.view = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
@@ -81,6 +87,15 @@ public class MainViewModel extends ViewModel {
 
             date.setValue(dateValue);
         });
+
+        // When the current view changes, update our view
+        viewRepository.getView().observe(viewValue -> {
+            if (viewValue == null) {
+                return;
+            }
+
+            view.setValue(viewValue);
+        });
     }
 
     public Subject<List<Goal>> getOrderedGoals() {
@@ -98,7 +113,6 @@ public class MainViewModel extends ViewModel {
     public void advanceDateOneDayForward() {
         dateRepository.advanceDateOneDayForward();
     }
-
 
     public void setDate(DateProvider dateProvider) {
         dateRepository.setDate(dateProvider);
@@ -141,5 +155,13 @@ public class MainViewModel extends ViewModel {
 
     public Subject<Calendar> getDate() {
         return date;
+    }
+
+    public void setView(ViewOptions view) {
+        viewRepository.setView(view);
+    }
+
+    public Subject<ViewOptions> getView() {
+        return view;
     }
 }
