@@ -12,10 +12,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Calendar;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
  * This class maintains the Alert Dialog that allows the user to add a new goal to the list
@@ -106,7 +110,14 @@ public class AddGoalDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
         if (!goalText.equals("")) {
-            var goal = new Goal(null, goalText,  -1, false, null, true);
+            Calendar goalDate = null;
+            ViewOptions view = activityModel.getView().getValue();
+            if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
+                goalDate = new MockDateProvider(activityModel.getDate().getValue())
+                        .getCurrentViewDate(view);
+            }
+            var goal = new Goal(null, goalText, -1, false, null,
+                    true, goalDate, view == ViewOptions.PENDING);
             activityModel.append(goal);
             dialog.dismiss();
         }

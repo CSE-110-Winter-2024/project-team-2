@@ -15,7 +15,9 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 public class MainViewModel extends ViewModel {
@@ -60,7 +62,9 @@ public class MainViewModel extends ViewModel {
             if (orderedGoals.getValue() != null) {
                 for (Goal goal : orderedGoals.getValue()) {
                     if (goal != null && getDate().getValue() != null){
-                        goal.updateIsDisplayed(getDate().getValue());
+                        Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                                .getCurrentViewDate(getView().getValue());
+                        goal.updateIsDisplayed(mutableDate, getView().getValue());
                     }
                 }
             }
@@ -139,7 +143,9 @@ public class MainViewModel extends ViewModel {
                  */
                 if (getDate().getValue() != null) {
                     boolean wasDisplayed = goal.getIsDisplayed();
-                    goal.updateIsDisplayed(getDate().getValue());
+                    Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                            .getCurrentViewDate(getView().getValue());
+                    goal.updateIsDisplayed(mutableDate, getView().getValue());
 
                     /*
                      * Only propagate change to database if isDisplayed actually changed, to avoid
