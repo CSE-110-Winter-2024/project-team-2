@@ -54,32 +54,32 @@ public class ChangeViewFragment extends DialogFragment {
      *
      * @return view
      */
-     @Override
-     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-         this.view = FragmentChangeViewBinding.inflate(getLayoutInflater());
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        this.view = FragmentChangeViewBinding.inflate(getLayoutInflater());
 
-         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                 .setView(view.getRoot())
-                 .create();
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(view.getRoot())
+                .create();
 
-         // Set up click listeners for when different view options are pressed
-         view.todayViewOption.setOnClickListener(view -> {
-             activityModel.setView(ViewOptions.TODAY);
-             dialog.dismiss();
-         });
-         view.tomorrowViewOption.setOnClickListener(view -> {
-             activityModel.setView(ViewOptions.TOMORROW);
-             dialog.dismiss();
-         });
-         view.pendingViewOption.setOnClickListener(view -> {
-             activityModel.setView(ViewOptions.PENDING);
-             dialog.dismiss();
-         });
-         view.recurringViewOption.setOnClickListener(view -> {
-             activityModel.setView(ViewOptions.RECURRING);
-             dialog.dismiss();
-         });
+        // Set up click listeners for when different view options are pressed
+        view.todayViewOption.setOnClickListener(view -> {
+            activityModel.setView(ViewOptions.TODAY);
+            dialog.dismiss();
+        });
+        view.tomorrowViewOption.setOnClickListener(view -> {
+            activityModel.setView(ViewOptions.TOMORROW);
+            dialog.dismiss();
+        });
+        view.pendingViewOption.setOnClickListener(view -> {
+            activityModel.setView(ViewOptions.PENDING);
+            dialog.dismiss();
+        });
+        view.recurringViewOption.setOnClickListener(view -> {
+            activityModel.setView(ViewOptions.RECURRING);
+            dialog.dismiss();
+        });
 
-         return dialog;
-     }
+        return dialog;
+    }
 }

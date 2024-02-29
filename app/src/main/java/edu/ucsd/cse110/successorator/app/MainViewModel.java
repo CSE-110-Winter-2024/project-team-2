@@ -15,7 +15,6 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
@@ -29,6 +28,7 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
+    private final SimpleSubject<List<Goal>> allGoals;
     private final SimpleSubject<Calendar> date;
     private final SimpleSubject<ViewOptions> view;
 
@@ -49,6 +49,7 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
+        this.allGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
         this.view = new SimpleSubject<>();
 
@@ -61,6 +62,23 @@ public class MainViewModel extends ViewModel {
             orderedGoals.setValue(newOrderedGoals);
             if (orderedGoals.getValue() != null) {
                 for (Goal goal : orderedGoals.getValue()) {
+                    if (goal != null && getDate().getValue() != null){
+                        Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                                .getCurrentViewDate(getView().getValue());
+                        goal.updateIsDisplayed(mutableDate, getView().getValue());
+                    }
+                }
+            }
+        });
+
+        goalRepository.getAllGoals().observe(goals -> {
+            if (goals == null) return; // not ready yet, ignore
+
+            var newAllGoals = new ArrayList<>(goals);
+
+            allGoals.setValue(newAllGoals);
+            if (allGoals.getValue() != null) {
+                for (Goal goal : allGoals.getValue()) {
                     if (goal != null && getDate().getValue() != null){
                         Calendar mutableDate = new MockDateProvider(getDate().getValue())
                                 .getCurrentViewDate(getView().getValue());
@@ -83,6 +101,12 @@ public class MainViewModel extends ViewModel {
             this.orderedGoals.setValue(goals);
         });
 
+        // When there's a change to all goals, update whether or not they are displayed
+        allGoals.observe(goals -> {
+            if (goals == null) return;
+            this.updateAllGoalsIsDisplayed();
+        });
+
         // When the current date changes, update our date
         dateRepository.getDate().observe(dateValue -> {
             if (dateValue == null) {
@@ -93,17 +117,21 @@ public class MainViewModel extends ViewModel {
         });
 
         // When the current view changes, update our view
-        viewRepository.getView().observe(viewValue -> {
-            if (viewValue == null) {
+        viewRepository.getView().observe(viewType -> {
+            if (viewType == null) {
                 return;
             }
 
-            view.setValue(viewValue);
+            view.setValue(viewType);
         });
     }
 
     public Subject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
+    }
+
+    public Subject<List<Goal>> getAllGoals() {
+        return allGoals;
     }
 
     /**
@@ -135,11 +163,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateAllGoalsIsDisplayed() {
-        if (getOrderedGoals().getValue() != null) {
-            for (Goal goal : getOrderedGoals().getValue()) {
+        if (getAllGoals().getValue() != null) {
+            for (Goal goal : getAllGoals().getValue()) {
                 /*
                  * Iterate through all goals and updated isDisplayed value based on
-                 * current system date, and update database
+                 * current view and system date, and update database
                  */
                 if (getDate().getValue() != null) {
                     boolean wasDisplayed = goal.getIsDisplayed();

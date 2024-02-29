@@ -89,23 +89,14 @@ public class Goal {
         } else if (view == ViewOptions.RECURRING) {
             isDisplayed = false;
         } else if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
-            boolean completedOnCurrDate;
-            if (dateCompleted != null) {
-                Calendar currDateCopy = (Calendar) date.clone();
-                Calendar dateCompletedCopy = (Calendar) dateCompleted.clone();
-
-                // Subtract 2 hours to account for 2 AM day change
-                currDateCopy.add(Calendar.HOUR, -2);
-                dateCompletedCopy.add(Calendar.HOUR, -2);
-
-                completedOnCurrDate = (dateCompletedCopy.get(Calendar.MONTH) == currDateCopy.get(Calendar.MONTH))
-                        && (dateCompletedCopy.get(Calendar.DAY_OF_MONTH) == currDateCopy.get(Calendar.DAY_OF_MONTH))
-                        && (dateCompletedCopy.get(Calendar.YEAR) == currDateCopy.get(Calendar.YEAR));
+            if (goalDate != null) {
+                boolean curDateGoal = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
+                        && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
+                        && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
+                isDisplayed = curDateGoal;
             } else {
-                completedOnCurrDate = false;
+                isDisplayed = false;
             }
-
-            isDisplayed = (!isComplete || completedOnCurrDate);
         }
     }
 

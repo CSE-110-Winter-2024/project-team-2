@@ -24,11 +24,17 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
     List<GoalEntity> findAll();
 
+    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    List<GoalEntity> getAllGoals();
+
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
     LiveData<List<GoalEntity>> findAllAsLiveData();
+
+    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    LiveData<List<GoalEntity>> getAllGoalsAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
     int count();
