@@ -20,8 +20,6 @@ Keisuke Hirano + Vivian Liu
 - Blockers: N/A
 - Goals for next standup: meeting later today, aim to get a PR up by EOD Friday
 
-## Notes
-
 Vivian's asynchronous updates:
 - Keisuke and I met last night to work on US10 and changes are on branch US10-choose-goal-view
 - Made viewOptions enum
@@ -33,3 +31,7 @@ Vivian's asynchronous updates:
   - Implement filtering depending on the view
   - Make sure goals are added correctly when on tomorrow or pending views
   - If time: testing. adding 2 fields broke a lot of our previous tests lol so we need to fix that
+
+## Notes
+
+- No weekly meeting this Friday, just standup (some ppl can't make it + doesn't feel necessary)
