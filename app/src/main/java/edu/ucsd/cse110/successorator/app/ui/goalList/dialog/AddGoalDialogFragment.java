@@ -18,6 +18,7 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
@@ -72,6 +73,11 @@ public class AddGoalDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
+        Calendar currDate = activityModel.getDate().getValue();
+        this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(currDate)));
+        this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(currDate)));
+        this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(currDate)));
+
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")

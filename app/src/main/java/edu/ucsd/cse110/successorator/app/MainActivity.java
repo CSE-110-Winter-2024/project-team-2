@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 isShowingNoGoals = true;
             }
+
             if (goals.size() > 0 || viewType != ViewOptions.TODAY) {
                 if (isShowingNoGoals) {
                     // Replace NoGoalsFragment with GoalsListFragment

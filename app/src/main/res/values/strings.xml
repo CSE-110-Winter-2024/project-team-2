@@ -10,4 +10,6 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="pending">Pending</string>
     <string name="recurring">Recurring</string>
+    <string name="one_time_text">One-Time</string>
+    <string name="daily_text">Daily</string>
 </resources>
