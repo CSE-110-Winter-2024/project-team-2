@@ -13,15 +13,18 @@ public class Goal {
     public @NonNull Boolean isComplete;
     public @Nullable Calendar dateCompleted;
     public @NonNull Boolean isDisplayed;
+    public @NonNull GoalContext goalContext;
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
-                @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed) {
+                @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed,
+                @NonNull GoalContext goalContext) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
         this.dateCompleted = dateCompleted;
         this.isDisplayed = isDisplayed;
+        this.goalContext = goalContext;
     }
 
     public @NonNull String getGoalText() {
@@ -46,6 +49,10 @@ public class Goal {
 
     public @NonNull Boolean getIsDisplayed() {
         return isDisplayed;
+    }
+
+    public @NonNull GoalContext getGoalContext() {
+        return goalContext;
     }
 
     public void changeIsCompleteStatus() {
@@ -86,7 +93,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
     }
 
     /**
@@ -95,7 +102,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
     }
 
     @Override
@@ -104,11 +111,12 @@ public class Goal {
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
         return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id) && Objects.equals(sortOrder, goal.sortOrder)
-                && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed);
+                && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed)
+                && Objects.equals(goalContext, goal.goalContext);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
     }
 }

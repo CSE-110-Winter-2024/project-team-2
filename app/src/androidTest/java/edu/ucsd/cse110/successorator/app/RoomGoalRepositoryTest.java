@@ -20,6 +20,7 @@ import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
@@ -60,7 +61,7 @@ public class RoomGoalRepositoryTest {
         allGoalsSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.append(new Goal(null, "goal1", 1, false, null, true));
+        goalRepository.append(new Goal(null, "goal1", 1, false, null, true, GoalContext.getGoalContextById(1)));
         // Our observer should have been called once upon creation, and again upon appending a goal.
         assertEquals(2, notifiedCount);
         assertEquals(1, allGoalsSubject.getValue().size());
@@ -68,7 +69,7 @@ public class RoomGoalRepositoryTest {
 
     @Test
     public void observeUpdateGoal() {
-        Goal goal = new Goal(1, "goal1", 1, false, null, true);
+        Goal goal = new Goal(1, "goal1", 1, false, null, true, GoalContext.getGoalContextById(1));
         goalRepository.save(goal);
         Subject<List<Goal>> allGoalsSubject = goalRepository.findAll();
         Subject<Goal> goalSubject = goalRepository.find(goal.id);
@@ -79,7 +80,7 @@ public class RoomGoalRepositoryTest {
         goalSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.save(new Goal(1, "goalTextChanged", 2, false, null, true));
+        goalRepository.save(new Goal(1, "goalTextChanged", 2, false, null, true, GoalContext.getGoalContextById(3)));
 
         // Each observer should have been called once upon creation, and again upon saving the goal.
         assertEquals(4, notifiedCount);
@@ -88,8 +89,10 @@ public class RoomGoalRepositoryTest {
         // Check that fields were updated on both subjects
         assertEquals("goalTextChanged", allGoalsSubject.getValue().get(0).getGoalText());
         assertEquals((Integer) 2, allGoalsSubject.getValue().get(0).getSortOrder());
+        assertEquals((Integer) 3, allGoalsSubject.getValue().get(0).getGoalContext().getId());
         assertEquals("goalTextChanged", goalSubject.getValue().getGoalText());
         assertEquals((Integer) 2, goalSubject.getValue().getSortOrder());
+        assertEquals((Integer) 3, goalSubject.getValue().getGoalContext().getId());
     }
 
     @Test
@@ -100,8 +103,8 @@ public class RoomGoalRepositoryTest {
             notifiedCount++;
         });
         List<Goal> goalsToSave = List.of(
-                new Goal(null, "goal1", 1, false, null, true),
-                new Goal(null, "goal2", 2, false, null, true)
+                new Goal(null, "goal1", 1, false, null, true, GoalContext.getGoalContextById(2)),
+                new Goal(null, "goal2", 2, false, null, true, GoalContext.getGoalContextById(4))
         );
         goalRepository.save(goalsToSave);
 

@@ -16,6 +16,7 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 
 /**
  * This class maintains the Alert Dialog that allows the user to add a new goal to the list
@@ -105,9 +106,14 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if (!goalText.equals("")) {
-            var goal = new Goal(null, goalText,  -1, false, null, true);
+        var selectedContextId = activityModel.getSelectedGoalContextId().getValue();
+        // Don't allow user to create a goal if they haven't entered any text or selected a context
+        if (!goalText.equals("") && selectedContextId != null) {
+            var goal = new Goal(null, goalText,  -1, false, null,
+                    true, GoalContext.getGoalContextById(selectedContextId));
             activityModel.append(goal);
+            // Reset selected context ID to null so that no context will be selected by default next time
+            activityModel.setSelectedGoalContextId(null);
             dialog.dismiss();
         }
     }
