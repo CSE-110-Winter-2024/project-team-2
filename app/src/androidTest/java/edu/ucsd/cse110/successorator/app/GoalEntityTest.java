@@ -18,7 +18,8 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class GoalEntityTest {
     @Test
     public void goalEntityConstructor() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         assertEquals(goalEntity1.goalText, "goal1");
         assertEquals(goalEntity1.sortOrder, 1);
         assertFalse(goalEntity1.isComplete);
@@ -26,7 +27,8 @@ public class GoalEntityTest {
         assertTrue(goalEntity1.isDisplayed);
 
         Calendar dateCompleted = Calendar.getInstance();
-        GoalEntity goalEntity2 = new GoalEntity("goal1", 1, false, dateCompleted, false);
+        GoalEntity goalEntity2 = new GoalEntity("goal1", 1, false, dateCompleted, false,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         assertEquals(goalEntity2.goalText, "goal1");
         assertEquals(goalEntity2.sortOrder, 1);
         assertFalse(goalEntity2.isComplete);
@@ -36,7 +38,8 @@ public class GoalEntityTest {
 
     @Test
     public void fromGoal() {
-        Goal goal1 = new Goal(5, "goal1", 1, false, null, true);
+        Goal goal1 = new Goal(5, "goal1", 1, false, null, true,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
         assertEquals(goalEntity1.id, (Integer) 5);
         assertEquals(goalEntity1.goalText, "goal1");
@@ -46,7 +49,8 @@ public class GoalEntityTest {
         assertTrue(goalEntity1.isDisplayed);
 
         Calendar dateCompleted = Calendar.getInstance();
-        Goal goal2 = new Goal(10, "goal2", 2, true, dateCompleted, false);
+        Goal goal2 = new Goal(10, "goal2", 2, true, dateCompleted, false,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
         assertEquals(goalEntity2.id, (Integer) 10);
         assertEquals(goalEntity2.goalText, "goal2");
@@ -58,7 +62,8 @@ public class GoalEntityTest {
 
     @Test
     public void toGoal() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         Goal goal1 = goalEntity1.toGoal();
         assertEquals(goal1.goalText, "goal1");
         assertEquals(goal1.sortOrder, (Integer) 1);
@@ -67,7 +72,8 @@ public class GoalEntityTest {
         assertTrue(goal1.isDisplayed);
 
         Calendar dateCompleted = Calendar.getInstance();
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, dateCompleted, false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, dateCompleted, false,
+                Calendar.getInstance(), false, false, Goal.RecurrencePattern.NONE);
         Goal goal2 = goalEntity2.toGoal();
         assertEquals(goal2.goalText, "goal2");
         assertEquals(goal2.sortOrder, (Integer) 2);

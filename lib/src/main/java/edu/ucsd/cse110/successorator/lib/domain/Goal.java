@@ -17,10 +17,15 @@ public class Goal {
     public @NonNull Boolean isDisplayed;
     public @Nullable Calendar goalDate;
     public @NonNull Boolean isPending;
+    public @NonNull Boolean isRecurring;
+    public RecurrencePattern recurrencePattern;
+
+
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
                 @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed,
-                @Nullable Calendar goalDate, @NonNull Boolean isPending) {
+                @Nullable Calendar goalDate, @NonNull Boolean isPending, @NonNull Boolean isRecurring,
+                @NonNull RecurrencePattern recurrencePattern) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
@@ -29,6 +34,8 @@ public class Goal {
         this.isDisplayed = isDisplayed;
         this.goalDate = goalDate;
         this.isPending = isPending;
+        this.isRecurring = isRecurring;
+        this.recurrencePattern = recurrencePattern;
     }
 
     public @NonNull String getGoalText() {
@@ -82,14 +89,33 @@ public class Goal {
     public void setIsPending(@NonNull Boolean isPending) {
         this.isPending = isPending;
     }
+    public boolean getIsRecurring(){ return isRecurring; }
+    public void setIsRecurring(@NonNull Boolean isRecurring){
+        this.isRecurring = isRecurring;
+    }
+
+    public RecurrencePattern getRecurrencePattern(){ return recurrencePattern; }
+
+    public void setRecurrencePattern(RecurrencePattern recurrencePattern){
+        this.recurrencePattern = recurrencePattern;
+    }
+    public enum RecurrencePattern{
+        NONE,
+        DAILY,
+        WEEKLY,
+        MONTHLY,
+        YEARLY
+    }
 
     public void updateIsDisplayed(Calendar date, ViewOptions view) {
         if (view == ViewOptions.PENDING) {
             isDisplayed = isPending;
         } else if (view == ViewOptions.RECURRING) {
-            isDisplayed = false;
+            isDisplayed = isRecurring;
         } else if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
-            if (goalDate != null) {
+            if (isRecurring && matchesRecurrencePattern(date)){
+                isDisplayed = true;
+            } else if (goalDate != null) {
                 boolean curDateGoal = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
                         && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
                         && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
@@ -100,13 +126,29 @@ public class Goal {
         }
     }
 
+    private boolean matchesRecurrencePattern(Calendar date) {
+        switch (recurrencePattern) {
+            case DAILY:
+                return true;
+            case WEEKLY:
+                return goalDate.get(Calendar.DAY_OF_WEEK) == date.get(Calendar.DAY_OF_WEEK);
+            case MONTHLY:
+                return goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);
+            case YEARLY:
+                return goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH)
+                        && goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH);
+            default:
+                return false;
+        }
+    }
+
     /**
      * set sortOrder of Goal
      * @param sortOrder to set
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, isRecurring, recurrencePattern);
     }
 
     /**
@@ -115,7 +157,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, isRecurring, recurrencePattern);
     }
 
     @Override
@@ -123,11 +165,15 @@ public class Goal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
-        return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed) && Objects.equals(goalDate, goal.goalDate) && Objects.equals(isPending, goal.isPending);
+        return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id)
+                && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(isComplete, goal.isComplete)
+                && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed)
+                && Objects.equals(goalDate, goal.goalDate) && Objects.equals(isPending, goal.isPending)
+                && Objects.equals(isRecurring, goal.isRecurring) && Objects.equals(recurrencePattern,goal.recurrencePattern);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, isRecurring, recurrencePattern);
     }
 }
