@@ -45,7 +45,7 @@ public class GoalsDaoTest {
 
     @Test
     public void insertGoal() {
-        GoalEntity goalEntity = new GoalEntity("goal1", 1, false, null, true);
+        GoalEntity goalEntity = new GoalEntity("goal1", 1, false, null, true, Calendar.getInstance(), false);
         Long goal1Id = goalsDao.insert(goalEntity);
         List<GoalEntity> allGoals = goalsDao.findAll();
         assertEquals(1, allGoals.size());
@@ -55,8 +55,8 @@ public class GoalsDaoTest {
 
     @Test
     public void insertMultipleGoals() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
@@ -66,9 +66,9 @@ public class GoalsDaoTest {
 
     @Test
     public void goalsCount() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
-        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
@@ -78,9 +78,9 @@ public class GoalsDaoTest {
 
     @Test
     public void minSortOrder() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
-        GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
@@ -90,9 +90,9 @@ public class GoalsDaoTest {
 
     @Test
     public void maxSortOrder() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
-        GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 4, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(goalsToInsert);
@@ -102,7 +102,7 @@ public class GoalsDaoTest {
 
     @Test
     public void changeIsCompleteStatus() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
         goalEntity1.id = 1;
         goalsDao.insert(goalEntity1);
         goalsDao.changeIsCompleteStatus(1);
@@ -111,7 +111,7 @@ public class GoalsDaoTest {
 
     @Test
     public void changeIsDisplayedStatus() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
         goalEntity1.id = 1;
         goalsDao.insert(goalEntity1);
 
@@ -124,7 +124,7 @@ public class GoalsDaoTest {
 
     @Test
     public void setDateCompleted() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
         goalEntity1.id = 1;
         goalsDao.insert(goalEntity1);
         assertNull(goalsDao.find(1).dateCompleted);
@@ -138,12 +138,12 @@ public class GoalsDaoTest {
 
     @Test
     public void append() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 5, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goalsToInsert = List.of(goalEntity1, goalEntity2);
         goalsDao.insert(goalsToInsert);
-        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100, false, null, true);
+        GoalEntity goalEntityToAppend = new GoalEntity("goal3", -100, false, null, true, Calendar.getInstance(), false);
         int appendedGoalId = goalsDao.append(goalEntityToAppend);
         int goalsCount = goalsDao.count();
         assertEquals(3, goalsCount);
@@ -153,11 +153,32 @@ public class GoalsDaoTest {
 
     @Test
     public void findAll() {
-        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true);
-        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, null, true);
-        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true);
-        GoalEntity goalEntity4 = new GoalEntity("goal4", 4, true, null, true);
-        GoalEntity goalEntity5 = new GoalEntity("goal5", 5, false, null, true);
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity4 = new GoalEntity("goal4", 4, true, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity5 = new GoalEntity("goal5", 5, false, null, true, Calendar.getInstance(), false);
+
+        List<GoalEntity> goals = List.of(goalEntity1, goalEntity2, goalEntity3, goalEntity4, goalEntity5);
+        goalsDao.insert(goals);
+        List<GoalEntity> allGoals = goalsDao.findAll();
+        List<GoalEntity> sortedGoals = List.of(goalEntity1, goalEntity3, goalEntity5, goalEntity2, goalEntity4);
+        for (int i = 0; i < 5; i++) {
+            assertEquals(sortedGoals.get(i).goalText, allGoals.get(i).goalText);
+            assertEquals(sortedGoals.get(i).sortOrder, allGoals.get(i).sortOrder);
+            assertEquals(sortedGoals.get(i).isComplete, allGoals.get(i).isComplete);
+            assertEquals(sortedGoals.get(i).dateCompleted, allGoals.get(i).dateCompleted);
+            assertEquals(sortedGoals.get(i).isDisplayed, allGoals.get(i).isDisplayed);
+        }
+    }
+
+    @Test
+    public void getAllGoals() {
+        GoalEntity goalEntity1 = new GoalEntity("goal1", 1, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity3 = new GoalEntity("goal3", 3, false, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity4 = new GoalEntity("goal4", 4, true, null, true, Calendar.getInstance(), false);
+        GoalEntity goalEntity5 = new GoalEntity("goal5", 5, false, null, true, Calendar.getInstance(), false);
 
         List<GoalEntity> goals = List.of(goalEntity1, goalEntity2, goalEntity3, goalEntity4, goalEntity5);
         goalsDao.insert(goals);
@@ -174,11 +195,11 @@ public class GoalsDaoTest {
 
     @Test
     public void moveToTop() {
-        Goal goal1 = new Goal(5, "goal1", 1, false, null,  true);
+        Goal goal1 = new Goal(5, "goal1", 1, false, null,  true, Calendar.getInstance(), false);
         GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
-        Goal goal2 = new Goal(10, "goal2", 2, false, null, true);
+        Goal goal2 = new Goal(10, "goal2", 2, false, null, true, Calendar.getInstance(), false);
         GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
-        Goal goal3 = new Goal(3, "goal3", 4, false, null, true);
+        Goal goal3 = new Goal(3, "goal3", 4, false, null, true, Calendar.getInstance(), false);
         GoalEntity goalEntity3 = GoalEntity.fromGoal(goal3);
         List<GoalEntity> GoalsToInsert = List.of(goalEntity1, goalEntity2, goalEntity3);
         goalsDao.insert(GoalsToInsert);
