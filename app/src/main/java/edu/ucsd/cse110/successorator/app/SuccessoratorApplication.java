@@ -10,7 +10,6 @@ import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.CurrentViewProvider;
 
 public class SuccessoratorApplication extends Application {
     private GoalRepository goalRepository;
@@ -31,7 +30,7 @@ public class SuccessoratorApplication extends Application {
 
         this.goalRepository = new RoomGoalRepository(database.goalsDao());
         this.dateRepository = new DateRepository(new CurrentDateProvider());
-        this.viewRepository = new ViewRepository(new CurrentViewProvider());
+        this.viewRepository = new ViewRepository();
     }
 
     public GoalRepository getGoalRepository() {

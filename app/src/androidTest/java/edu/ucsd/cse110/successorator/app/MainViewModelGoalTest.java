@@ -25,7 +25,6 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.CurrentViewProvider;
 
 /**
  * Tests the goals-related functionality of MainViewModel; specifically, appending goals and
@@ -60,7 +59,7 @@ public class MainViewModelGoalTest {
     public void getGoalsAndAppend() {
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new CurrentDateProvider());
-        ViewRepository viewRepository = new ViewRepository(new CurrentViewProvider());
+        ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 0);

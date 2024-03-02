@@ -24,7 +24,6 @@ import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.CurrentViewProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
@@ -62,7 +61,7 @@ public class MainViewModelViewTest {
         Calendar calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 14);
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new MockDateProvider(calendar));
-        ViewRepository viewRepository = new ViewRepository(new CurrentViewProvider());
+        ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
         assertEquals(mainViewModel.getView().getValue(), defaultView);

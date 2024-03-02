@@ -18,7 +18,7 @@ public interface GoalRepository {
 
     void append(Goal goal);
 
-    void changeIsCompleteStatus(Integer id);
+    void changeIsCompleteStatus(Integer id, Calendar date);
 
     void moveToTop(Integer id);
 

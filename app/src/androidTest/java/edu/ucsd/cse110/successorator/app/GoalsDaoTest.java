@@ -208,4 +208,21 @@ public class GoalsDaoTest {
         assertEquals(1, goalsDao.find(5).sortOrder);
         assertEquals(4, goalsDao.find(3).sortOrder);
     }
+
+    @Test
+    public void getIsPendingStatus() {
+        Goal goal = new Goal(0, "goal1", 1, false, null,  true, Calendar.getInstance(), false);
+        GoalEntity goalEntity = GoalEntity.fromGoal(goal);
+        goalsDao.append(goalEntity);
+        assertFalse(goalsDao.getIsPendingStatus(0));
+    }
+
+    @Test
+    public void changeIsPendingStatus() {
+        Goal goal = new Goal(3, "goal1", 1, false, null,  true, null, true);
+        GoalEntity goalEntity = GoalEntity.fromGoal(goal);
+        goalsDao.append(goalEntity);
+        goalsDao.changeIsPendingStatus(3, false);
+        assertFalse(goalsDao.getIsPendingStatus(3));
+    }
 }
