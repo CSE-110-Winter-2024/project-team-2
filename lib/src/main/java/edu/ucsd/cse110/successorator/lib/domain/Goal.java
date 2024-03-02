@@ -90,10 +90,9 @@ public class Goal {
             isDisplayed = false;
         } else if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
             if (goalDate != null) {
-                boolean curDateGoal = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
+                isDisplayed = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
                         && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
                         && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
-                isDisplayed = curDateGoal;
             } else {
                 isDisplayed = false;
             }
