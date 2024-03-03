@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.app.ui.goalList.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -74,10 +75,23 @@ public class AddGoalDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
         Calendar currDate = activityModel.getDate().getValue();
-        this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(currDate)));
-        this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(currDate)));
-        this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(currDate)));
+        ViewOptions currentView = activityModel.getView().getValue();
 
+        if (currentView == ViewOptions.RECURRING){
+            view.oneTimeButton.setVisibility(View.GONE);
+            view.datePicker.setVisibility(View.VISIBLE);
+
+            updateRecurrenceButtonsText(currDate);
+
+            view.datePicker.init(currDate.get(Calendar.YEAR), currDate.get(Calendar.MONTH), currDate.get(Calendar.DAY_OF_MONTH),
+                    (datePicker, year, monthOfYear, dayOfMonth) -> {
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, monthOfYear, dayOfMonth);
+                        updateRecurrenceButtonsText(selectedDate);
+                    });
+        } else {
+            updateRecurrenceButtonsText(currDate);
+        }
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
@@ -106,6 +120,11 @@ public class AddGoalDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void updateRecurrenceButtonsText(Calendar date){
+        this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(date)));
+        this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(date)));
+        this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(date)));
+    }
     /**
      * When the positive button is clicked get text from input,
      * create new goal, add goal to list
@@ -118,12 +137,23 @@ public class AddGoalDialogFragment extends DialogFragment {
         if (!goalText.equals("")) {
             Calendar goalDate = null;
             ViewOptions view = activityModel.getView().getValue();
+            Goal.RecurrencePattern recurrencePattern = Goal.RecurrencePattern.NONE;
+
             if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
                 goalDate = new MockDateProvider(activityModel.getDate().getValue())
                         .getCurrentViewDate(view);
+            } else if (view == ViewOptions.RECURRING){
+                goalDate = Calendar.getInstance();
+                goalDate.set(this.view.datePicker.getYear(), this.view.datePicker.getMonth(), this.view.datePicker.getDayOfMonth());
+
+                if (this.view.dailyButton.isChecked()) {
+                    recurrencePattern = Goal.RecurrencePattern.DAILY;
+                }
             }
+
             var goal = new Goal(null, goalText, -1, false, null,
-                    true, goalDate, view == ViewOptions.PENDING);
+                    true, goalDate, view == ViewOptions.PENDING,
+                    view == ViewOptions.RECURRING, recurrencePattern);
             activityModel.append(goal);
             dialog.dismiss();
         }
