@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.ui.changeView.ChangeViewFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewTitleFormatter;
 
 /**
  * The main activity sets up the initial screen and triggers the Alert Dialog when user taps +.
@@ -42,21 +45,69 @@ public class MainActivity extends AppCompatActivity {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        // Listen for changes to date to update displayed date and isDisplayed values of goals
+        // Listen for changes to date to update the app bar and isDisplayed values of goals
         this.activityModel.getDate().observe(date -> {
             if (date == null) {
                 return;
             }
 
-            // Make a copy of the date so we don't change the original
-            Calendar mutableDate = (Calendar) date.clone();
-            // Set our mutable date 2 hours back
-            mutableDate.add(Calendar.HOUR_OF_DAY, -2);
+            Calendar mutableDate = new MockDateProvider(date)
+                    .getCurrentViewDate(activityModel.getView().getValue());
 
-            // Displays the formattedDate on the action bar where the title used to be
-            String formattedDate = new DateFormatter().formatDate(mutableDate);
+            // Displays the title on the app bar
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(formattedDate);
+                getSupportActionBar()
+                        .setTitle(new ViewTitleFormatter()
+                                .formatViewTitle(this.activityModel.getView().getValue(), mutableDate));
+            }
+
+            // Update isDisplayed value of all goals and update database
+            activityModel.updateAllGoalsIsDisplayed();
+        });
+
+        // Listen for changes to view to update the action bar and isDisplayed values of goals
+        this.activityModel.getView().observe(viewType -> {
+            if (viewType == null) {
+                return;
+            }
+
+            Calendar mutableDate = new MockDateProvider(activityModel.getDate().getValue())
+                    .getCurrentViewDate(viewType);
+
+            // Displays the title on the app bar
+            if (getSupportActionBar() != null) {
+                getSupportActionBar()
+                        .setTitle(new ViewTitleFormatter()
+                                .formatViewTitle(viewType, mutableDate));
+            }
+
+            var goals = activityModel.getOrderedGoals().getValue();
+            if (goals == null) return;
+            if (goals.size() == 0) {
+                if (!isShowingNoGoals && viewType == ViewOptions.TODAY) {
+                    // Replace GoalsListFragment with NoGoalsFragment
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    if (!fragmentManager.isDestroyed()) {
+                        fragmentManager
+                                .beginTransaction()
+                                .replace(R.id.goals_container, NoGoalsFragment.newInstance())
+                                .commit();
+                    }
+                }
+                isShowingNoGoals = true;
+            }
+            if (goals.size() > 0 || viewType != ViewOptions.TODAY) {
+                if (isShowingNoGoals) {
+                    // Replace NoGoalsFragment with GoalsListFragment
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    if (!fragmentManager.isDestroyed()) {
+                        fragmentManager
+                                .beginTransaction()
+                                .replace(R.id.goals_container, GoalListFragment.newInstance())
+                                .commit();
+                    }
+                }
+                isShowingNoGoals = false;
             }
 
             // Update isDisplayed value of all goals and update database
@@ -68,15 +119,14 @@ public class MainActivity extends AppCompatActivity {
             if (goals == null) return;
 
             /*
-             * If there are no goals, we want to show NoGoalsFragment. If there 
-             * is at least one goal, we want to show GoalListFragment. 
+             * If there are no goals and we are on Today's view, then we want to show
+             * NoGoalsFragment. Otherwise, we want to show GoalListFragment.
              * We use isShowingNoGoals to track whether we are currently showing 
              * NoGoalsFragment, and we only replace the fragment when the fragment
-             * we should show doesn't match what we're already showing
+             * we should show doesn't match what we're already showing.
              */
-
             if (goals.size() == 0) {
-                if (!isShowingNoGoals) {
+                if (!isShowingNoGoals && activityModel.getView().getValue() == ViewOptions.TODAY) {
                     // Replace GoalsListFragment with NoGoalsFragment
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     if (!fragmentManager.isDestroyed()) {
@@ -141,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.add_bar_manu_swap_views) {
             var dialogFragment = AddGoalDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "AddGoalDialogFragment");
+        }
+
+        if (itemId == R.id.add_bar_manu_change_view) {
+            var changeViewFragment = ChangeViewFragment.newInstance();
+            changeViewFragment.show(getSupportFragmentManager(), "ChangeViewFragment");
         }
 
         return super.onOptionsItemSelected(item);

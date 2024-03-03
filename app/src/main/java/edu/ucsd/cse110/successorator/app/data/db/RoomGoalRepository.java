@@ -36,6 +36,17 @@ public class RoomGoalRepository implements GoalRepository {
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
+    @Override
+    public Subject<List<Goal>> getAllGoals() {
+        var entitiesLiveData = goalsDao.getAllGoalsAsLiveData();
+        var allGoalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(allGoalsLiveData);
+    }
+
     public void save(Goal goal) {
         goalsDao.insert(GoalEntity.fromGoal(goal));
     }
@@ -53,8 +64,13 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsCompleteStatus(Integer id) {
+    public void changeIsCompleteStatus(Integer id, Calendar date) {
         goalsDao.changeIsCompleteStatus(id);
+        // If goal is pending, then crossing it off should move it to Today's list
+        if (goalsDao.getIsPendingStatus(id)) {
+            goalsDao.changeIsPendingStatus(id, false);
+            goalsDao.setGoalDate(id, date);
+        }
     }
 
     @Override

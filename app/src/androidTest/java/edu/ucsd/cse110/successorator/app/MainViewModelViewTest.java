@@ -24,14 +24,15 @@ import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
- * Tests the date-related functionality of MainViewModel; specifically, advancing the date one day
- * forward and observing changes to the current date.
+ * Tests the view-related functionality of MainViewModel; specifically, changing the
+ * view and observing changes to the current view.
  */
-public class MainViewModelDateTest {
+public class MainViewModelViewTest {
     private int observeCallsMade = 0;
-    private Calendar lastObservedDate = null;
+    private ViewOptions lastObservedView = null;
     private GoalsDao goalsDao;
     private SuccessoratorDatabase db;
 
@@ -55,57 +56,39 @@ public class MainViewModelDateTest {
     }
 
     @Test
-    public void advanceDateForward() {
+    public void changeViews() {
+        ViewOptions defaultView = ViewOptions.TODAY;
         Calendar calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 14);
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new MockDateProvider(calendar));
         ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
-        assertEquals(mainViewModel.getDate().getValue(), calendar);
-        mainViewModel.getDate().observe(newDate -> {
+        assertEquals(mainViewModel.getView().getValue(), defaultView);
+        mainViewModel.getView().observe(viewType -> {
             this.observeCallsMade++;
-            lastObservedDate = newDate;
+            lastObservedView = viewType;
         });
-        assertEquals(lastObservedDate, calendar);
+        assertEquals(lastObservedView, defaultView);
         // Our observer should have been called once when we added it
         assertEquals(observeCallsMade, 1);
 
-        mainViewModel.advanceDateOneDayForward();
-        Calendar advancedCalendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 15);
-        assertEquals(mainViewModel.getDate().getValue(), advancedCalendar);
-        assertEquals(lastObservedDate, advancedCalendar);
+        mainViewModel.setView(ViewOptions.TOMORROW);
+        ViewOptions tomorrowView = ViewOptions.TOMORROW;
+        assertEquals(mainViewModel.getView().getValue(), tomorrowView);
+        assertEquals(lastObservedView, tomorrowView);
         assertEquals(observeCallsMade, 2);
 
-        mainViewModel.advanceDateOneDayForward();
-        advancedCalendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 16);
-        assertEquals(mainViewModel.getDate().getValue(), advancedCalendar);
-        assertEquals(lastObservedDate, advancedCalendar);
+        mainViewModel.setView(ViewOptions.PENDING);
+        ViewOptions pendingView = ViewOptions.PENDING;
+        assertEquals(mainViewModel.getView().getValue(), pendingView);
+        assertEquals(lastObservedView, pendingView);
         assertEquals(observeCallsMade, 3);
-    }
 
-    @Test
-    public void setDate() {
-        Calendar calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 14);
-        GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
-        DateRepository dateRepository = new DateRepository(new MockDateProvider(calendar));
-        ViewRepository viewRepository = new ViewRepository();
-        MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
-
-        assertEquals(mainViewModel.getDate().getValue(), calendar);
-        mainViewModel.getDate().observe(newDate -> {
-            this.observeCallsMade++;
-            lastObservedDate = newDate;
-        });
-        assertEquals(lastObservedDate, calendar);
-        // Our observer should have been called once when we added it
-        assertEquals(observeCallsMade, 1);
-
-        calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 25);
-        mainViewModel.setDate(new MockDateProvider(calendar));
-        assertEquals(mainViewModel.getDate().getValue(), calendar);
-        assertEquals(lastObservedDate, calendar);
-        // Our observer should have been called again when we set the date
-        assertEquals(observeCallsMade, 2);
+        mainViewModel.setView(ViewOptions.RECURRING);
+        ViewOptions recurringView = ViewOptions.RECURRING;
+        assertEquals(mainViewModel.getView().getValue(), recurringView);
+        assertEquals(lastObservedView, recurringView);
+        assertEquals(observeCallsMade, 4);
     }
 }
