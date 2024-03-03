@@ -56,8 +56,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // Populate the view with the goal's data.
         binding.goalTextView.setText(goal.getGoalText());
 
-        // Display as strikethrough if isComplete is true
-        if (goal.getIsComplete()) {
+        // Display as strikethrough if goal isn't pending and isComplete is true
+        // if (!goal.getIsPending() && goal.getIsComplete()) {
+        if (goal.getIsComplete()) { // Delete this later for US12 (Move Goals Between Views)
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -65,17 +66,18 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
-            var id = goal.getId();
-            onClick.accept(id);
+                // For US12: if (!goal.getIsPending()) {
+                var id = goal.getId();
+                onClick.accept(id);
 
-            TextView textView = (TextView) v;
-            int flags = textView.getPaintFlags();
-            // Toggle the strike through
-            if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
-                textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            } else {
-                textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
-            }
+                TextView textView = (TextView) v;
+                int flags = textView.getPaintFlags();
+                // Toggle the strike through
+                if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
+                    textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                } else {
+                    textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
         });
 
         return binding.getRoot();
