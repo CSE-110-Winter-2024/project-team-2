@@ -5,4 +5,9 @@
     <string name="add_goal">Add Goal</string>
     <string name="enter_your_goal">Enter your goal</string>
     <string name="date_mock_button_description">Advance date forward</string>
+    <string name="change_view">Change View</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="pending">Pending</string>
+    <string name="recurring">Recurring</string>
 </resources>

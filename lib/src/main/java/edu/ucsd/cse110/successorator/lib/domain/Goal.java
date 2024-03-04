@@ -6,6 +6,9 @@ import androidx.annotation.Nullable;
 import java.util.Calendar;
 import java.util.Objects;
 
+import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
+
 public class Goal {
     public final @NonNull String goalText;
     public final @Nullable Integer id;
@@ -13,17 +16,21 @@ public class Goal {
     public @NonNull Boolean isComplete;
     public @Nullable Calendar dateCompleted;
     public @NonNull Boolean isDisplayed;
+    public @Nullable Calendar goalDate;
+    public @NonNull Boolean isPending;
     public @NonNull GoalContext goalContext;
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
                 @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed,
-                @NonNull GoalContext goalContext) {
+                @Nullable Calendar goalDate, @NonNull Boolean isPending, @NonNull GoalContext goalContext) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
         this.dateCompleted = dateCompleted;
         this.isDisplayed = isDisplayed;
+        this.goalDate = goalDate;
+        this.isPending = isPending;
         this.goalContext = goalContext;
     }
 
@@ -51,6 +58,14 @@ public class Goal {
         return isDisplayed;
     }
 
+    public @Nullable Calendar getGoalDate() {
+        return goalDate;
+    }
+
+    public @NonNull Boolean getIsPending() {
+        return isPending;
+    }
+
     public @NonNull GoalContext getGoalContext() {
         return goalContext;
     }
@@ -67,24 +82,34 @@ public class Goal {
         this.isDisplayed = isDisplayed;
     }
 
-    public void updateIsDisplayed(Calendar currDate) {
-        boolean completedOnCurrDate;
-        if (dateCompleted != null) {
-            Calendar currDateCopy = (Calendar) currDate.clone();
-            Calendar dateCompletedCopy = (Calendar) dateCompleted.clone();
+    public void setGoalDate(@Nullable Calendar goalDate) {
+        this.goalDate = goalDate;
+    }
 
-            // Subtract 2 hours to account for 2 AM day change
-            currDateCopy.add(Calendar.HOUR, -2);
-            dateCompletedCopy.add(Calendar.HOUR, -2);
+    public void setIsPending(@NonNull Boolean isPending) {
+        this.isPending = isPending;
+    }
 
-            completedOnCurrDate = (dateCompletedCopy.get(Calendar.MONTH) == currDateCopy.get(Calendar.MONTH))
-                    && (dateCompletedCopy.get(Calendar.DAY_OF_MONTH) == currDateCopy.get(Calendar.DAY_OF_MONTH))
-                    && (dateCompletedCopy.get(Calendar.YEAR) == currDateCopy.get(Calendar.YEAR));
-        } else {
-            completedOnCurrDate = false;
+    public void updateIsDisplayed(Calendar date, ViewOptions view) {
+        if (view == ViewOptions.PENDING) {
+            isDisplayed = isPending;
+        } else if (view == ViewOptions.RECURRING) {
+            isDisplayed = false;
+        } else if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
+            if (goalDate != null) {
+                // Goal is displayed if dates match
+                isDisplayed = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
+                        && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
+                        && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
+                // Case where goal is not complete and rolls over
+                if (!isComplete && view == ViewOptions.TODAY
+                        && new DateComparer().isFirstDateBeforeSecondDate(goalDate, date)) {
+                    isDisplayed = true;
+                }
+            } else {
+                isDisplayed = false;
+            }
         }
-
-        isDisplayed = (!isComplete || completedOnCurrDate);
     }
 
     /**
@@ -93,7 +118,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext);
     }
 
     /**
@@ -102,7 +127,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext);
     }
 
     @Override
@@ -112,11 +137,11 @@ public class Goal {
         Goal goal = (Goal) o;
         return Objects.equals(goalText, goal.goalText) && Objects.equals(id, goal.id) && Objects.equals(sortOrder, goal.sortOrder)
                 && Objects.equals(isComplete, goal.isComplete) && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed)
-                && Objects.equals(goalContext, goal.goalContext);
+                && Objects.equals(goalContext, goal.goalContext) && Objects.equals(goalDate, goal.goalDate) && Objects.equals(isPending, goal.isPending);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalContext);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext);
     }
 }

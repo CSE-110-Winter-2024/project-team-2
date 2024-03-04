@@ -24,11 +24,17 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
     List<GoalEntity> findAll();
 
+    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    List<GoalEntity> getAllGoals();
+
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
     LiveData<List<GoalEntity>> findAllAsLiveData();
+
+    @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
+    LiveData<List<GoalEntity>> getAllGoalsAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
     int count();
@@ -54,10 +60,20 @@ public interface GoalsDao {
             "NULL END) WHERE id = :id")
     void setDateCompleted(Integer id, Calendar dateCompleted);
 
+    @Query("SELECT isPending FROM goals where id = :id")
+    boolean getIsPendingStatus(int id);
+
+    @Query("UPDATE goals SET isPending = :isPending WHERE id = :id")
+    void changeIsPendingStatus(Integer id, boolean isPending);
+
+    @Query("UPDATE goals SET goalDate = :goalDate WHERE id = :id")
+    void setGoalDate(Integer id, Calendar goalDate);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
-        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null, true, goal.contextId);
+        var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
+                true, goal.goalDate, goal.isPending, goal.contextId);
         return Math.toIntExact(insert(newGoal));
     }
 

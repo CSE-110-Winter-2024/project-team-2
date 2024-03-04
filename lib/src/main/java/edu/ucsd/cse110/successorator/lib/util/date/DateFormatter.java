@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class DateFormatter {
     public String formatDate(Calendar calendar) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE M/dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE M/dd", Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }
 }

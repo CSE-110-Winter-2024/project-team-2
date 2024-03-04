@@ -15,25 +15,24 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
+import java.util.GregorianCalendar;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
-import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
- * Tests the goals-related functionality of MainViewModel; specifically, appending goals and
- * observing changes to the ordered list of goals.
+ * Tests the view-related functionality of MainViewModel; specifically, changing the
+ * view and observing changes to the current view.
  */
-public class MainViewModelGoalTest {
+public class MainViewModelViewTest {
     private int observeCallsMade = 0;
-    private List<Goal> lastObservedGoals = null;
+    private ViewOptions lastObservedView = null;
     private GoalsDao goalsDao;
     private SuccessoratorDatabase db;
 
@@ -57,36 +56,39 @@ public class MainViewModelGoalTest {
     }
 
     @Test
-    public void getGoalsAndAppend() {
+    public void changeViews() {
+        ViewOptions defaultView = ViewOptions.TODAY;
+        Calendar calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 14);
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
-        DateRepository dateRepository = new DateRepository(new CurrentDateProvider());
+        DateRepository dateRepository = new DateRepository(new MockDateProvider(calendar));
         ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 0);
-        mainViewModel.getOrderedGoals().observe(newGoals -> {
+        assertEquals(mainViewModel.getView().getValue(), defaultView);
+        mainViewModel.getView().observe(viewType -> {
             this.observeCallsMade++;
-            lastObservedGoals = newGoals;
+            lastObservedView = viewType;
         });
+        assertEquals(lastObservedView, defaultView);
         // Our observer should have been called once when we added it
         assertEquals(observeCallsMade, 1);
 
-        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
-        mainViewModel.append(goal1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
-        assertEquals(lastObservedGoals.size(), 1);
-        assertEquals(lastObservedGoals.get(0), goal1);
+        mainViewModel.setView(ViewOptions.TOMORROW);
+        ViewOptions tomorrowView = ViewOptions.TOMORROW;
+        assertEquals(mainViewModel.getView().getValue(), tomorrowView);
+        assertEquals(lastObservedView, tomorrowView);
         assertEquals(observeCallsMade, 2);
 
-        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
-        mainViewModel.append(goal2);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 2);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(1), goal2);
-        assertEquals(lastObservedGoals.size(), 2);
-        assertEquals(lastObservedGoals.get(0), goal1);
-        assertEquals(lastObservedGoals.get(1), goal2);
+        mainViewModel.setView(ViewOptions.PENDING);
+        ViewOptions pendingView = ViewOptions.PENDING;
+        assertEquals(mainViewModel.getView().getValue(), pendingView);
+        assertEquals(lastObservedView, pendingView);
         assertEquals(observeCallsMade, 3);
+
+        mainViewModel.setView(ViewOptions.RECURRING);
+        ViewOptions recurringView = ViewOptions.RECURRING;
+        assertEquals(mainViewModel.getView().getValue(), recurringView);
+        assertEquals(lastObservedView, recurringView);
+        assertEquals(observeCallsMade, 4);
     }
 }

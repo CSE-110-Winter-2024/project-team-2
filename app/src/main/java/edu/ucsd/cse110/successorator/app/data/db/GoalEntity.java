@@ -33,28 +33,38 @@ public class GoalEntity {
     @ColumnInfo(name = "isDisplayed")
     public boolean isDisplayed;
 
+    @ColumnInfo(name = "goalDate")
+    public Calendar goalDate;
+
+    @ColumnInfo(name = "isPending")
+    public boolean isPending;
+    
     @ColumnInfo(name = "contextId")
     public int contextId;
 
     public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete,
-                      @Nullable Calendar dateCompleted, boolean isDisplayed, int contextId) {
+                      @Nullable Calendar dateCompleted, boolean isDisplayed,
+                      @Nullable Calendar goalDate, boolean isPending, int contextId) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
         this.dateCompleted = dateCompleted;
         this.isDisplayed = isDisplayed;
+        this.goalDate = goalDate;
+        this.isPending = isPending;
         this.contextId = contextId;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(),
-                goal.getDateCompleted(), goal.getIsDisplayed(), Objects.requireNonNull(goal.getGoalContext().getId()));
+                goal.getDateCompleted(), goal.getIsDisplayed(), goal.getGoalDate(), goal.getIsPending(), 
+                Objects.requireNonNull(goal.getGoalContext().getId()));
         goalEntity.id = goal.getId();
         return goalEntity;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed,
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending,
                 Objects.requireNonNull(GoalContext.getGoalContextById(contextId)));
     }
 }

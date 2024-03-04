@@ -10,13 +10,15 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findAll();
 
+    Subject<List<Goal>> getAllGoals();
+
     void save(Goal goal);
 
     void save(List<Goal> goals);
 
     void append(Goal goal);
 
-    void changeIsCompleteStatus(Integer id);
+    void changeIsCompleteStatus(Integer id, Calendar date);
 
     void moveToTop(Integer id);
 
