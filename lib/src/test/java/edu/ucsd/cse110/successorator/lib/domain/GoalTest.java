@@ -123,15 +123,22 @@ public class GoalTest {
     public void updateIsDisplayed() {
         Calendar currDate = Calendar.getInstance();
         Calendar dateCompleted = Calendar.getInstance();
+        Calendar yesterdayGoalDate = Calendar.getInstance();
         Calendar todayGoalDate = Calendar.getInstance();
         Calendar tommorowGoalDate = Calendar.getInstance();
+        yesterdayGoalDate.add(Calendar.DAY_OF_MONTH, -1);
         tommorowGoalDate.add(Calendar.DAY_OF_MONTH, 1);
-        Calendar tommorowDate = Calendar.getInstance();
-        tommorowDate.add(Calendar.DAY_OF_MONTH, 1);
+        Calendar tomorrowDate = Calendar.getInstance();
+        tomorrowDate.add(Calendar.DAY_OF_MONTH, 1);
         Boolean isPending = true;
 
         // When not goal is not completed, TODAY view, goal made TODAY
         Goal goal = new Goal(0, "test Goal", 0, false, null, true, todayGoalDate, false, GoalContext.getGoalContextById(1));
+        goal.updateIsDisplayed(currDate, ViewOptions.TODAY);
+        assertTrue(goal.getIsDisplayed());
+
+        // When not goal is not completed, TODAY view, goal made yesterday
+        goal = new Goal(0, "test Goal", 0, false, null, true, yesterdayGoalDate, false, GoalContext.getGoalContextById(1));
         goal.updateIsDisplayed(currDate, ViewOptions.TODAY);
         assertTrue(goal.getIsDisplayed());
 
@@ -145,17 +152,27 @@ public class GoalTest {
         goal2.updateIsDisplayed(currDate, ViewOptions.TODAY);
         assertFalse(goal2.getIsDisplayed());
 
-        // When not goal is not completed, TOMORROW view, goal made TODAY
-        Goal goal3 = new Goal(0, "test Goal", 0, false, null, true, todayGoalDate, false, GoalContext.getGoalContextById(1));
-        goal3.updateIsDisplayed(currDate, ViewOptions.TOMORROW);
+        // When not goal is not completed, TOMORROW view, goal made TOMORROW
+        Goal goal3 = new Goal(0, "test Goal", 0, false, null, true, tommorowGoalDate, false, GoalContext.getGoalContextById(1));
+        goal3.updateIsDisplayed(tomorrowDate, ViewOptions.TOMORROW);
         assertTrue(goal3.getIsDisplayed());
 
-        // Same day goal is crossed off
+        // When not goal is not completed, TOMORROW view, goal made TODAY
+        goal3 = new Goal(0, "test Goal", 0, false, null, true, todayGoalDate, false, GoalContext.getGoalContextById(1));
+        goal3.updateIsDisplayed(tomorrowDate, ViewOptions.TOMORROW);
+        assertFalse(goal3.getIsDisplayed());
+
+        // When not goal is not completed, TOMORROW view, goal made yesterday
+        goal3 = new Goal(0, "test Goal", 0, false, null, true, yesterdayGoalDate, false, GoalContext.getGoalContextById(1));
+        goal3.updateIsDisplayed(tomorrowDate, ViewOptions.TOMORROW);
+        assertFalse(goal3.getIsDisplayed());
+
+        // Today list: Same day goal is crossed off
         Goal goal4 = new Goal(0, "test Goal", 0, true, dateCompleted, true, todayGoalDate, false, GoalContext.getGoalContextById(1));
         goal4.updateIsDisplayed(currDate, ViewOptions.TODAY);
         assertTrue(goal4.getIsDisplayed());
 
-        // Day after goal is crossed off
+        // Today list: Day after goal is crossed off
         currDate.add(Calendar.DATE, 1);
         Goal goal5 = new Goal(0, "test Goal", 0, true, dateCompleted, true, todayGoalDate, false, GoalContext.getGoalContextById(1));
         goal5.updateIsDisplayed(currDate, ViewOptions.TODAY);

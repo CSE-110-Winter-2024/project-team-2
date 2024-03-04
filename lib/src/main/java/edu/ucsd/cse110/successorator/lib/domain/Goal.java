@@ -95,20 +95,20 @@ public class Goal {
             isDisplayed = isPending;
         } else if (view == ViewOptions.RECURRING) {
             isDisplayed = false;
-        } else if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
-            if (goalDate != null) {
-                // Goal is displayed if dates match
-                isDisplayed = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
-                        && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
-                        && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
-                // Case where goal is not complete and rolls over
-                if (!isComplete && view == ViewOptions.TODAY
-                        && new DateComparer().isFirstDateBeforeSecondDate(goalDate, date)) {
-                    isDisplayed = true;
-                }
-            } else {
-                isDisplayed = false;
-            }
+        } else if (view == ViewOptions.TODAY) {
+            isDisplayed = !isPending // don't display pending goals on today's list
+                    && goalDate != null // must have a goalDate
+                    && !(isComplete
+                        && dateCompleted != null
+                        && new DateComparer().compareDates(dateCompleted, date) < 0
+                    ) // do not display if the goal was completed on a previous day
+                    // goal date must be for past or present, not future (future is tomorrow's list!)
+                    && new DateComparer().compareDates(goalDate, date) <= 0;
+        } else if (view == ViewOptions.TOMORROW) {
+            isDisplayed = !isPending // don't display pending goals on tomorrow's list
+                    && goalDate != null // must have a goalDate
+                    // goal date must be for tomorrow's date, not before or after that
+                    && new DateComparer().compareDates(goalDate, date) == 0;
         }
     }
 

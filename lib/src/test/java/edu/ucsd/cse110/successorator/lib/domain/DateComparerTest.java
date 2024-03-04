@@ -1,6 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -16,16 +16,16 @@ public class DateComparerTest {
         // Test first date is before second date
         Calendar firstDate = new GregorianCalendar(2024, Calendar.MARCH, 2, 1, 30);
         Calendar secondDate = new GregorianCalendar(2025, Calendar.FEBRUARY, 3, 2, 0);
-        assertTrue(new DateComparer().isFirstDateBeforeSecondDate(firstDate, secondDate));
+        assertTrue(new DateComparer().compareDates(firstDate, secondDate) < 0);
 
         // Test same day, different times
         firstDate = new GregorianCalendar(2024, Calendar.MARCH, 2, 1, 30);
         secondDate = new GregorianCalendar(2024, Calendar.MARCH, 2, 5, 0);
-        assertFalse(new DateComparer().isFirstDateBeforeSecondDate(firstDate, secondDate));
+        assertEquals(new DateComparer().compareDates(firstDate, secondDate), 0);
 
         // Test first date is after second date
         firstDate = new GregorianCalendar(2024, Calendar.MARCH, 3);
         secondDate = new GregorianCalendar(2024, Calendar.MARCH, 2);
-        assertFalse(new DateComparer().isFirstDateBeforeSecondDate(firstDate, secondDate));
+        assertTrue(new DateComparer().compareDates(firstDate, secondDate) > 0);
     }
 }
