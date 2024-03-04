@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import android.content.Context;
 
@@ -14,26 +15,21 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
-import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 
 /**
- * Tests the goals-related functionality of MainViewModel; specifically, appending goals and
- * observing changes to the ordered list of goals.
+ * Tests the selected goal context ID functionality of the MainViewModel.
  */
-public class MainViewModelGoalTest {
+public class MainViewModelSelectedGoalContextTest {
     private int observeCallsMade = 0;
-    private List<Goal> lastObservedGoals = null;
+    private Integer lastObservedSelectedGoalContextId;
     private GoalsDao goalsDao;
     private SuccessoratorDatabase db;
 
@@ -57,36 +53,27 @@ public class MainViewModelGoalTest {
     }
 
     @Test
-    public void getGoalsAndAppend() {
+    public void selectedGoalContextId() {
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new CurrentDateProvider());
         ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 0);
-        mainViewModel.getOrderedGoals().observe(newGoals -> {
+        // Selected goal context ID should initially be null
+        assertNull(mainViewModel.getSelectedGoalContextId().getValue());
+
+        mainViewModel.getSelectedGoalContextId().observe(newSelectedGoalContextId -> {
             this.observeCallsMade++;
-            lastObservedGoals = newGoals;
+            lastObservedSelectedGoalContextId = newSelectedGoalContextId;
         });
+        assertNull(lastObservedSelectedGoalContextId);
         // Our observer should have been called once when we added it
         assertEquals(observeCallsMade, 1);
 
-        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
-        mainViewModel.append(goal1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
-        assertEquals(lastObservedGoals.size(), 1);
-        assertEquals(lastObservedGoals.get(0), goal1);
+        mainViewModel.setSelectedGoalContextId(3);
+        assertEquals(mainViewModel.getSelectedGoalContextId().getValue(), (Integer) 3);
+        assertEquals(lastObservedSelectedGoalContextId, (Integer) 3);
+        // Our observer should have been called again when setting the goal context ID
         assertEquals(observeCallsMade, 2);
-
-        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
-        mainViewModel.append(goal2);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 2);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
-        assertEquals(mainViewModel.getOrderedGoals().getValue().get(1), goal2);
-        assertEquals(lastObservedGoals.size(), 2);
-        assertEquals(lastObservedGoals.get(0), goal1);
-        assertEquals(lastObservedGoals.get(1), goal2);
-        assertEquals(observeCallsMade, 3);
     }
 }

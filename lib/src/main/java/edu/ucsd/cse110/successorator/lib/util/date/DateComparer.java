@@ -5,14 +5,17 @@ import java.util.GregorianCalendar;
 
 public class DateComparer {
     /**
-     * This method compares two given Calendar dates and returns true if
-     * firstDate is a date before secondDate and returns false otherwise.
-     * Compares the year, month, and days only. Does not compare time.
+     * This method compares two given Calendar dates by year, month, and days only (not considering
+     * time) and returns the result of the comparison:
+     * - a positive number if firstDate is after secondDate
+     * - 0 if firstDate is the same as secondDate
+     * - a negative number if firstDate is before secondDate
+     *
      * @param firstDate the firstDate being compared
      * @param secondDate the date firstDate is compared to
-     * @return whether or not firstDate is before secondDate
+     * @return the result of the date comparison
      */
-    public boolean isFirstDateBeforeSecondDate(Calendar firstDate, Calendar secondDate) {
+    public int compareDates(Calendar firstDate, Calendar secondDate) {
         // Create Calendar instances of firstDate and secondDate, but
         // disregard the time by setting them to midnight
         Calendar firstDateCopy = new GregorianCalendar(firstDate.get(Calendar.YEAR),
@@ -21,6 +24,6 @@ public class DateComparer {
         Calendar secondDateCopy = new GregorianCalendar(secondDate.get(Calendar.YEAR),
                 secondDate.get(Calendar.MONTH),
                 secondDate.get(Calendar.DAY_OF_MONTH));
-        return firstDateCopy.compareTo(secondDateCopy) < 0;
+        return firstDateCopy.compareTo(secondDateCopy);
     }
 }

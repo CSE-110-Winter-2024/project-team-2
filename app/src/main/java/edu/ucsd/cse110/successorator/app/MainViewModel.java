@@ -32,6 +32,12 @@ public class MainViewModel extends ViewModel {
     private final SimpleSubject<Calendar> date;
     private final SimpleSubject<ViewOptions> view;
 
+    /*
+     The ID of the currently selected goal context when the user is adding a goal and choosing a context.
+     Null if they have not chosen a context or are not currently adding a goal.
+     */
+    private final SimpleSubject<Integer> selectedGoalContextId;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -51,6 +57,7 @@ public class MainViewModel extends ViewModel {
         this.orderedGoals = new SimpleSubject<>();
         this.allGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
+        this.selectedGoalContextId = new SimpleSubject<>();
         this.view = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
@@ -191,6 +198,14 @@ public class MainViewModel extends ViewModel {
         return date;
     }
 
+    public Subject<Integer> getSelectedGoalContextId() {
+        return selectedGoalContextId;
+    }
+
+    public void setSelectedGoalContextId(Integer contextId) {
+        selectedGoalContextId.setValue(contextId);
+    }
+    
     public void setView(ViewOptions view) {
         viewRepository.setView(view);
     }
