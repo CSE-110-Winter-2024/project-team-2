@@ -60,6 +60,15 @@
             android:text="" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/startingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "@string/starting"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
     <DatePicker
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
@@ -68,5 +77,23 @@
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/startDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startingLabel" />
+
+    <Button
+        android:id="@+id/setDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_the_date"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/datePicker"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

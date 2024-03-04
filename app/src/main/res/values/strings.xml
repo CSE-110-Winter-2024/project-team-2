@@ -12,4 +12,6 @@
     <string name="recurring">Recurring</string>
     <string name="one_time_text">One-Time</string>
     <string name="daily_text">Daily</string>
+    <string name="starting">Starting:</string>
+    <string name="set_the_date">Set the date</string>
 </resources>
