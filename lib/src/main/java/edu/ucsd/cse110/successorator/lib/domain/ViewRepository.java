@@ -3,14 +3,13 @@ package edu.ucsd.cse110.successorator.lib.domain;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
-import edu.ucsd.cse110.successorator.lib.util.views.ViewProvider;
 
 public class ViewRepository {
     private final SimpleSubject<ViewOptions> view;
 
-    public ViewRepository(ViewProvider viewProvider) {
+    public ViewRepository() {
         view = new SimpleSubject<>();
-        view.setValue(viewProvider.getDefaultView());
+        view.setValue(ViewOptions.TODAY);
     }
 
     public void setView(ViewOptions view) {

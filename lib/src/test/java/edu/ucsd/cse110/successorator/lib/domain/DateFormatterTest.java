@@ -16,6 +16,6 @@ public class DateFormatterTest {
         DateFormatter dateFormatter = new DateFormatter();
         Calendar fakedCalendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 12);
         String formattedDate = dateFormatter.formatDate(fakedCalendar);
-        assert (formattedDate.equals("Monday 2/12"));
+        assert (formattedDate.equals("Mon 2/12"));
     }
 }

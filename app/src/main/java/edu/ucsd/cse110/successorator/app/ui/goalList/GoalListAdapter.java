@@ -57,8 +57,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         binding.goalTextView.setText(goal.getGoalText());
 
         // Display as strikethrough if goal isn't pending and isComplete is true
-        if (!goal.getIsPending() && goal.getIsComplete()) {
-//        if (goal.getIsComplete()) {
+        // if (!goal.getIsPending() && goal.getIsComplete()) {
+        if (goal.getIsComplete()) { // Delete this later for US12 (Move Goals Between Views)
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -66,7 +66,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
-            if (!goal.getIsPending()) {
+                // For US12: if (!goal.getIsPending()) {
                 var id = goal.getId();
                 onClick.accept(id);
 
@@ -78,7 +78,6 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 } else {
                     textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-            }
         });
 
         return binding.getRoot();

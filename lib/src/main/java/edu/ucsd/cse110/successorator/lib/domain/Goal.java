@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import java.util.Calendar;
 import java.util.Objects;
 
+import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 public class Goal {
@@ -116,10 +117,14 @@ public class Goal {
             if (isRecurring && matchesRecurrencePattern(date)){
                 isDisplayed = true;
             } else if (goalDate != null) {
-                boolean curDateGoal = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
+                isDisplayed = (goalDate.get(Calendar.MONTH) == date.get(Calendar.MONTH))
                         && (goalDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
                         && (goalDate.get(Calendar.YEAR) == date.get(Calendar.YEAR));
-                isDisplayed = curDateGoal;
+                // Case where goal is not complete and rolls over
+                if (!isComplete && view == ViewOptions.TODAY
+                        && new DateComparer().isFirstDateBeforeSecondDate(goalDate, date)) {
+                    isDisplayed = true;
+                }
             } else {
                 isDisplayed = false;
             }

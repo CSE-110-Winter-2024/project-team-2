@@ -60,6 +60,15 @@ public interface GoalsDao {
             "NULL END) WHERE id = :id")
     void setDateCompleted(Integer id, Calendar dateCompleted);
 
+    @Query("SELECT isPending FROM goals where id = :id")
+    boolean getIsPendingStatus(int id);
+
+    @Query("UPDATE goals SET isPending = :isPending WHERE id = :id")
+    void changeIsPendingStatus(Integer id, boolean isPending);
+
+    @Query("UPDATE goals SET goalDate = :goalDate WHERE id = :id")
+    void setGoalDate(Integer id, Calendar goalDate);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();

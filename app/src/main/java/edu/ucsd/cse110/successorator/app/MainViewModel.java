@@ -150,8 +150,8 @@ public class MainViewModel extends ViewModel {
         dateRepository.setDate(dateProvider);
     }
 
-    public void changeIsCompleteStatus(Integer id) {
-        goalRepository.changeIsCompleteStatus(id);
+    public void changeIsCompleteStatus(Integer id, Calendar date) {
+        goalRepository.changeIsCompleteStatus(id, date);
     }
 
     public void moveToTop(Integer id) {
