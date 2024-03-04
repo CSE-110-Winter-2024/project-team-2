@@ -50,7 +50,7 @@ public class GoalContextListAdapter extends RecyclerView.Adapter<GoalContextList
 
     // Brightness (alpha channel) of background color when a goal context button is or is not selected. Max is 0xFF (255)
     private static final int SELECTED_BRIGHTNESS = 0xFF;
-    private static final int UNSELECTED_BRIGHTNESS = 0x88;
+    private static final int UNSELECTED_BRIGHTNESS = 0x55;
 
     public GoalContextListAdapter(Fragment fragment, List<GoalContext> contexts, Consumer<Integer> onClick) {
         /*
