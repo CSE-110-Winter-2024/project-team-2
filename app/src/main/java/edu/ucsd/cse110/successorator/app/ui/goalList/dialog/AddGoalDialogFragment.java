@@ -18,6 +18,7 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
@@ -109,7 +110,9 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if (!goalText.equals("")) {
+        var selectedContextId = activityModel.getSelectedGoalContextId().getValue();
+        // Don't allow user to create a goal if they haven't entered any text or selected a context
+        if (!goalText.equals("") && selectedContextId != null) {
             Calendar goalDate = null;
             ViewOptions view = activityModel.getView().getValue();
             if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
@@ -117,8 +120,10 @@ public class AddGoalDialogFragment extends DialogFragment {
                         .getCurrentViewDate(view);
             }
             var goal = new Goal(null, goalText, -1, false, null,
-                    true, goalDate, view == ViewOptions.PENDING);
+                    true, goalDate, view == ViewOptions.PENDING, GoalContext.getGoalContextById(selectedContextId));
             activityModel.append(goal);
+            // Reset selected context ID to null so that no context will be selected by default next time
+            activityModel.setSelectedGoalContextId(null);
             dialog.dismiss();
         }
     }
