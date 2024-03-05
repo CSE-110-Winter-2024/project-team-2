@@ -79,9 +79,7 @@ public class AddGoalDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
         Calendar currDate = activityModel.getDate().getValue();
-        this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(currDate)));
-        this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(currDate)));
-        this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(currDate)));
+        updateStartDateText(currDate);
 
         ViewOptions currentView = activityModel.getView().getValue();
 
@@ -93,16 +91,7 @@ public class AddGoalDialogFragment extends DialogFragment {
             updateStartDateText(currDate);
 
             view.startDateButton.setOnClickListener(v -> toggleDatePickerVisibility());
-            DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    Calendar datePicked = Calendar.getInstance();
-                    datePicked.set(Calendar.YEAR, year);
-                    datePicked.set(Calendar.MONTH, month);
-                    datePicked.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    updateStartDateText(datePicked);
-                }
-            };
+
             view.setDateButton.setOnClickListener(v -> {
                 toggleDatePickerVisibility();
                 Calendar datePicked = Calendar.getInstance();
@@ -113,6 +102,13 @@ public class AddGoalDialogFragment extends DialogFragment {
             });
         } else if (currentView == ViewOptions.PENDING) {
             view.radioGroup.setVisibility(View.GONE);
+        } else if (currentView == ViewOptions.TOMORROW) {
+            Calendar tmrDate = Calendar.getInstance();
+            tmrDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR));
+            tmrDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH));
+            tmrDate.set(Calendar.DAY_OF_MONTH, currDate.get(Calendar.DAY_OF_MONTH));
+            tmrDate.add(Calendar.DATE, 1);
+            updateStartDateText(tmrDate);
         }
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())

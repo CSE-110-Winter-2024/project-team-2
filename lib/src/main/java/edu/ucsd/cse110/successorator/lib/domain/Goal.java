@@ -139,10 +139,13 @@ public class Goal {
                     && new DateComparer().compareDates(goalDate, date) <= 0
                     && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, date) > 0);
         } else if (view == ViewOptions.TOMORROW) {
+            Calendar tmrDate = (Calendar) date.clone();
+            tmrDate.add(Calendar.DATE, 1);
             isDisplayed = !isPending // don't display pending goals on tomorrow's list
                     && goalDate != null // must have a goalDate
                     // goal date must be for tomorrow's date, not before or after that
-                    && new DateComparer().compareDates(goalDate, date) == 0;
+                    && new DateComparer().compareDates(goalDate, date) == 0
+                    && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, tmrDate) > 0);
         }
     }
 
@@ -155,6 +158,7 @@ public class Goal {
             } else if (this.getRecurrencePattern() == RecurrencePattern.WEEKLY) {
                 newGoalDate.add(Calendar.WEEK_OF_YEAR, 1);
             } else if (this.getRecurrencePattern() == RecurrencePattern.MONTHLY) {
+                //TODO: need to fix this logic!!
                 do {
                     newGoalDate.add(Calendar.WEEK_OF_YEAR, 1);
                 } while (newGoalDate.WEEK_OF_MONTH != this.getGoalDate().WEEK_OF_MONTH);

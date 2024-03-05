@@ -26,7 +26,6 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.CurrentViewProvider;
 
 /**
  * Tests the goals-related functionality of MainViewModel; specifically, appending goals and
