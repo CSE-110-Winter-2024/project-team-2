@@ -86,4 +86,8 @@ public class RoomGoalRepository implements GoalRepository {
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
         goalsDao.changeIsDisplayedStatus(id, isDisplayed);
     }
+
+    public void setMadeNextRecurrence(Integer id){
+        goalsDao.setMadeNextRecurrence(id);
+    }
 }

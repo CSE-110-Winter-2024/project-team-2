@@ -43,10 +43,13 @@ public class GoalEntity {
     @ColumnInfo(name = "recurrencePattern")
     public Goal.RecurrencePattern recurrencePattern;
 
+    @ColumnInfo(name = "madeNextRecurrence")
+    public boolean madeNextRecurrence;
+
     public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete,
                       @Nullable Calendar dateCompleted, boolean isDisplayed,
                       @Nullable Calendar goalDate, boolean isPending,
-                      boolean isRecurring, Goal.RecurrencePattern recurrencePattern) {
+                      boolean isRecurring, Goal.RecurrencePattern recurrencePattern, boolean madeNextRecurrence) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
@@ -56,17 +59,18 @@ public class GoalEntity {
         this.isPending = isPending;
         this.isRecurring = isRecurring;
         this.recurrencePattern = recurrencePattern;
+        this.madeNextRecurrence = madeNextRecurrence;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(),
                 goal.getDateCompleted(), goal.getIsDisplayed(), goal.getGoalDate(), goal.getIsPending(),
-                goal.getIsRecurring(),goal.getRecurrencePattern());
+                goal.getIsRecurring(),goal.getRecurrencePattern(), goal.getMadeNextRecurrence());
         goalEntity.id = goal.getId();
         return goalEntity;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, isRecurring, recurrencePattern);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, isRecurring, recurrencePattern, madeNextRecurrence);
     }
 }

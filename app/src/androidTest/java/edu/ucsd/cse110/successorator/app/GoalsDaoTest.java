@@ -45,7 +45,7 @@ public class GoalsDaoTest {
 
     @Test
     public void insertGoal() {
-        GoalEntity goalEntity = new GoalEntity("goal1", 1, false, null, true);
+        GoalEntity goalEntity = new GoalEntity("goal1", 1, false, null, true );
         Long goal1Id = goalsDao.insert(goalEntity);
         List<GoalEntity> allGoals = goalsDao.findAll();
         assertEquals(1, allGoals.size());

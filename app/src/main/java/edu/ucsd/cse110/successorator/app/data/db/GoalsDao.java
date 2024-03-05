@@ -69,11 +69,14 @@ public interface GoalsDao {
     @Query("UPDATE goals SET goalDate = :goalDate WHERE id = :id")
     void setGoalDate(Integer id, Calendar goalDate);
 
+    @Query("UPDATE goals SET madeNextRecurrence = true WHERE id = :id")
+    void setMadeNextRecurrence(Integer id);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
-                true, goal.goalDate, goal.isPending, goal.isRecurring, goal.recurrencePattern);
+                true, goal.goalDate, goal.isPending, goal.isRecurring, goal.recurrencePattern, goal.madeNextRecurrence);
         return Math.toIntExact(insert(newGoal));
     }
 

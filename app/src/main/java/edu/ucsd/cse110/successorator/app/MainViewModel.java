@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
@@ -105,6 +106,7 @@ public class MainViewModel extends ViewModel {
         allGoals.observe(goals -> {
             if (goals == null) return;
             this.updateAllGoalsIsDisplayed();
+            this.addRecurringGoals(this);
         });
 
         // When the current date changes, update our date
@@ -173,14 +175,41 @@ public class MainViewModel extends ViewModel {
                     boolean wasDisplayed = goal.getIsDisplayed();
                     Calendar mutableDate = new MockDateProvider(getDate().getValue())
                             .getCurrentViewDate(getView().getValue());
-                    goal.updateIsDisplayed(mutableDate, getView().getValue());
-
+                    goal.updateIsDisplayed(mutableDate,getView().getValue());
                     /*
                      * Only propagate change to database if isDisplayed actually changed, to avoid
                      * infinite observer & updating loop
                      */
                     if (wasDisplayed != goal.getIsDisplayed()) {
                         goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    public void addRecurringGoals(MainViewModel activityModel) {
+        if (getAllGoals().getValue() != null) {
+            for (Goal goal : getAllGoals().getValue()) {
+                /*
+                 * Iterate through all goals and updated isDisplayed value based on
+                 * current view and system date, and update database
+                 */
+                Calendar date = Calendar.getInstance();
+                date.setTime(getDate().getValue().getTime());
+                date.add(Calendar.DATE, 1);
+
+                if (getDate().getValue() != null && new DateComparer().isFirstDateBeforeSecondDate(goal.getGoalDate(), date)){
+                    Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                            .getCurrentViewDate(getView().getValue());
+                    goal.updateIsDisplayed(mutableDate, getView().getValue());
+                    Goal nextGoalRecurrence = goal.updateNextOccurrence();
+
+                    if (nextGoalRecurrence != null){
+                        goalRepository.setMadeNextRecurrence(goal.getId());
+                        activityModel.append(nextGoalRecurrence);
                     }
                 }
             }
