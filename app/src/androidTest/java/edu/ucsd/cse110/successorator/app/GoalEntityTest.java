@@ -11,6 +11,7 @@ import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 
 /**
  * Tests the methods of the GoalEntity class
@@ -25,6 +26,7 @@ public class GoalEntityTest {
         assertFalse(goalEntity1.isComplete);
         assertNull(goalEntity1.dateCompleted);
         assertTrue(goalEntity1.isDisplayed);
+        assertEquals(goalEntity1.contextId, 1);
 
         Calendar dateCompleted = Calendar.getInstance();
         GoalEntity goalEntity2 = new GoalEntity("goal1", 1, false, dateCompleted, false,
@@ -34,6 +36,7 @@ public class GoalEntityTest {
         assertFalse(goalEntity2.isComplete);
         assertEquals(dateCompleted, goalEntity2.dateCompleted);
         assertFalse(goalEntity2.isDisplayed);
+        assertEquals(goalEntity2.contextId, 3);
     }
 
     @Test
@@ -47,6 +50,7 @@ public class GoalEntityTest {
         assertFalse(goalEntity1.isComplete);
         assertNull(goalEntity1.dateCompleted);
         assertTrue(goalEntity1.isDisplayed);
+        assertEquals(goalEntity1.contextId, 1);
 
         Calendar dateCompleted = Calendar.getInstance();
         Goal goal2 = new Goal(10, "goal2", 2, true, dateCompleted, false, Calendar.getInstance(), false, GoalContext.getGoalContextById(2), false, Goal.RecurrencePattern.NONE, null);
@@ -57,6 +61,7 @@ public class GoalEntityTest {
         assertTrue(goalEntity2.isComplete);
         assertEquals(dateCompleted, goalEntity2.dateCompleted);
         assertFalse(goalEntity2.isDisplayed);
+        assertEquals(goalEntity2.contextId, 2);
     }
 
     @Test
@@ -68,6 +73,7 @@ public class GoalEntityTest {
         assertFalse(goal1.isComplete);
         assertNull(goal1.dateCompleted);
         assertTrue(goal1.isDisplayed);
+        assertEquals(goal1.getGoalContext(), GoalContext.getGoalContextById(1));
 
         Calendar dateCompleted = Calendar.getInstance();
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, dateCompleted, false, Calendar.getInstance(), false, 3, false, Goal.RecurrencePattern.NONE, null);
@@ -77,5 +83,6 @@ public class GoalEntityTest {
         assertTrue(goal2.isComplete);
         assertEquals(dateCompleted, goal2.dateCompleted);
         assertFalse(goal2.isDisplayed);
+        assertEquals(goal2.getGoalContext(), GoalContext.getGoalContextById(3));
     }
 }

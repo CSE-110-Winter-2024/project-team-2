@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <EditText
         android:id="@+id/goal_edit_text"
@@ -17,6 +17,7 @@
         android:hint="@string/enter_your_goal"
         android:autofillHints="@string/enter_your_goal"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/context_list_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -104,5 +105,4 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/goal_edit_text"
         tools:layout="@layout/fragment_goal_context_list" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

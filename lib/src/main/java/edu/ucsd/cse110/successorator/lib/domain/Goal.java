@@ -19,9 +19,9 @@ public class Goal {
     public @Nullable Calendar goalDate;
     public @NonNull Boolean isPending;
     public @NonNull Boolean isRecurring;
+    public @NonNull GoalContext goalContext;
     public RecurrencePattern recurrencePattern;
     public Calendar nextRecurrence;
-    public @NonNull GoalContext goalContext;
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
                 @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed,

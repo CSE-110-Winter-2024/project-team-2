@@ -19,7 +19,6 @@ import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragmen
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.CurrentViewProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewTitleFormatter;
 

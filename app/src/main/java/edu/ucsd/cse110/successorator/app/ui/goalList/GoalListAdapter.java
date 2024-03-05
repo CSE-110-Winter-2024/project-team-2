@@ -1,11 +1,14 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,8 +60,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         binding.goalTextView.setText(goal.getGoalText());
 
         // Display as strikethrough if goal isn't pending and isComplete is true
-        if (!goal.getIsPending() && goal.getIsComplete()) {
-//        if (goal.getIsComplete()) {
+        // if (!goal.getIsPending() && goal.getIsComplete()) {
+        if (goal.getIsComplete()) { // Delete this later for US12 (Move Goals Between Views)
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -66,7 +69,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
-            if (!goal.getIsPending()) {
+                // For US12: if (!goal.getIsPending()) {
                 var id = goal.getId();
                 onClick.accept(id);
 
@@ -78,8 +81,17 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 } else {
                     textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-            }
         });
+
+        // Set the text and background color of the goal context circle based on the context
+        var goalContext = goal.getGoalContext();
+
+        Button goalContextButton = binding.goalContextButton;
+        goalContextButton.setText(Character.toString(goalContext.getFirstLetterOfName()));
+
+        // Always set goal context color to full brightness for list display
+        int goalContextColor = Color.parseColor(goalContext.getColor());
+        goalContextButton.getBackground().setColorFilter(goalContextColor, PorterDuff.Mode.MULTIPLY );
 
         return binding.getRoot();
     }
