@@ -64,8 +64,13 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsCompleteStatus(Integer id) {
+    public void changeIsCompleteStatus(Integer id, Calendar date) {
         goalsDao.changeIsCompleteStatus(id);
+        // If goal is pending, then crossing it off should move it to Today's list
+        if (goalsDao.getIsPendingStatus(id)) {
+            goalsDao.changeIsPendingStatus(id, false);
+            goalsDao.setGoalDate(id, date);
+        }
     }
 
     @Override
@@ -80,5 +85,9 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
         goalsDao.changeIsDisplayedStatus(id, isDisplayed);
+    }
+
+    public void setNextRecurrence(Integer id, Calendar nextRecurrence){
+        goalsDao.setNextRecurrence(id, nextRecurrence);
     }
 }

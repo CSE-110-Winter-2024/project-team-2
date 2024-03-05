@@ -1,9 +1,12 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList.dialog;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,12 +15,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
@@ -78,6 +83,37 @@ public class AddGoalDialogFragment extends DialogFragment {
         this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(currDate)));
         this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(currDate)));
 
+        ViewOptions currentView = activityModel.getView().getValue();
+
+        if (currentView == ViewOptions.RECURRING) {
+            view.oneTimeButton.setVisibility(View.GONE);
+            view.startingLabel.setVisibility(View.VISIBLE);
+            view.startDateButton.setVisibility(View.VISIBLE);
+
+            updateStartDateText(currDate);
+
+            view.startDateButton.setOnClickListener(v -> toggleDatePickerVisibility());
+            DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    Calendar datePicked = Calendar.getInstance();
+                    datePicked.set(Calendar.YEAR, year);
+                    datePicked.set(Calendar.MONTH, month);
+                    datePicked.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    updateStartDateText(datePicked);
+                }
+            };
+            view.setDateButton.setOnClickListener(v -> {
+                toggleDatePickerVisibility();
+                Calendar datePicked = Calendar.getInstance();
+                datePicked.set(Calendar.MONTH, view.datePicker.getMonth());
+                datePicked.set(Calendar.YEAR, view.datePicker.getYear());
+                datePicked.set(Calendar.DAY_OF_MONTH, view.datePicker.getDayOfMonth());
+                updateStartDateText(datePicked);
+            });
+        } else if (currentView == ViewOptions.PENDING) {
+            view.radioGroup.setVisibility(View.GONE);
+        }
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("New Goal")
@@ -106,6 +142,31 @@ public class AddGoalDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void updateStartDateText(Calendar date) {
+        String formattedDate = new SimpleDateFormat("MMM dd, yyyy").format(date.getTime());
+        view.startDateButton.setText(formattedDate);
+        this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(date)));
+        this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(date)));
+        this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(date)));
+
+    }
+
+    private void toggleDatePickerVisibility(){
+        if(view.datePicker.getVisibility() == View.GONE){
+            view.datePicker.setVisibility(View.VISIBLE);
+            view.setDateButton.setVisibility(View.VISIBLE);
+            view.startDateButton.setVisibility(View.GONE);
+            view.radioGroup.setVisibility(View.GONE);
+            view.contextListContainer.setVisibility(View.GONE);
+        } else {
+            view.datePicker.setVisibility(View.GONE);
+            view.setDateButton.setVisibility(View.GONE);
+            view.startDateButton.setVisibility(View.VISIBLE);
+            view.radioGroup.setVisibility(View.VISIBLE);
+            view.contextListContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
     /**
      * When the positive button is clicked get text from input,
      * create new goal, add goal to list
@@ -115,16 +176,53 @@ public class AddGoalDialogFragment extends DialogFragment {
      */
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var goalText = view.goalEditText.getText().toString();
-        if (!goalText.equals("")) {
+        var selectedContextId = activityModel.getSelectedGoalContextId().getValue();
+        // Don't allow user to create a goal if they haven't entered any text or selected a context
+        if (!goalText.equals("") && selectedContextId != null) {
             Calendar goalDate = null;
             ViewOptions view = activityModel.getView().getValue();
+            Goal.RecurrencePattern recurrencePattern = Goal.RecurrencePattern.NONE;
+            Boolean isRecurring = true;
+
             if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
                 goalDate = new MockDateProvider(activityModel.getDate().getValue())
                         .getCurrentViewDate(view);
+                if (this.view.oneTimeButton.isChecked()){
+                    isRecurring = false;
+                }
+                if (this.view.dailyButton.isChecked()) {
+                    recurrencePattern = Goal.RecurrencePattern.DAILY;
+                } else if (this.view.weeklyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.WEEKLY;
+                } else if (this.view.monthlyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.MONTHLY;
+                } else if (this.view.yearlyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.YEARLY;
+                }
+            } else if (view == ViewOptions.RECURRING){
+                goalDate = Calendar.getInstance();
+                goalDate.set(this.view.datePicker.getYear(), this.view.datePicker.getMonth(), this.view.datePicker.getDayOfMonth());
+                updateStartDateText(goalDate);
+
+                if (this.view.dailyButton.isChecked()) {
+                    recurrencePattern = Goal.RecurrencePattern.DAILY;
+                } else if (this.view.weeklyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.WEEKLY;
+                } else if (this.view.monthlyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.MONTHLY;
+                } else if (this.view.yearlyButton.isChecked()){
+                    recurrencePattern = Goal.RecurrencePattern.YEARLY;
+                }
+            } else if (view == ViewOptions.PENDING){
+                isRecurring = false;
             }
+
             var goal = new Goal(null, goalText, -1, false, null,
-                    true, goalDate, view == ViewOptions.PENDING);
+                    true, goalDate, view == ViewOptions.PENDING, GoalContext.getGoalContextById(selectedContextId), isRecurring,
+                    recurrencePattern, null);
             activityModel.append(goal);
+            // Reset selected context ID to null so that no context will be selected by default next time
+            activityModel.setSelectedGoalContextId(null);
             dialog.dismiss();
         }
     }

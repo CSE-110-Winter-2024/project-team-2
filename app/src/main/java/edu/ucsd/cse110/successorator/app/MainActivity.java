@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Update isDisplayed value of all goals and update database
+
             activityModel.updateAllGoalsIsDisplayed();
         });
 

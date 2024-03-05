@@ -60,11 +60,23 @@ public interface GoalsDao {
             "NULL END) WHERE id = :id")
     void setDateCompleted(Integer id, Calendar dateCompleted);
 
+    @Query("SELECT isPending FROM goals where id = :id")
+    boolean getIsPendingStatus(int id);
+
+    @Query("UPDATE goals SET isPending = :isPending WHERE id = :id")
+    void changeIsPendingStatus(Integer id, boolean isPending);
+
+    @Query("UPDATE goals SET goalDate = :goalDate WHERE id = :id")
+    void setGoalDate(Integer id, Calendar goalDate);
+
+    @Query("UPDATE goals SET nextRecurrence = :nextRecurrence WHERE id = :id")
+    void setNextRecurrence(Integer id, Calendar nextRecurrence);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
-                true, goal.goalDate, goal.isPending);
+                true, goal.goalDate, goal.isPending, goal.contextId, goal.isRecurring, goal.recurrencePattern, goal.nextRecurrence);
         return Math.toIntExact(insert(newGoal));
     }
 

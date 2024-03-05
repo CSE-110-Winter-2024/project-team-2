@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
 import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
@@ -31,6 +32,12 @@ public class MainViewModel extends ViewModel {
     private final SimpleSubject<List<Goal>> allGoals;
     private final SimpleSubject<Calendar> date;
     private final SimpleSubject<ViewOptions> view;
+
+    /*
+     The ID of the currently selected goal context when the user is adding a goal and choosing a context.
+     Null if they have not chosen a context or are not currently adding a goal.
+     */
+    private final SimpleSubject<Integer> selectedGoalContextId;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -51,6 +58,7 @@ public class MainViewModel extends ViewModel {
         this.orderedGoals = new SimpleSubject<>();
         this.allGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
+        this.selectedGoalContextId = new SimpleSubject<>();
         this.view = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
@@ -105,6 +113,7 @@ public class MainViewModel extends ViewModel {
         allGoals.observe(goals -> {
             if (goals == null) return;
             this.updateAllGoalsIsDisplayed();
+            this.addRecurringGoals(this);
         });
 
         // When the current date changes, update our date
@@ -150,8 +159,8 @@ public class MainViewModel extends ViewModel {
         dateRepository.setDate(dateProvider);
     }
 
-    public void changeIsCompleteStatus(Integer id) {
-        goalRepository.changeIsCompleteStatus(id);
+    public void changeIsCompleteStatus(Integer id, Calendar date) {
+        goalRepository.changeIsCompleteStatus(id, date);
     }
 
     public void moveToTop(Integer id) {
@@ -173,14 +182,43 @@ public class MainViewModel extends ViewModel {
                     boolean wasDisplayed = goal.getIsDisplayed();
                     Calendar mutableDate = new MockDateProvider(getDate().getValue())
                             .getCurrentViewDate(getView().getValue());
-                    goal.updateIsDisplayed(mutableDate, getView().getValue());
-
+                    goal.updateIsDisplayed(mutableDate,getView().getValue());
                     /*
                      * Only propagate change to database if isDisplayed actually changed, to avoid
                      * infinite observer & updating loop
                      */
                     if (wasDisplayed != goal.getIsDisplayed()) {
                         goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    public void addRecurringGoals(MainViewModel activityModel) {
+        if (getAllGoals().getValue() != null) {
+            for (Goal goal : getAllGoals().getValue()) {
+                if(goal.isRecurring) {
+                    /*
+                     * Iterate through all goals and updated nextRecurrence value based on
+                     * current view and system date, and update database
+                     */
+                    Calendar date = Calendar.getInstance();
+                    date.setTime(getDate().getValue().getTime());
+                    date.add(Calendar.DATE, 1);
+
+                    if (getDate().getValue() != null && new DateComparer().compareDates(goal.getGoalDate(), date) < 0){
+                        Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                                .getCurrentViewDate(getView().getValue());
+                        goal.updateIsDisplayed(mutableDate, getView().getValue());
+                        Goal nextGoalRecurrence = goal.updateNextOccurrence();
+
+                        if (nextGoalRecurrence != null){
+                            goalRepository.setNextRecurrence(goal.getId(), nextGoalRecurrence.getGoalDate());
+                            activityModel.append(nextGoalRecurrence);
+                        }
                     }
                 }
             }
@@ -191,6 +229,14 @@ public class MainViewModel extends ViewModel {
         return date;
     }
 
+    public Subject<Integer> getSelectedGoalContextId() {
+        return selectedGoalContextId;
+    }
+
+    public void setSelectedGoalContextId(Integer contextId) {
+        selectedGoalContextId.setValue(contextId);
+    }
+    
     public void setView(ViewOptions view) {
         viewRepository.setView(view);
     }

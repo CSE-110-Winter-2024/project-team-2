@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
@@ -21,6 +22,7 @@ import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
@@ -59,7 +61,7 @@ public class MainViewModelGoalTest {
     public void getGoalsAndAppend() {
         GoalRepository goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new CurrentDateProvider());
-        ViewRepository viewRepository = new ViewRepository(new CurrentViewProvider());
+        ViewRepository viewRepository = new ViewRepository();
         MainViewModel mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
 
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 0);
@@ -70,7 +72,7 @@ public class MainViewModelGoalTest {
         // Our observer should have been called once when we added it
         assertEquals(observeCallsMade, 1);
 
-        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true);
+        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), false, Goal.RecurrencePattern.NONE, null);
         mainViewModel.append(goal1);
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 1);
         assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
@@ -78,7 +80,7 @@ public class MainViewModelGoalTest {
         assertEquals(lastObservedGoals.get(0), goal1);
         assertEquals(observeCallsMade, 2);
 
-        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true);
+        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), false, Goal.RecurrencePattern.NONE, null);
         mainViewModel.append(goal2);
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 2);
         assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
