@@ -197,17 +197,18 @@ public class MainViewModel extends ViewModel {
                  * Iterate through all goals and updated isDisplayed value based on
                  * current view and system date, and update database
                  */
-                Calendar date = Calendar.getInstance();
-                date.setTime(getDate().getValue().getTime());
-                date.add(Calendar.DATE, 1);
+                //Calendar date = Calendar.getInstance();
+                //date.setTime(getDate().getValue().getTime());
+                //date.add(Calendar.DATE, 1);
 
-                if (getDate().getValue() != null && new DateComparer().isFirstDateBeforeSecondDate(goal.getGoalDate(), date)){
-                    Calendar mutableDate = new MockDateProvider(getDate().getValue())
-                            .getCurrentViewDate(getView().getValue());
-                    goal.updateIsDisplayed(mutableDate, getView().getValue());
+                if (getDate().getValue() != null && new DateComparer().isFirstDateBeforeSecondDate(goal.getGoalDate(), Calendar.getInstance())){
                     Goal nextGoalRecurrence = goal.updateNextOccurrence();
+                    boolean similarGoalExists = getAllGoals().getValue().stream()
+                            .anyMatch(existingGoal -> existingGoal.getGoalText().equals(nextGoalRecurrence.getGoalText()) &&
+                                    existingGoal.getRecurrencePattern() == nextGoalRecurrence.getRecurrencePattern() &&
+                                    existingGoal.getGoalDate().equals(nextGoalRecurrence.getGoalDate()));
 
-                    if (nextGoalRecurrence != null){
+                    if(!similarGoalExists){
                         goalRepository.setMadeNextRecurrence(goal.getId());
                         activityModel.append(nextGoalRecurrence);
                     }

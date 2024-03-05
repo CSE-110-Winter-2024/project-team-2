@@ -204,4 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public MainViewModel getActivityModel(){
+        return activityModel;
+    }
 }

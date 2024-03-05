@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.MainActivity;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
  * This class maintains the list of goals
@@ -57,13 +59,15 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // Populate the view with the goal's data.
         binding.goalTextView.setText(goal.getGoalText());
 
-        // Display as strikethrough if goal isn't pending and isComplete is true
-        // if (!goal.getIsPending() && goal.getIsComplete()) {
-        if (goal.getIsComplete()) { // Delete this later for US12 (Move Goals Between Views)
+        if (goal.getIsComplete()) {
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
+            // Display as strikethrough if goal isn't pending and isComplete is true
+            // if (!goal.getIsPending() && goal.getIsComplete()) {
+
+        binding.goalTextView.setOnClickListener(v -> onClick.accept(goal.getId()));
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
