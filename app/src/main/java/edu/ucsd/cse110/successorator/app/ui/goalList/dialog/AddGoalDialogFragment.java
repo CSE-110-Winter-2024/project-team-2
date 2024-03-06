@@ -1,12 +1,10 @@
 package edu.ucsd.cse110.successorator.app.ui.goalList.dialog;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -178,13 +176,13 @@ public class AddGoalDialogFragment extends DialogFragment {
             Calendar goalDate = null;
             ViewOptions view = activityModel.getView().getValue();
             Goal.RecurrencePattern recurrencePattern = Goal.RecurrencePattern.NONE;
-            Boolean isRecurring = true;
+            Integer recurType = 1;
 
             if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
                 goalDate = new MockDateProvider(activityModel.getDate().getValue())
                         .getCurrentViewDate(view);
                 if (this.view.oneTimeButton.isChecked()){
-                    isRecurring = false;
+                    recurType = 0;
                 }
                 if (this.view.dailyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.DAILY;
@@ -210,17 +208,48 @@ public class AddGoalDialogFragment extends DialogFragment {
                     recurrencePattern = Goal.RecurrencePattern.YEARLY;
                 }
             } else if (view == ViewOptions.PENDING){
-                isRecurring = false;
+                recurType = 0;
             }
 
-            var goal = new Goal(null, goalText, -1, false, null,
-                    true, goalDate, view == ViewOptions.PENDING, GoalContext.getGoalContextById(selectedContextId), isRecurring,
-                    recurrencePattern, null);
-            activityModel.append(goal);
+            if(recurType == 1) {
+                // add first goal occurrence
+                var goal = new Goal(null, goalText, -1, false, null,
+                        true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 2,
+                        recurrencePattern, null);
+                activityModel.append(goal);
+
+                // add goal for recur view
+                String recurGoalText = recurGoalText(goalDate, goalText, view, recurrencePattern);
+                var recurGoal = new Goal(null, recurGoalText, -1, false, null,
+                        true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 1,
+                        recurrencePattern, null);
+                activityModel.append(recurGoal);
+            } else {
+                var goal = new Goal(null, goalText, -1, false, null,
+                        true, goalDate, view == ViewOptions.PENDING, GoalContext.getGoalContextById(selectedContextId), recurType,
+                        recurrencePattern, null);
+                activityModel.append(goal);
+            }
+
+
+
             // Reset selected context ID to null so that no context will be selected by default next time
             activityModel.setSelectedGoalContextId(null);
             dialog.dismiss();
         }
+    }
+
+    public String recurGoalText(Calendar date, String goalText, ViewOptions view, Goal.RecurrencePattern recurrencePattern) {
+        if(Goal.RecurrencePattern.DAILY == recurrencePattern) {
+            return goalText + ", Daily";
+        } else if(Goal.RecurrencePattern.WEEKLY == recurrencePattern) {
+            return goalText + ", Weekly on " + new DateFormatter().formatWeekDay(date);
+        } else if(Goal.RecurrencePattern.MONTHLY == recurrencePattern) {
+            return goalText + ", Monthly on " + new DateFormatter().formatDayOfMonth(date);
+        } else if(Goal.RecurrencePattern.YEARLY == recurrencePattern) {
+            return goalText + ", Yearly on " + new DateFormatter().formatDayOfYear(date);
+        }
+        return "";
     }
 
     /**

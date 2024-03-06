@@ -200,7 +200,7 @@ public class MainViewModel extends ViewModel {
     public void addRecurringGoals(MainViewModel activityModel) {
         if (getAllGoals().getValue() != null) {
             for (Goal goal : getAllGoals().getValue()) {
-                if(goal.isRecurring) {
+                if(goal.recurType == 2) {
                     /*
                      * Iterate through all goals and updated nextRecurrence value based on
                      * current view and system date, and update database

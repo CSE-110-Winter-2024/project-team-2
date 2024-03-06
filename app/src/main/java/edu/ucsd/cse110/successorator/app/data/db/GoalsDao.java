@@ -76,7 +76,7 @@ public interface GoalsDao {
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
-                true, goal.goalDate, goal.isPending, goal.contextId, goal.isRecurring, goal.recurrencePattern, goal.nextRecurrence);
+                true, goal.goalDate, goal.isPending, goal.contextId, goal.recurType, goal.recurrencePattern, goal.nextRecurrence);
         return Math.toIntExact(insert(newGoal));
     }
 

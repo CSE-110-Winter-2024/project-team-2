@@ -42,8 +42,8 @@ public class GoalEntity {
     @ColumnInfo(name = "contextId")
     public int contextId;
 
-    @ColumnInfo(name = "isRecurring")
-    public boolean isRecurring;
+    @ColumnInfo(name = "recurType")
+    public Integer recurType;
 
     @ColumnInfo(name = "recurrencePattern")
     public Goal.RecurrencePattern recurrencePattern;
@@ -54,7 +54,7 @@ public class GoalEntity {
     public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete,
                       @Nullable Calendar dateCompleted, boolean isDisplayed,
                       @Nullable Calendar goalDate, boolean isPending, int contextId,
-                      boolean isRecurring, Goal.RecurrencePattern recurrencePattern, @Nullable Calendar nextRecurrence) {
+                      Integer recurType, Goal.RecurrencePattern recurrencePattern, @Nullable Calendar nextRecurrence) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
@@ -63,7 +63,7 @@ public class GoalEntity {
         this.goalDate = goalDate;
         this.isPending = isPending;
         this.contextId = contextId;
-        this.isRecurring = isRecurring;
+        this.recurType = recurType;
         this.recurrencePattern = recurrencePattern;
         this.nextRecurrence = nextRecurrence;
     }
@@ -71,12 +71,12 @@ public class GoalEntity {
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(),
                 goal.getDateCompleted(), goal.getIsDisplayed(), goal.getGoalDate(), goal.getIsPending(),
-                Objects.requireNonNull(goal.getGoalContext().getId()), goal.getIsRecurring(),goal.getRecurrencePattern(), goal.getNextRecurrence());
+                Objects.requireNonNull(goal.getGoalContext().getId()), goal.getRecurType(),goal.getRecurrencePattern(), goal.getNextRecurrence());
         goalEntity.id = goal.getId();
         return goalEntity;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, Objects.requireNonNull(GoalContext.getGoalContextById(contextId)), isRecurring, recurrencePattern, nextRecurrence);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, Objects.requireNonNull(GoalContext.getGoalContextById(contextId)), recurType, recurrencePattern, nextRecurrence);
     }
 }
