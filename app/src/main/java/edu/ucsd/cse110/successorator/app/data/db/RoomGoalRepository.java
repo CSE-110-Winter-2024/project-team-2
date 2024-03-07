@@ -90,4 +90,8 @@ public class RoomGoalRepository implements GoalRepository {
     public void setNextRecurrence(Integer id, Calendar nextRecurrence){
         goalsDao.setNextRecurrence(id, nextRecurrence);
     }
+
+    public void setPastRecurrenceId(Integer id, Integer pastRecurrenceId) {
+        goalsDao.setPastRecurrenceId(id, pastRecurrenceId);
+    }
 }

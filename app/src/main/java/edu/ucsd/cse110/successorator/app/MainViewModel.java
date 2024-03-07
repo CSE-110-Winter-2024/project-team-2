@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -213,16 +214,28 @@ public class MainViewModel extends ViewModel {
                         Calendar mutableDate = new MockDateProvider(getDate().getValue())
                                 .getCurrentViewDate(getView().getValue());
                         goal.updateIsDisplayed(mutableDate, getView().getValue());
-                        Goal nextGoalRecurrence = goal.updateNextOccurrence();
+                        Goal nextGoalRecurrence = goal.makeNextOccurrence();
 
                         if (nextGoalRecurrence != null){
                             goalRepository.setNextRecurrence(goal.getId(), nextGoalRecurrence.getGoalDate());
+                            goalRepository.setPastRecurrenceId(nextGoalRecurrence.getId(), goal.getId());
                             activityModel.append(nextGoalRecurrence);
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean hasActivePrevGoal(Goal goal) {
+        if (getAllGoals().getValue() != null) {
+            for (Goal pastGoal : getAllGoals().getValue()) {
+                if(Objects.equals(pastGoal.getId(), goal.getPastRecurrenceId())){
+                    return !pastGoal.getIsComplete();
+                }
+            }
+        }
+        return false;
     }
 
     public Subject<Calendar> getDate() {

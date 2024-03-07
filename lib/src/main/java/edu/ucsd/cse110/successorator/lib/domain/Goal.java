@@ -22,12 +22,13 @@ public class Goal {
     public @NonNull GoalContext goalContext;
     public RecurrencePattern recurrencePattern;
     public Calendar nextRecurrence;
+    public @Nullable Integer pastRecurrenceId;
 
     public Goal(@Nullable Integer id, @NonNull String goalText, @NonNull Integer sortOrder,
                 @NonNull Boolean isComplete, @Nullable Calendar dateCompleted, @NonNull Boolean isDisplayed,
                 @Nullable Calendar goalDate, @NonNull Boolean isPending, @NonNull GoalContext goalContext,
                 @NonNull Integer recurType, @NonNull RecurrencePattern recurrencePattern,
-                @Nullable Calendar nextRecurrence) {
+                @Nullable Calendar nextRecurrence, @Nullable Integer pastRecurrenceId) {
         this.goalText = goalText;
         this.id = id;
         this.sortOrder = sortOrder;
@@ -40,6 +41,7 @@ public class Goal {
         this.recurrencePattern = recurrencePattern;
         this.nextRecurrence = nextRecurrence;
         this.goalContext = goalContext;
+        this.pastRecurrenceId = pastRecurrenceId;
     }
 
     public @NonNull String getGoalText() {
@@ -78,6 +80,24 @@ public class Goal {
         return goalContext;
     }
 
+    @NonNull
+    public Integer getRecurType() {
+        return recurType;
+    }
+
+    @NonNull
+    public RecurrencePattern getRecurrencePattern() {
+        return recurrencePattern;
+    }
+
+    public Calendar getNextRecurrence() {
+        return nextRecurrence;
+    }
+
+    public @Nullable Integer getPastRecurrenceId() {
+        return pastRecurrenceId;
+    }
+
     public void changeIsCompleteStatus() {
         this.isComplete = !this.isComplete;
     }
@@ -97,26 +117,13 @@ public class Goal {
     public void setIsPending(@NonNull Boolean isPending) {
         this.isPending = isPending;
     }
-    @NonNull
-    public Integer getRecurType() {
-        return recurType;
-    }
 
     public void setRecurType(@NonNull Integer recurType) {
         this.recurType = recurType;
     }
 
-    @NonNull
-    public RecurrencePattern getRecurrencePattern() {
-        return recurrencePattern;
-    }
-
     public void setRecurrencePattern(@NonNull RecurrencePattern recurrencePattern) {
         this.recurrencePattern = recurrencePattern;
-    }
-
-    public Calendar getNextRecurrence() {
-        return nextRecurrence;
     }
 
     public void setNextRecurrence(@Nullable Calendar nextRecurrence) {
@@ -161,7 +168,7 @@ public class Goal {
         }
     }
 
-    public Goal updateNextOccurrence() {
+    public Goal makeNextOccurrence() {
         if (this.getNextRecurrence() == null) {
             Calendar newGoalDate = (Calendar) this.getGoalDate().clone();
             if(this.getRecurrencePattern() == RecurrencePattern.DAILY) {
@@ -182,9 +189,9 @@ public class Goal {
 
             // update nextRecurrence date and return next Occurrence of this goal
             this.setNextRecurrence(newGoalDate);
-            return new Goal(this.getId(), this.getGoalText(), this.getSortOrder(), false,
+            return new Goal(null, this.getGoalText(), this.getSortOrder(), false,
                     null,false, newGoalDate,false, this.getGoalContext(),
-                    2,this.getRecurrencePattern(), null);
+                    2,this.getRecurrencePattern(), null, id);
         }
         return null; // if goal is not recurring return null
     }
@@ -220,7 +227,7 @@ public class Goal {
      * @return goal with sortOrder
      */
     public @NonNull Goal withSortOrder(Integer sortOrder) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence, pastRecurrenceId);
     }
 
     /**
@@ -229,7 +236,7 @@ public class Goal {
      * @return goal with id
      */
     public @NonNull Goal withId(Integer id) {
-        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence);
+        return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence, pastRecurrenceId);
     }
 
     @Override
@@ -242,11 +249,11 @@ public class Goal {
                 && Objects.equals(dateCompleted, goal.dateCompleted) && Objects.equals(isDisplayed, goal.isDisplayed)
                 && Objects.equals(goalDate, goal.goalDate) && Objects.equals(isPending, goal.isPending)
                 && Objects.equals(goalContext, goal.goalContext) && Objects.equals(recurType, goal.recurType) && Objects.equals(recurrencePattern,goal.recurrencePattern)
-                && Objects.equals(nextRecurrence, goal.nextRecurrence);
+                && Objects.equals(nextRecurrence, goal.nextRecurrence) && Objects.equals(pastRecurrenceId, goal.pastRecurrenceId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence);
+        return Objects.hash(goalText, id, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending, goalContext, recurType, recurrencePattern, nextRecurrence, pastRecurrenceId);
     }
 }

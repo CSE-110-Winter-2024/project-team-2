@@ -27,4 +27,6 @@ public interface GoalRepository {
     void changeIsDisplayedStatus(Integer id, boolean isDisplayed);
 
     void setNextRecurrence(Integer id, Calendar nextRecurrence);
+
+    void setPastRecurrenceId(Integer id, Integer pastRecurrenceId);
 }

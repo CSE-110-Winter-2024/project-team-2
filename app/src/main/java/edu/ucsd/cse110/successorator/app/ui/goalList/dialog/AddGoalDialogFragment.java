@@ -21,6 +21,7 @@ import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentDialogAddGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
+import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
 import edu.ucsd.cse110.successorator.lib.util.date.DateFormatter;
 import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
@@ -91,12 +92,14 @@ public class AddGoalDialogFragment extends DialogFragment {
             view.startDateButton.setOnClickListener(v -> toggleDatePickerVisibility());
 
             view.setDateButton.setOnClickListener(v -> {
-                toggleDatePickerVisibility();
                 Calendar datePicked = Calendar.getInstance();
                 datePicked.set(Calendar.MONTH, view.datePicker.getMonth());
                 datePicked.set(Calendar.YEAR, view.datePicker.getYear());
                 datePicked.set(Calendar.DAY_OF_MONTH, view.datePicker.getDayOfMonth());
-                updateStartDateText(datePicked);
+                if(new DateComparer().compareDates(datePicked, activityModel.getDate().getValue()) >= 0){
+                    toggleDatePickerVisibility();
+                    updateStartDateText(datePicked);
+                }
             });
         } else if (currentView == ViewOptions.PENDING) {
             view.radioGroup.setVisibility(View.GONE);
@@ -215,19 +218,19 @@ public class AddGoalDialogFragment extends DialogFragment {
                 // add first goal occurrence
                 var goal = new Goal(null, goalText, -1, false, null,
                         true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 2,
-                        recurrencePattern, null);
+                        recurrencePattern, null, null);
                 activityModel.append(goal);
 
                 // add goal for recur view
                 String recurGoalText = recurGoalText(goalDate, goalText, view, recurrencePattern);
                 var recurGoal = new Goal(null, recurGoalText, -1, false, null,
                         true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 1,
-                        recurrencePattern, null);
+                        recurrencePattern, null, null);
                 activityModel.append(recurGoal);
             } else {
                 var goal = new Goal(null, goalText, -1, false, null,
                         true, goalDate, view == ViewOptions.PENDING, GoalContext.getGoalContextById(selectedContextId), recurType,
-                        recurrencePattern, null);
+                        recurrencePattern, null, null);
                 activityModel.append(goal);
             }
 
