@@ -135,15 +135,15 @@ public class AddGoalDialogFragment extends DialogFragment {
 
     private void updateStartDateText(Calendar date) {
         String formattedDate = new SimpleDateFormat("MMM dd, yyyy").format(date.getTime());
-        view.startDateButton.setText(formattedDate);
+
+        this.view.startDateButton.setText(formattedDate);
         this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(date)));
         this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(date)));
         this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(date)));
-
     }
 
     private void toggleDatePickerVisibility() {
-        if(view.datePicker.getVisibility() == View.GONE) {
+        if (view.datePicker.getVisibility() == View.GONE) {
             view.datePicker.setVisibility(View.VISIBLE);
             view.setDateButton.setVisibility(View.VISIBLE);
             view.startDateButton.setVisibility(View.GONE);
@@ -178,37 +178,37 @@ public class AddGoalDialogFragment extends DialogFragment {
             if (view == ViewOptions.TODAY || view == ViewOptions.TOMORROW) {
                 goalDate = new MockDateProvider(activityModel.getDate().getValue())
                         .getCurrentViewDate(view);
-                if (this.view.oneTimeButton.isChecked()){
+                if (this.view.oneTimeButton.isChecked()) {
                     recurType = 0;
                 }
                 if (this.view.dailyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.DAILY;
-                } else if (this.view.weeklyButton.isChecked()){
+                } else if (this.view.weeklyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.WEEKLY;
-                } else if (this.view.monthlyButton.isChecked()){
+                } else if (this.view.monthlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.MONTHLY;
-                } else if (this.view.yearlyButton.isChecked()){
+                } else if (this.view.yearlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.YEARLY;
                 }
-            } else if (view == ViewOptions.RECURRING){
+            } else if (view == ViewOptions.RECURRING) {
                 goalDate = Calendar.getInstance();
                 goalDate.set(this.view.datePicker.getYear(), this.view.datePicker.getMonth(), this.view.datePicker.getDayOfMonth());
                 updateStartDateText(goalDate);
 
                 if (this.view.dailyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.DAILY;
-                } else if (this.view.weeklyButton.isChecked()){
+                } else if (this.view.weeklyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.WEEKLY;
-                } else if (this.view.monthlyButton.isChecked()){
+                } else if (this.view.monthlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.MONTHLY;
-                } else if (this.view.yearlyButton.isChecked()){
+                } else if (this.view.yearlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.YEARLY;
                 }
-            } else if (view == ViewOptions.PENDING){
-                recurType = 0;
+            } else if (view == ViewOptions.PENDING) {
+                recurType = 0; // is not recurring goal
             }
 
-            if(recurType == 1) {
+            if (recurType == 1) { // Is recurring goal, create template and first occurrence
                 // add first goal occurrence
                 var goal = new Goal(null, goalText, -1, false, null,
                         true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 2,
@@ -216,7 +216,7 @@ public class AddGoalDialogFragment extends DialogFragment {
                 activityModel.append(goal);
 
                 // add goal for recur view
-                String recurGoalText = recurGoalText(goalDate, goalText, view, recurrencePattern);
+                String recurGoalText = recurGoalText(goalDate, goalText, recurrencePattern);
                 var recurGoal = new Goal(null, recurGoalText, -1, false, null,
                         true, goalDate, false, GoalContext.getGoalContextById(selectedContextId), 1,
                         recurrencePattern, null, null);
@@ -228,22 +228,20 @@ public class AddGoalDialogFragment extends DialogFragment {
                 activityModel.append(goal);
             }
 
-
-
             // Reset selected context ID to null so that no context will be selected by default next time
             activityModel.setSelectedGoalContextId(null);
             dialog.dismiss();
         }
     }
 
-    public String recurGoalText(Calendar date, String goalText, ViewOptions view, Goal.RecurrencePattern recurrencePattern) {
-        if(Goal.RecurrencePattern.DAILY == recurrencePattern) {
+    public String recurGoalText(Calendar date, String goalText, Goal.RecurrencePattern recurrencePattern) {
+        if (Goal.RecurrencePattern.DAILY == recurrencePattern) {
             return goalText + ", Daily";
-        } else if(Goal.RecurrencePattern.WEEKLY == recurrencePattern) {
+        } else if (Goal.RecurrencePattern.WEEKLY == recurrencePattern) {
             return goalText + ", Weekly on " + new DateFormatter().formatWeekDay(date);
-        } else if(Goal.RecurrencePattern.MONTHLY == recurrencePattern) {
+        } else if (Goal.RecurrencePattern.MONTHLY == recurrencePattern) {
             return goalText + ", Monthly on " + new DateFormatter().formatDayOfMonth(date);
-        } else if(Goal.RecurrencePattern.YEARLY == recurrencePattern) {
+        } else if (Goal.RecurrencePattern.YEARLY == recurrencePattern) {
             return goalText + ", Yearly on " + new DateFormatter().formatDayOfYear(date);
         }
         return "";

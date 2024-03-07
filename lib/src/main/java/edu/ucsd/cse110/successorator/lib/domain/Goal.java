@@ -196,7 +196,7 @@ public class Goal {
                     null,false, newGoalDate,false, this.getGoalContext(),
                     2,this.getRecurrencePattern(), null, id);
         }
-        return null; // if goal is not recurring return null
+        return null; // if next recurrence is already made, return null
     }
 
     /**

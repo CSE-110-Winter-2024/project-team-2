@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.lib.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -10,9 +11,8 @@ import org.junit.Test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import javax.swing.text.View;
 
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
@@ -220,6 +220,76 @@ public class GoalTest {
         currDate.setTime(sdf.parse("Feb 18 02:01:00 AM 2024"));
         goal.updateIsDisplayed(currDate, ViewOptions.TODAY);
         assertFalse(goal.getIsDisplayed());
+    }
+
+    @Test
+    public void makeNextOccurrence() {
+        Calendar currDate = new GregorianCalendar(2024, Calendar.JANUARY, 2);
+        Calendar tmrDate = new GregorianCalendar(2024, Calendar.JANUARY, 3);
+        Calendar weekDate = new GregorianCalendar(2024, Calendar.JANUARY, 9);
+        Calendar monthDate = new GregorianCalendar(2024, Calendar.FEBRUARY, 6);
+        Calendar yearDate = new GregorianCalendar(2025, Calendar.JANUARY, 2);
+
+        // next recurrence is already made
+        Goal goal = new Goal(0, "test Goal", 0, false, null, true, currDate, false, GoalContext.getGoalContextById(1), 0, Goal.RecurrencePattern.NONE, tmrDate, null);
+        assertNull(goal.makeNextOccurrence());
+
+        // goal is recurring Daily
+        goal = new Goal(0, "test Goal", 0, false, null, true, currDate, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.DAILY, null, null);
+        Goal recurGoal = goal.makeNextOccurrence();
+        Goal expected = new Goal(null, "test Goal", goal.getSortOrder(), false,
+                null,false, tmrDate,false, goal.getGoalContext(),
+                2,goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal,expected);
+
+        // goal is recurring Weekly
+        goal = new Goal(0, "test Goal", 0, false, null, true, currDate, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.WEEKLY, null, null);
+        recurGoal = goal.makeNextOccurrence();
+        expected = new Goal(null, "test Goal", goal.getSortOrder(), false,
+                null,false, weekDate,false, goal.getGoalContext(),
+                2,goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal,expected);
+
+        // goal is recurring Monthly
+        goal = new Goal(0, "test Goal", 0, false, null, true, currDate, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.MONTHLY, null, null);
+        recurGoal = goal.makeNextOccurrence();
+        expected = new Goal(null, "test Goal", goal.getSortOrder(), false,
+                null,false, monthDate,false, goal.getGoalContext(),
+                2, goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal,expected);
+
+        // goal is recurring Yearly
+        goal = new Goal(0, "test Goal", 0, false, null, true, currDate, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.YEARLY, null, null);
+        recurGoal = goal.makeNextOccurrence();
+        expected = new Goal(null, "test Goal", goal.getSortOrder(), false,
+                null,false, yearDate,false, goal.getGoalContext(),
+                2, goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal,expected);
+    }
+
+    @Test
+    public void makeNextOccurrenceEdgeCases() {
+        // Test leap year
+        Calendar leapYear = new GregorianCalendar(2024, Calendar.FEBRUARY, 29);
+        Calendar yrAfterLeapYear = new GregorianCalendar(2024, Calendar.MARCH, 1);
+
+        Goal goal = new Goal(0, "Leap Year", 0, false, null, true, leapYear, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.YEARLY, null, null);
+        Goal recurGoal = goal.makeNextOccurrence();
+        Goal expected = new Goal(null, goal.getGoalText(), goal.getSortOrder(), false,
+                null,false, yrAfterLeapYear,false, goal.getGoalContext(),
+                2,goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal, expected);
+
+        // Test for month 5th day of month when next month doesn't have 5th day, roll to first of following month
+        Calendar fifthSunday = new GregorianCalendar(2024, Calendar.MARCH, 31);
+        Calendar monthAfterFifthSunday = new GregorianCalendar(2024, Calendar.MAY, 5);
+
+        goal = new Goal(0, "5th Sunday", 0, false, null, true, fifthSunday, false, GoalContext.getGoalContextById(1), 2, Goal.RecurrencePattern.MONTHLY, null, null);
+        recurGoal = goal.makeNextOccurrence();
+        expected = new Goal(null, goal.getGoalText(), goal.getSortOrder(), false,
+                null,false, monthAfterFifthSunday,false, goal.getGoalContext(),
+                2,goal.getRecurrencePattern(), null, goal.getId());
+        assertEquals(recurGoal, expected);
     }
 
     @Test

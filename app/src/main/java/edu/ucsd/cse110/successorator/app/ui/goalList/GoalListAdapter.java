@@ -79,7 +79,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
                 // For US12: if (!goal.getIsPending()) {
                 var id = goal.getId();
 
-                if(ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)){
+                if (ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)) {
                     // Show a dialog box with the message
                     Toast.makeText(getContext(), "This goal is still active for Today. Mark it finished in the Today view.", Toast.LENGTH_LONG).show();
                     return;
@@ -87,7 +87,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
                 onClick.accept(id);
 
-                if(goal.getRecurType() != 1) {
+                if (goal.getRecurType() != 1) {
                     TextView textView = (TextView) v;
                     int flags = textView.getPaintFlags();
                     // Toggle the strike through

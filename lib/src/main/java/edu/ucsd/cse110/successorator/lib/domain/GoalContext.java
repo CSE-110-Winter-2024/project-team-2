@@ -16,7 +16,7 @@ public class GoalContext {
     private final @Nullable Integer id;
     private final @NonNull String color;
 
-    public GoalContext(@NonNull String name, @Nullable Integer id, @NonNull String color){
+    public GoalContext(@NonNull String name, @Nullable Integer id, @NonNull String color) {
         this.name = name;
         this.id = id;
         this.color = color;
@@ -35,7 +35,7 @@ public class GoalContext {
         return color;
     }
 
-    public char getFirstLetterOfName(){
+    public char getFirstLetterOfName() {
         return name.charAt(0);
     }
 

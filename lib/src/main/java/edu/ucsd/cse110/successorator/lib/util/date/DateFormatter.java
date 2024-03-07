@@ -10,12 +10,12 @@ public class DateFormatter {
         return dateFormat.format(calendar.getTime());
     }
 
-    public String formatWeekDay(Calendar calendar){
+    public String formatWeekDay(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE", Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }
 
-    public String formatDayOfMonth(Calendar calendar){
+    public String formatDayOfMonth(Calendar calendar) {
         SimpleDateFormat dayOfWeekInMonthFormat = new SimpleDateFormat("F", Locale.getDefault());
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEE", Locale.getDefault());
         String day = dayFormat.format(calendar.getTime());
@@ -39,7 +39,7 @@ public class DateFormatter {
         return String.format("%s%s %s", dayOfWeekInMonth, suffix, day);
     }
 
-    public String formatDayOfYear(Calendar calendar){
+    public String formatDayOfYear(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("M/dd", Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }

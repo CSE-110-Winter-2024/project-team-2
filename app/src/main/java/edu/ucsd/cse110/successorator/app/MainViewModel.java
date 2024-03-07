@@ -81,27 +81,24 @@ public class MainViewModel extends ViewModel {
 
         // When there's a change to all goals, update whether or not they are displayed
         allGoals.observe(goals -> {
-            if (goals == null) return;
-           this.addRecurringGoals(this);
-           this.updateAllGoalsIsDisplayed();
+            if (goals == null) return; // not ready yet, ignore
+
+            this.addRecurringGoals();
+            this.updateAllGoalsIsDisplayed();
         });
 
         // When the current date changes, update our date
         dateRepository.getDate().observe(dateValue -> {
-            if (dateValue == null) {
-                return;
-            }
+            if (dateValue == null) return; // not ready yet, ignore
 
             date.setValue(dateValue);
-            this.addRecurringGoals(this);
+            this.addRecurringGoals();
             this.updateAllGoalsIsDisplayed();
         });
 
         // When the current view changes, update our view
         viewRepository.getView().observe(viewType -> {
-            if (viewType == null) {
-                return;
-            }
+            if (viewType == null) return; // not ready yet, ignore
 
             view.setValue(viewType);
         });
@@ -163,13 +160,11 @@ public class MainViewModel extends ViewModel {
                         goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
                     }
                 }
-
-
             }
         }
     }
 
-    public void addRecurringGoals(MainViewModel activityModel) {
+    public void addRecurringGoals() {
         if (getAllGoals().getValue() != null && getDate().getValue() != null) {
             Calendar date = (Calendar) getDate().getValue().clone();
             date.add(Calendar.DATE, 1);
@@ -177,7 +172,7 @@ public class MainViewModel extends ViewModel {
             for (Goal goal : goalRepository.queryAllGoals()) {
                 if (goal.recurType == 2) {
                     /*
-                     * Iterate through all goals and updated nextRecurrence value based on
+                     * Iterate through all recurring goals and updated nextRecurrence value based on
                      * current view and system date, and update database
                      */
 
@@ -190,7 +185,7 @@ public class MainViewModel extends ViewModel {
                         if (nextGoalRecurrence != null) {
                             nextGoalRecurrence.updateIsDisplayed(mutableDate,getView().getValue());
                             goalRepository.setNextRecurrence(goal.getId(), nextGoalRecurrence.getGoalDate());
-                            activityModel.append(nextGoalRecurrence);
+                            this.append(nextGoalRecurrence);
                         }
                     }
                 }
@@ -201,7 +196,7 @@ public class MainViewModel extends ViewModel {
     public boolean hasActivePrevGoal(Goal goal) {
         if (getAllGoals().getValue() != null) {
             for (Goal pastGoal : getAllGoals().getValue()) {
-                if(Objects.equals(pastGoal.getId(), goal.getPastRecurrenceId())){
+                if (Objects.equals(pastGoal.getId(), goal.getPastRecurrenceId())) {
                     return !pastGoal.getIsComplete();
                 }
             }
