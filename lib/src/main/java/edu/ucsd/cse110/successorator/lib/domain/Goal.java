@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 public class Goal {
@@ -148,7 +149,7 @@ public class Goal {
                     && goalDate != null // must have a goalDate
                     && !(isComplete
                         && dateCompleted != null
-                        && new DateComparer().compareDates(dateCompleted, date) < 0
+                        && new DateComparer().compareDates(new MockDateProvider(dateCompleted).getCurrentViewDate(view), date) < 0
                     ) // do not display if the goal was completed on a previous day
                     // goal date must be for past or present, not future (future is tomorrow's list!)
                     && new DateComparer().compareDates(goalDate, date) <= 0
@@ -156,15 +157,17 @@ public class Goal {
                     // do not display goal if the next occurrence of the goal is displayed
                     && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, date) > 0);
         } else if (view == ViewOptions.TOMORROW) {
-            Calendar tmrDate = (Calendar) date.clone();
-            tmrDate.add(Calendar.DATE, 1);
             isDisplayed = !isPending // don't display pending goals on tomorrow's list
                     && goalDate != null // must have a goalDate
+                    && !(isComplete
+                        && dateCompleted != null
+                    && new DateComparer().compareDates(new MockDateProvider(dateCompleted).getCurrentViewDate(view), date) < 0
+                    ) // do not display if the goal was completed on a previous day
                     // goal date must be for tomorrow's date, not before or after that
                     && new DateComparer().compareDates(goalDate, date) == 0
                     && recurType != 1 // do not display template goals
                     // do not display goal if the next occurrence of the goal is displayed
-                    && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, tmrDate) > 0);
+                    && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, date) > 0);
         }
     }
 

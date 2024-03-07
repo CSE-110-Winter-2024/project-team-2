@@ -77,13 +77,14 @@ public class AddGoalDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = FragmentDialogAddGoalBinding.inflate(getLayoutInflater());
-        Calendar currDate = activityModel.getDate().getValue();
-        updateStartDateText(currDate);
-
         ViewOptions currentView = activityModel.getView().getValue();
+        Calendar currDate = new MockDateProvider(activityModel.getDate().getValue()).getCurrentViewDate(currentView);
+        updateStartDateText(currDate);
+        view.datePicker.setMinDate(currDate.getTimeInMillis());
 
         if (currentView == ViewOptions.RECURRING) {
             view.oneTimeButton.setVisibility(View.GONE);
+            view.weeklyButton.setChecked(true);
             view.startingLabel.setVisibility(View.VISIBLE);
             view.startDateButton.setVisibility(View.VISIBLE);
 
@@ -96,20 +97,13 @@ public class AddGoalDialogFragment extends DialogFragment {
                 datePicked.set(Calendar.MONTH, view.datePicker.getMonth());
                 datePicked.set(Calendar.YEAR, view.datePicker.getYear());
                 datePicked.set(Calendar.DAY_OF_MONTH, view.datePicker.getDayOfMonth());
-                if(new DateComparer().compareDates(datePicked, activityModel.getDate().getValue()) >= 0){
+                if (new DateComparer().compareDates(datePicked, activityModel.getDate().getValue()) >= 0) {
                     toggleDatePickerVisibility();
                     updateStartDateText(datePicked);
                 }
             });
         } else if (currentView == ViewOptions.PENDING) {
             view.radioGroup.setVisibility(View.GONE);
-        } else if (currentView == ViewOptions.TOMORROW) {
-            Calendar tmrDate = Calendar.getInstance();
-            tmrDate.set(Calendar.YEAR, currDate.get(Calendar.YEAR));
-            tmrDate.set(Calendar.MONTH, currDate.get(Calendar.MONTH));
-            tmrDate.set(Calendar.DAY_OF_MONTH, currDate.get(Calendar.DAY_OF_MONTH));
-            tmrDate.add(Calendar.DATE, 1);
-            updateStartDateText(tmrDate);
         }
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -148,8 +142,8 @@ public class AddGoalDialogFragment extends DialogFragment {
 
     }
 
-    private void toggleDatePickerVisibility(){
-        if(view.datePicker.getVisibility() == View.GONE){
+    private void toggleDatePickerVisibility() {
+        if(view.datePicker.getVisibility() == View.GONE) {
             view.datePicker.setVisibility(View.VISIBLE);
             view.setDateButton.setVisibility(View.VISIBLE);
             view.startDateButton.setVisibility(View.GONE);

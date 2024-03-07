@@ -60,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle(new ViewTitleFormatter()
                                 .formatViewTitle(this.activityModel.getView().getValue(), mutableDate));
             }
-
-            // Update isDisplayed value of all goals and update database
-            activityModel.updateAllGoalsIsDisplayed();
         });
 
         // Listen for changes to view to update the action bar and isDisplayed values of goals
@@ -152,9 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 isShowingNoGoals = false;
             }
-
-            // Update isDisplayed value of all goals and update database
-            activityModel.updateAllGoalsIsDisplayed();
         });
     }
 

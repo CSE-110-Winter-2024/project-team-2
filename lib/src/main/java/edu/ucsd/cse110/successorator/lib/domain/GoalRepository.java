@@ -12,6 +12,8 @@ public interface GoalRepository {
 
     Subject<List<Goal>> getAllGoals();
 
+    List<Goal> queryAllGoals();
+
     void save(Goal goal);
 
     void save(List<Goal> goals);
