@@ -65,6 +65,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // Populate the view with the goal's data.
         binding.goalTextView.setText(goal.getGoalText());
 
+        // Clear strikethrough in case this goal was recycled from a strikethroughed goal
+        binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
         // Display as strikethrough if goal isn't pending and isComplete is true
         // if (!goal.getIsPending() && goal.getIsComplete()) {
         if (goal.getRecurType() != Goal.RecurType.RECURRING_TEMPLATE) {
