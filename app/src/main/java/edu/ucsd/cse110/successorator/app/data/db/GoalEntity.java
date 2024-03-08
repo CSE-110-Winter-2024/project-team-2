@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
+import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
 
 @Entity(tableName = "goals")
 public class GoalEntity {
@@ -43,7 +44,7 @@ public class GoalEntity {
     public int contextId;
 
     @ColumnInfo(name = "recurType")
-    public Integer recurType;
+    public RecurType recurType;
 
     @ColumnInfo(name = "recurrencePattern")
     public Goal.RecurrencePattern recurrencePattern;
@@ -54,11 +55,14 @@ public class GoalEntity {
     @ColumnInfo(name = "pastRecurrenceId")
     public Integer pastRecurrenceId;
 
+    @ColumnInfo(name = "templateId")
+    public Integer templateId;
+
     public GoalEntity(@NonNull String goalText, int sortOrder, boolean isComplete,
                       @Nullable Calendar dateCompleted, boolean isDisplayed,
                       @Nullable Calendar goalDate, boolean isPending, int contextId,
-                      Integer recurType, Goal.RecurrencePattern recurrencePattern, @Nullable Calendar nextRecurrence,
-                      @Nullable Integer pastRecurrenceId) {
+                      RecurType recurType, Goal.RecurrencePattern recurrencePattern, @Nullable Calendar nextRecurrence,
+                      @Nullable Integer pastRecurrenceId, @Nullable Integer templateId) {
         this.goalText = goalText;
         this.sortOrder = sortOrder;
         this.isComplete = isComplete;
@@ -71,13 +75,14 @@ public class GoalEntity {
         this.recurrencePattern = recurrencePattern;
         this.nextRecurrence = nextRecurrence;
         this.pastRecurrenceId = pastRecurrenceId;
+        this.templateId = templateId;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var goalEntity = new GoalEntity(goal.getGoalText(), goal.getSortOrder(), goal.getIsComplete(),
                 goal.getDateCompleted(), goal.getIsDisplayed(), goal.getGoalDate(), goal.getIsPending(),
                 Objects.requireNonNull(goal.getGoalContext().getId()), goal.getRecurType(),goal.getRecurrencePattern(), goal.getNextRecurrence(),
-                goal.getPastRecurrenceId());
+                goal.getPastRecurrenceId(), goal.getTemplateId());
         goalEntity.id = goal.getId();
         return goalEntity;
     }
@@ -85,6 +90,6 @@ public class GoalEntity {
     public @NonNull Goal toGoal() {
         return new Goal(id, goalText, sortOrder, isComplete, dateCompleted, isDisplayed, goalDate, isPending,
                 Objects.requireNonNull(GoalContext.getGoalContextById(contextId)), recurType, recurrencePattern,
-                nextRecurrence, pastRecurrenceId);
+                nextRecurrence, pastRecurrenceId, templateId);
     }
 }

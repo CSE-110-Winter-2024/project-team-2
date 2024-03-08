@@ -13,6 +13,7 @@ import java.util.Objects;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -82,8 +83,7 @@ public class MainViewModel extends ViewModel {
         // When there's a change to all goals, update whether or not they are displayed
         allGoals.observe(goals -> {
             if (goals == null) return;
-           this.addRecurringGoals(this);
-           this.updateAllGoalsIsDisplayed();
+            this.updateAllGoalsIsDisplayed();
         });
 
         // When the current date changes, update our date
@@ -93,7 +93,6 @@ public class MainViewModel extends ViewModel {
             }
 
             date.setValue(dateValue);
-            this.addRecurringGoals(this);
             this.updateAllGoalsIsDisplayed();
         });
 
@@ -118,9 +117,10 @@ public class MainViewModel extends ViewModel {
     /**
      * Append goal to the end of the list
      * @param goal goal to be appended
+     * @return the ID of the appended goal
      */
-    public void append(Goal goal) {
-        goalRepository.append(goal);
+    public int append(Goal goal) {
+        return goalRepository.append(goal);
     }
 
     public void advanceDateOneDayForward() {
@@ -144,54 +144,49 @@ public class MainViewModel extends ViewModel {
     }
 
     public void updateAllGoalsIsDisplayed() {
-        if (getAllGoals().getValue() != null) {
+        if (getAllGoals().getValue() != null && getDate().getValue() != null) {
+            Calendar date = (Calendar) getDate().getValue().clone();
+            date.add(Calendar.DATE, 1);
+
             for (Goal goal : getAllGoals().getValue()) {
                 /*
                  * Iterate through all goals and updated isDisplayed value based on
                  * current view and system date, and update database
                  */
-                if (getDate().getValue() != null) {
-                    boolean wasDisplayed = goal.getIsDisplayed();
-                    Calendar mutableDate = new MockDateProvider(getDate().getValue())
-                            .getCurrentViewDate(getView().getValue());
-                    goal.updateIsDisplayed(mutableDate,getView().getValue());
-                    /*
-                     * Only propagate change to database if isDisplayed actually changed, to avoid
-                     * infinite observer & updating loop
-                     */
-                    if (wasDisplayed != goal.getIsDisplayed()) {
-                        goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
-                    }
+
+                // Step 1: Check whether we should make a recurrence for this goal
+                Goal templateGoal = goal.getTemplateId() == null ? null : goalRepository.rawFind(goal.getTemplateId());
+                boolean shouldMakeNextOccurrence = goal.recurType == Goal.RecurType.RECURRING_INSTANCE
+                        && getDate().getValue() != null && new DateComparer().compareDates(goal.getGoalDate(), date) < 0
+                        && templateGoal != null
+                        && goal.getNextRecurrence() == null;
+
+                // Step 2: Update next recurrence date of this goal, if necessary
+                if (shouldMakeNextOccurrence) {
+                    goal.updateNextRecurrence(templateGoal);
                 }
 
+                // Step 3: Update isDisplayed for this goal
+                boolean wasDisplayed = goal.getIsDisplayed();
+                Calendar mutableDate = new MockDateProvider(getDate().getValue())
+                        .getCurrentViewDate(getView().getValue());
+                goal.updateIsDisplayed(mutableDate,getView().getValue());
 
-            }
-        }
-    }
+                /*
+                 * Only propagate change to database if isDisplayed actually changed, to avoid
+                 * infinite observer & updating loop
+                 */
+                if (wasDisplayed != goal.getIsDisplayed()) {
+                    goalRepository.changeIsDisplayedStatus(goal.getId(), goal.getIsDisplayed());
+                }
 
-    public void addRecurringGoals(MainViewModel activityModel) {
-        if (getAllGoals().getValue() != null && getDate().getValue() != null) {
-            Calendar date = (Calendar) getDate().getValue().clone();
-            date.add(Calendar.DATE, 1);
+                // Step 4: Create next recurring goal in DB
+                if (shouldMakeNextOccurrence) {
+                    Goal nextGoalRecurrence = goal.makeNextOccurrence(templateGoal);
 
-            for (Goal goal : goalRepository.queryAllGoals()) {
-                if (goal.recurType == 2) {
-                    /*
-                     * Iterate through all goals and updated nextRecurrence value based on
-                     * current view and system date, and update database
-                     */
-
-                    if (getDate().getValue() != null && new DateComparer().compareDates(goal.getGoalDate(), date) < 0) {
-                        Calendar mutableDate = new MockDateProvider(getDate().getValue())
-                                .getCurrentViewDate(getView().getValue());
-                        goal.updateIsDisplayed(mutableDate, getView().getValue());
-                        Goal nextGoalRecurrence = goal.makeNextOccurrence();
-
-                        if (nextGoalRecurrence != null) {
-                            nextGoalRecurrence.updateIsDisplayed(mutableDate,getView().getValue());
-                            goalRepository.setNextRecurrence(goal.getId(), nextGoalRecurrence.getGoalDate());
-                            activityModel.append(nextGoalRecurrence);
-                        }
+                    if (nextGoalRecurrence != null) {
+                        goalRepository.setNextRecurrence(goal.getId(), nextGoalRecurrence.getGoalDate());
+                        append(nextGoalRecurrence);
                     }
                 }
             }

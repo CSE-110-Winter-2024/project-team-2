@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
@@ -66,7 +67,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Display as strikethrough if goal isn't pending and isComplete is true
         // if (!goal.getIsPending() && goal.getIsComplete()) {
-        if (goal.getRecurType() != 1) {
+        if (goal.getRecurType() != Goal.RecurType.RECURRING_TEMPLATE) {
             if (goal.getIsComplete()) { // Delete this later for US12 (Move Goals Between Views)
                 binding.goalTextView.setPaintFlags(binding.goalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             } else {
@@ -87,7 +88,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
                 onClick.accept(id);
 
-                if(goal.getRecurType() != 1) {
+                if(goal.getRecurType() != Goal.RecurType.RECURRING_TEMPLATE) {
                     TextView textView = (TextView) v;
                     int flags = textView.getPaintFlags();
                     // Toggle the strike through

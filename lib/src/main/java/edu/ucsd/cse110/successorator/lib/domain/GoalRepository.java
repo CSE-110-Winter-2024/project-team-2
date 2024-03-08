@@ -7,6 +7,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public interface GoalRepository {
     Subject<Goal> find(int id);
+    Goal rawFind(int id);
 
     Subject<List<Goal>> findAll();
 
@@ -18,7 +19,7 @@ public interface GoalRepository {
 
     void save(List<Goal> goals);
 
-    void append(Goal goal);
+    int append(Goal goal);
 
     void changeIsCompleteStatus(Integer id, Calendar date);
 

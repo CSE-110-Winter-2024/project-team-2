@@ -62,7 +62,8 @@ public class RoomGoalRepositoryTest {
         allGoalsSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.append(new Goal(null, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1)));
+        goalRepository.append(new Goal(null, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1),
+                Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null));
         // Our observer should have been called once upon creation, and again upon appending a goal.
         assertEquals(2, notifiedCount);
         assertEquals(1, allGoalsSubject.getValue().size());
@@ -70,7 +71,8 @@ public class RoomGoalRepositoryTest {
 
     @Test
     public void observeUpdateGoal() {
-        Goal goal = new Goal(1, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
+        Goal goal = new Goal(1, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1),
+                Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         goalRepository.save(goal);
         Subject<List<Goal>> allGoalsSubject = goalRepository.findAll();
         Subject<Goal> goalSubject = goalRepository.find(goal.id);
@@ -81,7 +83,8 @@ public class RoomGoalRepositoryTest {
         goalSubject.observe(goals -> {
             notifiedCount++;
         });
-        goalRepository.save(new Goal(1, "goalTextChanged", 2, false, null, true, Calendar.getInstance(), false,  GoalContext.getGoalContextById(3)));
+        goalRepository.save(new Goal(1, "goalTextChanged", 2, false, null, true, Calendar.getInstance(), false,  GoalContext.getGoalContextById(3),
+                Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null));
 
         // Each observer should have been called once upon creation, and again upon saving the goal.
         assertEquals(4, notifiedCount);
@@ -104,8 +107,10 @@ public class RoomGoalRepositoryTest {
             notifiedCount++;
         });
         List<Goal> goalsToSave = List.of(
-                new Goal(null, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(2)),
-                new Goal(null, "goal2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(4))
+                new Goal(null, "goal1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(2),
+                        Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null),
+                new Goal(null, "goal2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(4),
+                        Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null)
         );
         goalRepository.save(goalsToSave);
 

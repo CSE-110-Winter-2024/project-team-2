@@ -26,4 +26,8 @@ public class DateComparer {
                 secondDate.get(Calendar.DAY_OF_MONTH));
         return firstDateCopy.compareTo(secondDateCopy);
     }
+
+    public boolean isLeapDay(Calendar date) {
+        return date.get(Calendar.MONTH) == Calendar.FEBRUARY && date.get(Calendar.DAY_OF_MONTH) == 29;
+    }
 }

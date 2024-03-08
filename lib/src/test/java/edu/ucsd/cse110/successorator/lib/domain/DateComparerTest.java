@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -27,5 +28,20 @@ public class DateComparerTest {
         firstDate = new GregorianCalendar(2024, Calendar.MARCH, 3);
         secondDate = new GregorianCalendar(2024, Calendar.MARCH, 2);
         assertTrue(new DateComparer().compareDates(firstDate, secondDate) > 0);
+    }
+
+    @Test
+    public void isLeapDay() {
+        Calendar calendar = new GregorianCalendar(2025, Calendar.APRIL, 1);
+        assertFalse(new DateComparer().isLeapDay(calendar));
+
+        calendar = new GregorianCalendar(2024, Calendar.MARCH, 1);
+        assertFalse(new DateComparer().isLeapDay(calendar));
+
+        calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 28);
+        assertFalse(new DateComparer().isLeapDay(calendar));
+
+        calendar = new GregorianCalendar(2024, Calendar.FEBRUARY, 29);
+        assertTrue(new DateComparer().isLeapDay(calendar));
     }
 }

@@ -21,7 +21,8 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
+    // The complicated ORDER BY clause will order goals from oldest to newest for recurring templates only
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, (CASE WHEN recurType = 'RECURRING_TEMPLATE' THEN goalDate ELSE sort_order END)")
     List<GoalEntity> findAll();
 
     @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
@@ -30,7 +31,7 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, (CASE WHEN recurType = 'RECURRING_TEMPLATE' THEN goalDate ELSE sort_order END)")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
@@ -79,7 +80,8 @@ public interface GoalsDao {
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
-                true, goal.goalDate, goal.isPending, goal.contextId, goal.recurType, goal.recurrencePattern, goal.nextRecurrence, goal.pastRecurrenceId);
+                goal.isDisplayed, goal.goalDate, goal.isPending, goal.contextId, goal.recurType, goal.recurrencePattern,
+                goal.nextRecurrence, goal.pastRecurrenceId, goal.templateId);
         return Math.toIntExact(insert(newGoal));
     }
 
