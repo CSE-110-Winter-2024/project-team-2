@@ -24,6 +24,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
  * Tests the RoomGoalRepository by mocking a Room database and ensuring our app's CRUD operations

@@ -138,15 +138,15 @@ public class AddGoalDialogFragment extends DialogFragment {
 
     private void updateStartDateText(Calendar date) {
         String formattedDate = new SimpleDateFormat("MMM dd, yyyy").format(date.getTime());
-        view.startDateButton.setText(formattedDate);
+
+        this.view.startDateButton.setText(formattedDate);
         this.view.weeklyButton.setText(String.format("Weekly on %s", new DateFormatter().formatWeekDay(date)));
         this.view.monthlyButton.setText(String.format("Monthly on %s", new DateFormatter().formatDayOfMonth(date)));
         this.view.yearlyButton.setText(String.format("Yearly on %s", new DateFormatter().formatDayOfYear(date)));
-
     }
 
     private void toggleDatePickerVisibility() {
-        if(view.datePicker.getVisibility() == View.GONE) {
+        if (view.datePicker.getVisibility() == View.GONE) {
             view.datePicker.setVisibility(View.VISIBLE);
             view.setDateButton.setVisibility(View.VISIBLE);
             view.startDateButton.setVisibility(View.GONE);
@@ -186,14 +186,14 @@ public class AddGoalDialogFragment extends DialogFragment {
                 }
                 if (this.view.dailyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.DAILY;
-                } else if (this.view.weeklyButton.isChecked()){
+                } else if (this.view.weeklyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.WEEKLY;
-                } else if (this.view.monthlyButton.isChecked()){
+                } else if (this.view.monthlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.MONTHLY;
-                } else if (this.view.yearlyButton.isChecked()){
+                } else if (this.view.yearlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.YEARLY;
                 }
-            } else if (view == ViewOptions.RECURRING){
+            } else if (view == ViewOptions.RECURRING) {
                 goalDate = Calendar.getInstance();
                 // Set date past 2 AM to ensure it doesn't get counted as previous day
                 goalDate.set(Calendar.HOUR, 5);
@@ -202,11 +202,11 @@ public class AddGoalDialogFragment extends DialogFragment {
 
                 if (this.view.dailyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.DAILY;
-                } else if (this.view.weeklyButton.isChecked()){
+                } else if (this.view.weeklyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.WEEKLY;
-                } else if (this.view.monthlyButton.isChecked()){
+                } else if (this.view.monthlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.MONTHLY;
-                } else if (this.view.yearlyButton.isChecked()){
+                } else if (this.view.yearlyButton.isChecked()) {
                     recurrencePattern = Goal.RecurrencePattern.YEARLY;
                 }
             } else if (view == ViewOptions.PENDING){

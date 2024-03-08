@@ -60,7 +60,7 @@ public class GoalListFragment  extends Fragment{
 
         // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            if(activityModel.getView().getValue() != ViewOptions.RECURRING){
+            if (activityModel.getView().getValue() != ViewOptions.RECURRING) {
                 activityModel.changeIsCompleteStatus(id, activityModel.getDate().getValue());
                 activityModel.moveToTop(id);
                 activityModel.setDateCompleted(id, activityModel.getDate().getValue());

@@ -27,7 +27,7 @@ public class DateRepository {
         calendar.setValue(value);
     }
 
-    public Subject<Calendar> getDate(){
+    public Subject<Calendar> getDate() {
         return calendar;
     }
 }

@@ -88,9 +88,7 @@ public class MainViewModel extends ViewModel {
 
         // When the current date changes, update our date
         dateRepository.getDate().observe(dateValue -> {
-            if (dateValue == null) {
-                return;
-            }
+            if (dateValue == null) return; // not ready yet, ignore
 
             date.setValue(dateValue);
             this.updateAllGoalsIsDisplayed();
@@ -98,9 +96,7 @@ public class MainViewModel extends ViewModel {
 
         // When the current view changes, update our view
         viewRepository.getView().observe(viewType -> {
-            if (viewType == null) {
-                return;
-            }
+            if (viewType == null) return; // not ready yet, ignore
 
             view.setValue(viewType);
         });
@@ -196,7 +192,7 @@ public class MainViewModel extends ViewModel {
     public boolean hasActivePrevGoal(Goal goal) {
         if (getAllGoals().getValue() != null) {
             for (Goal pastGoal : getAllGoals().getValue()) {
-                if(Objects.equals(pastGoal.getId(), goal.getPastRecurrenceId())){
+                if (Objects.equals(pastGoal.getId(), goal.getPastRecurrenceId())) {
                     return !pastGoal.getIsComplete();
                 }
             }
