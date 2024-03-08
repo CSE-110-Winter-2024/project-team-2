@@ -2,6 +2,8 @@ package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -262,4 +264,36 @@ public class GoalsDaoTest {
         goalsDao.changeIsPendingStatus(3, false);
         assertFalse(goalsDao.getIsPendingStatus(3));
     }
+
+    @Test
+    public void setGoalDate(){
+        Goal goal = new Goal(3, "goal1", 1, false, null,  true, null,
+                true, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        GoalEntity goalEntity = GoalEntity.fromGoal(goal);
+        goalsDao.insert(goalEntity);
+        assertNull(goalsDao.find(3).goalDate);
+        Calendar goalDate = Calendar.getInstance();
+
+        goalsDao.setGoalDate(3, goalDate);
+        assertEquals(goalsDao.find(3).goalDate, goalDate);
+    }
+
+    @Test
+    public void setNextRecurrence(){
+        Calendar currDate = Calendar.getInstance();
+        Calendar nextRecurrence = (Calendar) currDate.clone();
+        nextRecurrence.add(Calendar.DATE, 1);
+
+        Goal goal = new Goal(3, "goal1", 1, false, null,  true, currDate,
+                true, GoalContext.getGoalContextById(1), Goal.RecurType.RECURRING_INSTANCE, Goal.RecurrencePattern.DAILY, null, null, null);
+        GoalEntity goalEntity = GoalEntity.fromGoal(goal);
+        goalsDao.insert(goalEntity);
+        assertNull(goalsDao.find(3).nextRecurrence);
+
+        goalsDao.setNextRecurrence(3, nextRecurrence);
+        assertNotNull(goalsDao.find(3).nextRecurrence);
+        assertEquals(goalsDao.find(3).nextRecurrence, nextRecurrence);
+        assertNotEquals(goalsDao.find(3).goalDate, goalsDao.find(3).nextRecurrence);
+    }
+
 }

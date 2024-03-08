@@ -27,6 +27,11 @@ public class GoalEntityTest {
         assertNull(goalEntity1.dateCompleted);
         assertTrue(goalEntity1.isDisplayed);
         assertEquals(goalEntity1.contextId, 1);
+        assertEquals(goalEntity1.recurType, Goal.RecurType.NOT_RECURRING);
+        assertEquals(goalEntity1.recurrencePattern, Goal.RecurrencePattern.NONE);
+        assertNull(goalEntity1.nextRecurrence);
+        assertNull(goalEntity1.pastRecurrenceId);
+
 
         Calendar dateCompleted = Calendar.getInstance();
         GoalEntity goalEntity2 = new GoalEntity("goal1", 1, false, dateCompleted, false,
@@ -37,6 +42,10 @@ public class GoalEntityTest {
         assertEquals(dateCompleted, goalEntity2.dateCompleted);
         assertFalse(goalEntity2.isDisplayed);
         assertEquals(goalEntity2.contextId, 3);
+        assertEquals(goalEntity2.recurType, Goal.RecurType.NOT_RECURRING);
+        assertEquals(goalEntity2.recurrencePattern, Goal.RecurrencePattern.NONE);
+        assertNull(goalEntity2.nextRecurrence);
+        assertNull(goalEntity2.pastRecurrenceId);
     }
 
     @Test
@@ -51,6 +60,10 @@ public class GoalEntityTest {
         assertNull(goalEntity1.dateCompleted);
         assertTrue(goalEntity1.isDisplayed);
         assertEquals(goalEntity1.contextId, 1);
+        assertEquals(goalEntity1.recurType, Goal.RecurType.NOT_RECURRING);
+        assertEquals(goalEntity1.recurrencePattern, Goal.RecurrencePattern.NONE);
+        assertNull(goalEntity1.nextRecurrence);
+        assertNull(goalEntity1.pastRecurrenceId);
 
         Calendar dateCompleted = Calendar.getInstance();
         Goal goal2 = new Goal(10, "goal2", 2, true, dateCompleted, false,
@@ -63,6 +76,10 @@ public class GoalEntityTest {
         assertEquals(dateCompleted, goalEntity2.dateCompleted);
         assertFalse(goalEntity2.isDisplayed);
         assertEquals(goalEntity2.contextId, 2);
+        assertEquals(goalEntity2.recurType, Goal.RecurType.NOT_RECURRING);
+        assertEquals(goalEntity2.recurrencePattern, Goal.RecurrencePattern.NONE);
+        assertNull(goalEntity2.nextRecurrence);
+        assertNull(goalEntity2.pastRecurrenceId);
     }
 
     @Test
@@ -76,6 +93,11 @@ public class GoalEntityTest {
         assertNull(goal1.dateCompleted);
         assertTrue(goal1.isDisplayed);
         assertEquals(goal1.getGoalContext(), GoalContext.getGoalContextById(1));
+        assertEquals(goal1.getRecurType(), Goal.RecurType.NOT_RECURRING);
+        assertEquals(goal1.getRecurrencePattern(), Goal.RecurrencePattern.NONE);
+        assertNull(goal1.nextRecurrence);
+        assertNull(goal1.pastRecurrenceId);
+
 
         Calendar dateCompleted = Calendar.getInstance();
         GoalEntity goalEntity2 = new GoalEntity("goal2", 2, true, dateCompleted, false,
@@ -87,5 +109,9 @@ public class GoalEntityTest {
         assertEquals(dateCompleted, goal2.dateCompleted);
         assertFalse(goal2.isDisplayed);
         assertEquals(goal2.getGoalContext(), GoalContext.getGoalContextById(3));
+        assertEquals(goal2.getRecurType(), Goal.RecurType.NOT_RECURRING);
+        assertEquals(goal2.getRecurrencePattern(), Goal.RecurrencePattern.NONE);
+        assertNull(goal2.nextRecurrence);
+        assertNull(goal2.pastRecurrenceId);
     }
 }
