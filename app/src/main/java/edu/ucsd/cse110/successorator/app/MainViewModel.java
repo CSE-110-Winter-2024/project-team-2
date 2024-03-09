@@ -41,6 +41,12 @@ public class MainViewModel extends ViewModel {
      */
     private final SimpleSubject<Integer> selectedGoalContextId;
 
+    /*
+     * The ID of the goal that we are currently taking an action on with the long-press menu.
+     * Null if we are not long-pressing any goal
+     */
+    private final SimpleSubject<Integer> longPressGoalId;
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -61,6 +67,7 @@ public class MainViewModel extends ViewModel {
         this.allGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
         this.selectedGoalContextId = new SimpleSubject<>();
+        this.longPressGoalId = new SimpleSubject<>();
         this.view = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
@@ -127,8 +134,23 @@ public class MainViewModel extends ViewModel {
         dateRepository.setDate(dateProvider);
     }
 
-    public void changeIsCompleteStatus(Integer id, Calendar date) {
-        goalRepository.changeIsCompleteStatus(id, date);
+    public void changeIsCompleteStatus(Integer id) {
+        goalRepository.changeIsCompleteStatus(id);
+        if (goalRepository.getIsPendingStatus(id)) {
+            moveToToday(id);
+        }
+        moveToTop(id);
+        setDateCompleted(id, getDate().getValue());
+    }
+
+    public void moveToToday(Integer id) {
+        goalRepository.changeIsPendingStatus(id, false);
+        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY));
+    }
+
+    public void moveToTomorrow(Integer id) {
+        goalRepository.changeIsPendingStatus(id, false);
+        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW));
     }
 
     public void moveToTop(Integer id) {
@@ -210,6 +232,14 @@ public class MainViewModel extends ViewModel {
 
     public void setSelectedGoalContextId(Integer contextId) {
         selectedGoalContextId.setValue(contextId);
+    }
+
+    public Subject<Integer> getLongPressGoalId() {
+        return longPressGoalId;
+    }
+
+    public void setLongPressGoalId(Integer goalId) {
+        longPressGoalId.setValue(goalId);
     }
     
     public void setView(ViewOptions view) {

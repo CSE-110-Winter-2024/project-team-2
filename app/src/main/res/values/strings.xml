@@ -14,4 +14,9 @@
     <string name="daily_text">Daily</string>
     <string name="set_the_date">Set the date</string>
     <string name="starting">Starting:</string>
+
+    <string name="move_to_today">Move to Today</string>
+    <string name="move_to_tomorrow">Move to Tomorrow</string>
+    <string name="finish">Finish</string>
+    <string name="delete">Delete</string>
 </resources>
