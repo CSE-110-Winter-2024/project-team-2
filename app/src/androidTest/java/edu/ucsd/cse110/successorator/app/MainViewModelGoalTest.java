@@ -71,7 +71,7 @@ public class MainViewModelGoalTest {
         // Our observer should have been called once when we added it
         assertEquals(observeCallsMade, 1);
 
-        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
+        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         mainViewModel.append(goal1);
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 1);
         assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);
@@ -79,7 +79,7 @@ public class MainViewModelGoalTest {
         assertEquals(lastObservedGoals.get(0), goal1);
         assertEquals(observeCallsMade, 2);
 
-        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1));
+        Goal goal2 = new Goal(2, "Goal 2", 2, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         mainViewModel.append(goal2);
         assertEquals(mainViewModel.getOrderedGoals().getValue().size(), 2);
         assertEquals(mainViewModel.getOrderedGoals().getValue().get(0), goal1);

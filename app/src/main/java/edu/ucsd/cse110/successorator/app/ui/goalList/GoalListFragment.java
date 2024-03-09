@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
  * This class displays the goal list in a Fragment view
@@ -59,10 +60,12 @@ public class GoalListFragment  extends Fragment{
 
         // Initialize the Adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), id -> {
-            activityModel.changeIsCompleteStatus(id, activityModel.getDate().getValue());
-            activityModel.moveToTop(id);
-            activityModel.setDateCompleted(id, activityModel.getDate().getValue());
-        });
+            if (activityModel.getView().getValue() != ViewOptions.RECURRING) {
+                activityModel.changeIsCompleteStatus(id, activityModel.getDate().getValue());
+                activityModel.moveToTop(id);
+                activityModel.setDateCompleted(id, activityModel.getDate().getValue());
+            }
+        }, activityModel);
 
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

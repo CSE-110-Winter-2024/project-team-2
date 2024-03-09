@@ -16,7 +16,7 @@ public class ViewRepository {
         this.view.setValue(view);
     }
 
-    public Subject<ViewOptions> getView(){
+    public Subject<ViewOptions> getView() {
         return view;
     }
 }

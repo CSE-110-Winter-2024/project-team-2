@@ -21,7 +21,8 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order")
+    // The complicated ORDER BY clause will order goals from oldest to newest for recurring templates only
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, (CASE WHEN recurType = 'RECURRING_TEMPLATE' THEN goalDate ELSE sort_order END)")
     List<GoalEntity> findAll();
 
     @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
@@ -30,7 +31,7 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE id = :id")
     LiveData<GoalEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, sort_order ")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, (CASE WHEN recurType = 'RECURRING_TEMPLATE' THEN goalDate ELSE sort_order END)")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
     @Query("SELECT * FROM goals ORDER BY isComplete, sort_order")
@@ -44,6 +45,14 @@ public interface GoalsDao {
 
     @Query("SELECT MAX(sort_order) FROM goals")
     int getMaxSortOrder();
+
+    /*
+     * Ensures that any future occurrences of the goal with the given ID are NOT completed. Handles
+     * the edge case where the today instance of a recurring goal is completed, then the tomorrow instance is
+     * completed, then the today instance is un-completed, we should also set the tomorrow instance to un-completed
+     */
+    @Query("UPDATE goals SET isComplete = False, dateCompleted = NULL WHERE pastRecurrenceId = :id")
+    void ensureFutureGoalsNotCompleted(int id);
 
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(int id);
@@ -69,11 +78,18 @@ public interface GoalsDao {
     @Query("UPDATE goals SET goalDate = :goalDate WHERE id = :id")
     void setGoalDate(Integer id, Calendar goalDate);
 
+    @Query("UPDATE goals SET nextRecurrence = :nextRecurrence WHERE id = :id")
+    void setNextRecurrence(Integer id, Calendar nextRecurrence);
+
+    @Query("UPDATE goals SET pastRecurrenceId = :pastRecurrenceId WHERE id = :id")
+    void setPastRecurrenceId(Integer id, Integer pastRecurrenceId);
+
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrder();
         var newGoal = new GoalEntity(goal.goalText, maxSortOrder + 1, goal.isComplete, null,
-                true, goal.goalDate, goal.isPending, goal.contextId);
+                goal.isDisplayed, goal.goalDate, goal.isPending, goal.contextId, goal.recurType, goal.recurrencePattern,
+                goal.nextRecurrence, goal.pastRecurrenceId, goal.templateId);
         return Math.toIntExact(insert(newGoal));
     }
 

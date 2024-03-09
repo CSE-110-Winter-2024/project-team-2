@@ -26,6 +26,11 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
+    public Goal rawFind(int id) {
+        return goalsDao.find(id).toGoal();
+    }
+
+    @Override
     public Subject<List<Goal>> findAll() {
         var entitiesLiveData = goalsDao.findAllAsLiveData();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -47,6 +52,12 @@ public class RoomGoalRepository implements GoalRepository {
         return new LiveDataSubjectAdapter<>(allGoalsLiveData);
     }
 
+    public List<Goal> queryAllGoals() {
+        return goalsDao.findAll().stream()
+                .map(GoalEntity::toGoal)
+                .collect(Collectors.toList());
+    }
+
     public void save(Goal goal) {
         goalsDao.insert(GoalEntity.fromGoal(goal));
     }
@@ -59,13 +70,15 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void append(Goal goal) {
-        goalsDao.append(GoalEntity.fromGoal(goal));
+    public int append(Goal goal) {
+        return goalsDao.append(GoalEntity.fromGoal(goal));
     }
 
     @Override
     public void changeIsCompleteStatus(Integer id, Calendar date) {
         goalsDao.changeIsCompleteStatus(id);
+        goalsDao.ensureFutureGoalsNotCompleted(id);
+        
         // If goal is pending, then crossing it off should move it to Today's list
         if (goalsDao.getIsPendingStatus(id)) {
             goalsDao.changeIsPendingStatus(id, false);
@@ -85,5 +98,13 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsDisplayedStatus(Integer id, boolean isDisplayed) {
         goalsDao.changeIsDisplayedStatus(id, isDisplayed);
+    }
+
+    public void setNextRecurrence(Integer id, Calendar nextRecurrence) {
+        goalsDao.setNextRecurrence(id, nextRecurrence);
+    }
+
+    public void setPastRecurrenceId(Integer id, Integer pastRecurrenceId) {
+        goalsDao.setPastRecurrenceId(id, pastRecurrenceId);
     }
 }
