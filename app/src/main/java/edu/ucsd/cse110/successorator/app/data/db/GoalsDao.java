@@ -46,6 +46,14 @@ public interface GoalsDao {
     @Query("SELECT MAX(sort_order) FROM goals")
     int getMaxSortOrder();
 
+    /*
+     * Ensures that any future occurrences of the goal with the given ID are NOT completed. Handles
+     * the edge case where the today instance of a recurring goal is completed, then the tomorrow instance is
+     * completed, then the today instance is un-completed, we should also set the tomorrow instance to un-completed
+     */
+    @Query("UPDATE goals SET isComplete = False, dateCompleted = NULL WHERE pastRecurrenceId = :id")
+    void ensureFutureGoalsNotCompleted(int id);
+
     @Query("UPDATE goals SET isComplete = NOT isComplete WHERE id = :id")
     void changeIsCompleteStatus(int id);
 
