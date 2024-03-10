@@ -30,6 +30,8 @@ public interface GoalRepository {
 
     void changeIsCompleteStatus(Integer id);
 
+    void moveFromPending(Integer id, Calendar date);
+
     void moveToTop(Integer id);
 
     void setDateCompleted(Integer id, Calendar dateCompleted);

@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
@@ -180,5 +181,39 @@ public class MainViewModelGoalTest {
         assertFalse(dbGoal.getIsPending());
         assertFalse(dbGoal.getIsComplete());
         assertEquals(dbGoal.getGoalDate(), new MockDateProvider(goalDate).getCurrentViewDate(ViewOptions.TOMORROW));
+    }
+
+    @Test
+    public void ensureFutureGoalsNotCompleted() {
+        Calendar goalDate = mainViewModel.getDate().getValue();
+
+        Goal templateGoal = new GoalFactory().makeRecurringTemplate("Goal 1", new MockDateProvider(goalDate).getCurrentViewDate(ViewOptions.RECURRING), ViewOptions.RECURRING, 1, Goal.RecurrencePattern.DAILY);
+        int templateId = mainViewModel.append(templateGoal);
+
+        Goal firstInstance = new GoalFactory().makeRecurringInstance("Goal 1", new MockDateProvider(goalDate).getCurrentViewDate(ViewOptions.RECURRING), 1, Goal.RecurrencePattern.DAILY, templateId);
+        int firstInstanceId = mainViewModel.append(firstInstance);
+
+        // This should create the second instance in the tomorrow view
+        mainViewModel.updateAllGoalsIsDisplayed();
+
+        // We should have 3 goals total
+        assertEquals(goalsDao.getAllGoals().size(), 3);
+        int secondInstanceId = goalsDao.getAllGoals().stream().filter(goal -> goal.id != templateId && goal.id != firstInstanceId).collect(Collectors.toList()).get(0).id;
+
+
+        // Neither instance should be crossed off initially
+        assertFalse(goalRepository.rawFind(firstInstanceId).getIsComplete());
+        assertFalse(goalRepository.rawFind(secondInstanceId).getIsComplete());
+
+        // Cross off today instance, then tomorrow instance
+        goalRepository.changeIsCompleteStatus(firstInstanceId);
+        goalRepository.changeIsCompleteStatus(secondInstanceId);
+        assertTrue(goalRepository.rawFind(firstInstanceId).getIsComplete());
+        assertTrue(goalRepository.rawFind(secondInstanceId).getIsComplete());
+
+        // Uncross today instance, this should also uncross tomorrow instance
+        goalRepository.changeIsCompleteStatus(firstInstanceId);
+        assertFalse(goalRepository.rawFind(firstInstanceId).getIsComplete());
+        assertFalse(goalRepository.rawFind(secondInstanceId).getIsComplete());
     }
 }

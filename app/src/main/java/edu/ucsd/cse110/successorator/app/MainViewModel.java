@@ -144,13 +144,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public void moveToToday(Integer id) {
-        goalRepository.changeIsPendingStatus(id, false);
-        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY));
+        goalRepository.moveFromPending(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY));
     }
 
     public void moveToTomorrow(Integer id) {
-        goalRepository.changeIsPendingStatus(id, false);
-        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW));
+        goalRepository.moveFromPending(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW));
     }
 
     public void moveToTop(Integer id) {

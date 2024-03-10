@@ -92,6 +92,7 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id) {
         goalsDao.changeIsCompleteStatus(id);
+        goalsDao.ensureFutureGoalsNotCompleted(id);
     }
 
     /**
