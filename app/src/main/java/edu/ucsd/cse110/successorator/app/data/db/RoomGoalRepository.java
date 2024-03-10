@@ -75,11 +75,30 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void changeIsCompleteStatus(Integer id, Calendar date) {
+    public boolean getIsPendingStatus(Integer id) {
+        return goalsDao.getIsPendingStatus(id);
+    }
+
+    @Override
+    public void changeIsPendingStatus(Integer id, boolean isPending) {
+        goalsDao.changeIsPendingStatus(id, isPending);
+    }
+
+    @Override
+    public void setGoalDate(Integer id, Calendar goalDate) {
+        goalsDao.setGoalDate(id, goalDate);
+    }
+
+    @Override
+    public void changeIsCompleteStatus(Integer id) {
         goalsDao.changeIsCompleteStatus(id);
-        goalsDao.ensureFutureGoalsNotCompleted(id);
-        
-        // If goal is pending, then crossing it off should move it to Today's list
+    }
+
+    /**
+     * Moves a goal from the Pending list to the Today or Tomorrow list. The date passed it is
+     * the new goalDate for the goal.
+     */
+    public void moveFromPending(Integer id, Calendar date) {
         if (goalsDao.getIsPendingStatus(id)) {
             goalsDao.changeIsPendingStatus(id, false);
             goalsDao.setGoalDate(id, date);
