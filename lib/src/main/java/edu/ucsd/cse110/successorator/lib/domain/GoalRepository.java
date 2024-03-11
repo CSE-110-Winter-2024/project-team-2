@@ -43,4 +43,8 @@ public interface GoalRepository {
     void setPastRecurrenceId(Integer id, Integer pastRecurrenceId);
 
     void deleteGoal(int id);
+
+    List<Goal> findGoalsByTemplateId(int templateId);
+
+    void setTemplateId(int id, Integer templateId);
 }

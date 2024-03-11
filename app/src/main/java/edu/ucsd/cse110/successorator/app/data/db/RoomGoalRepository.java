@@ -128,7 +128,20 @@ public class RoomGoalRepository implements GoalRepository {
         goalsDao.setPastRecurrenceId(id, pastRecurrenceId);
     }
 
-    public void deleteGoal(int id){
+    @Override
+    public void deleteGoal(int id) {
         goalsDao.delete(id);
+    }
+
+    @Override
+    public List<Goal> findGoalsByTemplateId(int templateId) {
+        return goalsDao.findGoalsByTemplateId(templateId).stream()
+                .map(GoalEntity::toGoal)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setTemplateId(int id, Integer templateId) {
+        goalsDao.setTemplateId(id, templateId);
     }
 }

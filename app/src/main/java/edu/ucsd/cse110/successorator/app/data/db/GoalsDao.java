@@ -100,4 +100,10 @@ public interface GoalsDao {
         delete(id);
         return Math.toIntExact(insert(goal));
     }
+
+    @Query("SELECT * FROM goals WHERE templateId = :templateId")
+    List<GoalEntity> findGoalsByTemplateId(int templateId);
+
+    @Query("UPDATE goals SET templateId = :templateId WHERE id = :id")
+    void setTemplateId(int id, Integer templateId);
 }
