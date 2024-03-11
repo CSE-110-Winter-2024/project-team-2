@@ -27,6 +27,7 @@ import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
+import edu.ucsd.cse110.successorator.lib.domain.FocusModeRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalFactory;
@@ -64,7 +65,8 @@ public class MainViewModelGoalTest {
         goalRepository = new RoomGoalRepository(goalsDao);
         DateRepository dateRepository = new DateRepository(new CurrentDateProvider());
         ViewRepository viewRepository = new ViewRepository();
-        mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository);
+        FocusModeRepository focusModeRepository = new FocusModeRepository();
+        mainViewModel = new MainViewModel(goalRepository, dateRepository, viewRepository, focusModeRepository);
     }
 
     @After

@@ -150,7 +150,7 @@ public class Goal {
         RECURRING_INSTANCE // Goal is an instance of a recurring goal template
     }
 
-    public void updateIsDisplayed(Calendar date, ViewOptions view) {
+    public void updateIsDisplayed(Calendar date, ViewOptions view, GoalContext context) {
         if (view == ViewOptions.PENDING) {
             isDisplayed = isPending;
         } else if (view == ViewOptions.RECURRING) {
@@ -180,6 +180,10 @@ public class Goal {
                     && recurType != Goal.RecurType.RECURRING_TEMPLATE // do not display template goals
                     // do not display goal if the next occurrence of the goal is displayed
                     && (nextRecurrence == null || new DateComparer().compareDates(nextRecurrence, date) > 0);
+        }
+
+        if (context != null && !Objects.equals(context.getId(), goalContext.getId())) {
+            isDisplayed = false;
         }
     }
 

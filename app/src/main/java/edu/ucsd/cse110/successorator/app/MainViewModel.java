@@ -11,9 +11,10 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
+import edu.ucsd.cse110.successorator.lib.domain.FocusModeRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
 import edu.ucsd.cse110.successorator.lib.domain.ViewRepository;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -27,13 +28,14 @@ public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
     private final DateRepository dateRepository;
     private final ViewRepository viewRepository;
+    private final FocusModeRepository focusModeRepository;
 
     // UI state
-    private final SimpleSubject<List<Integer>> goalOrdering;
     private final SimpleSubject<List<Goal>> orderedGoals;
     private final SimpleSubject<List<Goal>> allGoals;
     private final SimpleSubject<Calendar> date;
     private final SimpleSubject<ViewOptions> view;
+    private final SimpleSubject<GoalContext> focusContext;
 
     /*
      The ID of the currently selected goal context when the user is adding a goal and choosing a context.
@@ -53,22 +55,25 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getGoalRepository(), app.getDateRepository(), app.getViewRepository());
+                        return new MainViewModel(app.getGoalRepository(), app.getDateRepository(),
+                                app.getViewRepository(), app.getFocusModeRepository());
                     });
 
-    public MainViewModel(GoalRepository goalRepository, DateRepository dateRepository, ViewRepository viewRepository) {
+    public MainViewModel(GoalRepository goalRepository, DateRepository dateRepository,
+                         ViewRepository viewRepository, FocusModeRepository focusModeRepository) {
         this.goalRepository = goalRepository;
         this.dateRepository = dateRepository;
         this.viewRepository = viewRepository;
+        this.focusModeRepository = focusModeRepository;
 
         // Create the observable subjects.
-        this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
         this.allGoals = new SimpleSubject<>();
         this.date = new SimpleSubject<>();
         this.selectedGoalContextId = new SimpleSubject<>();
         this.longPressGoalId = new SimpleSubject<>();
         this.view = new SimpleSubject<>();
+        this.focusContext = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
@@ -106,6 +111,11 @@ public class MainViewModel extends ViewModel {
             if (viewType == null) return; // not ready yet, ignore
 
             view.setValue(viewType);
+        });
+
+        // When the current focus mode changes, update our focusContext
+        focusModeRepository.getFocusContext().observe(context -> {
+            focusContext.setValue(context);
         });
     }
 
@@ -188,7 +198,7 @@ public class MainViewModel extends ViewModel {
                 boolean wasDisplayed = goal.getIsDisplayed();
                 Calendar mutableDate = new MockDateProvider(getDate().getValue())
                         .getCurrentViewDate(getView().getValue());
-                goal.updateIsDisplayed(mutableDate,getView().getValue());
+                goal.updateIsDisplayed(mutableDate, getView().getValue(), getFocusContext().getValue());
 
                 /*
                  * Only propagate change to database if isDisplayed actually changed, to avoid
@@ -248,5 +258,13 @@ public class MainViewModel extends ViewModel {
 
     public Subject<ViewOptions> getView() {
         return view;
+    }
+
+    public Subject<GoalContext> getFocusContext() {
+        return focusContext;
+    }
+
+    public void setFocusContext(GoalContext context) {
+        focusModeRepository.setFocusContext(context);
     }
 }
