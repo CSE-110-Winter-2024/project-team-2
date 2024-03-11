@@ -79,10 +79,10 @@ public class FocusModeFragment extends DialogFragment {
             activityModel.setFocusContext(GoalContext.defaultGoalContexts.get(3));
             dialog.dismiss();
         });
-//        view.cancelContext.setOnClickListener(context -> {
-//            activityModel.setFocusContext(null);
-//            dialog.dismiss();
-//        });
+        view.cancelContext.setOnClickListener(context -> {
+            activityModel.setFocusContext(null);
+            dialog.dismiss();
+        });
 
         return dialog;
     }
