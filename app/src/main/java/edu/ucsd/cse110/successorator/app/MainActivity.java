@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -7,13 +8,16 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import android.graphics.drawable.ColorDrawable;
 
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.changeView.ChangeViewFragment;
+import edu.ucsd.cse110.successorator.app.ui.focusMode.FocusModeFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
@@ -109,7 +113,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Update isDisplayed value of all goals and update database
+            activityModel.updateAllGoalsIsDisplayed();
+        });
 
+        this.activityModel.getFocusContext().observe(context -> {
+            var view = findViewById(R.id.add_bar_manu_hamburger);
+            if (view == null) {
+                return;
+            }
+
+            if(context == null) {
+                 view.setBackgroundColor(Color.TRANSPARENT);
+            } else {
+                view.setBackgroundColor(Color.parseColor(context.getColor()));
+            }
+
+            // Update isDisplayed value of all goals and update database
             activityModel.updateAllGoalsIsDisplayed();
         });
 
@@ -183,6 +202,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
+
+        if (itemId == R.id.add_bar_manu_hamburger) {
+            var dialogFragment = FocusModeFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "FocusModeFragment");
+        }
 
         if (itemId == R.id.add_bar_manu_swap_views) {
             var dialogFragment = AddGoalDialogFragment.newInstance();
