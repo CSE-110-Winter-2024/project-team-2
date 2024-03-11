@@ -100,7 +100,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         });
 
         binding.goalTextView.setOnLongClickListener(v -> {
-            if (!goal.getIsPending()) {
+            // Only display long-press options for pending goals and recurring TEMPLATES (NOT recurring instances)
+            boolean showOptionsMenu = goal.getIsPending() || goal.getRecurType() == RecurType.RECURRING_TEMPLATE;
+            if (!showOptionsMenu) {
                 return false;
             }
 

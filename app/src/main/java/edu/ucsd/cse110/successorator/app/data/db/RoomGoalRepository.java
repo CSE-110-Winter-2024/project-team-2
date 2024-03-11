@@ -92,6 +92,7 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id) {
         goalsDao.changeIsCompleteStatus(id);
+        goalsDao.ensureFutureGoalsNotCompleted(id);
     }
 
     /**
@@ -125,5 +126,22 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setPastRecurrenceId(Integer id, Integer pastRecurrenceId) {
         goalsDao.setPastRecurrenceId(id, pastRecurrenceId);
+    }
+
+    @Override
+    public void deleteGoal(int id) {
+        goalsDao.delete(id);
+    }
+
+    @Override
+    public List<Goal> findGoalsByTemplateId(int templateId) {
+        return goalsDao.findGoalsByTemplateId(templateId).stream()
+                .map(GoalEntity::toGoal)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setTemplateId(int id, Integer templateId) {
+        goalsDao.setTemplateId(id, templateId);
     }
 }

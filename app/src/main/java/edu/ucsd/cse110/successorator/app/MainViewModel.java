@@ -119,6 +119,10 @@ public class MainViewModel extends ViewModel {
         });
     }
 
+    public Goal rawFindGoal(int id) {
+        return goalRepository.rawFind(id);
+    }
+
     public Subject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
     }
@@ -154,13 +158,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public void moveToToday(Integer id) {
-        goalRepository.changeIsPendingStatus(id, false);
-        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY));
+        goalRepository.moveFromPending(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY));
     }
 
     public void moveToTomorrow(Integer id) {
-        goalRepository.changeIsPendingStatus(id, false);
-        goalRepository.setGoalDate(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW));
+        goalRepository.moveFromPending(id, new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW));
     }
 
     public void moveToTop(Integer id) {
@@ -259,12 +261,39 @@ public class MainViewModel extends ViewModel {
     public Subject<ViewOptions> getView() {
         return view;
     }
-
+  
     public Subject<GoalContext> getFocusContext() {
         return focusContext;
     }
 
     public void setFocusContext(GoalContext context) {
         focusModeRepository.setFocusContext(context);
+    }
+
+    public void deleteGoal(int id) {
+        goalRepository.deleteGoal(id);
+    }
+
+    public void deleteRecurringGoalTemplate(int id) {
+        // Find all recurring goal instances of this template
+        List<Goal> instancesOfTemplate = goalRepository.findGoalsByTemplateId(id);
+        if (instancesOfTemplate != null) {
+            // Loop over all instances of this template
+            for (Goal instance : instancesOfTemplate) {
+                // Step 1: set templateId to null for all instances so they don't make future instances
+                goalRepository.setTemplateId(instance.getId(), null);
+
+                // Step 2: delete any instances whose goalDate is AFTER tomorrow
+                if (new DateComparer().compareDates(
+                        new MockDateProvider(instance.getGoalDate()).getCurrentViewDate(ViewOptions.TODAY),
+                        new MockDateProvider(getDate().getValue()).getCurrentViewDate(ViewOptions.TOMORROW)
+                ) > 0) {
+                    goalRepository.deleteGoal(instance.getId());
+                }
+            }
+        }
+
+        // Step 3: delete the recurring template itself
+        deleteGoal(id);
     }
 }
