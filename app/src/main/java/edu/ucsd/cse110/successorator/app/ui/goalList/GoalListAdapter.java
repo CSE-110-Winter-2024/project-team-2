@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,11 @@ import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
  * This class maintains the list of goals
  */
 public class GoalListAdapter extends ArrayAdapter<Goal> {
+    FragmentActivity activity;
     Consumer<Integer> onClick;
     MainViewModel activityModel;
 
-    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onClick, MainViewModel activityModel) {
+    public GoalListAdapter(FragmentActivity activity, List<Goal> goals, Consumer<Integer> onClick, MainViewModel activityModel) {
        /*
         * This sets a bunch of stuff internally, which we can access
         * with getContext() and getItem() for example.
@@ -39,7 +41,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         * Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         * or it will crash!
         */
-        super(context, 0, new ArrayList<>(goals));
+        super(activity, 0, new ArrayList<>(goals));
+        this.activity = activity;
         this.onClick = onClick;
         this.activityModel = activityModel;
     }
@@ -80,28 +83,32 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
-                // For US12: if (!goal.getIsPending()) {
-                var id = goal.getId();
+            // For pending goals, don't do anything on single tap
+            if (goal.getIsPending()) {
+                return;
+            }
 
-                if (ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)) {
-                    // Show a dialog box with the message
-                    Toast.makeText(getContext(), "This goal is still active for Today. Mark it finished in the Today view.", Toast.LENGTH_LONG).show();
-                    return;
-                }
+            var id = goal.getId();
 
-                onClick.accept(id);
+            if (ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)) {
+                // Show a dialog box with the message
+                Toast.makeText(getContext(), "This goal is still active for Today. Mark it finished in the Today view.", Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                if(goal.getRecurType() != Goal.RecurType.RECURRING_TEMPLATE) {
-                    TextView textView = (TextView) v;
-                    int flags = textView.getPaintFlags();
-                    // Toggle the strike through
-                    if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
-                        textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    } else {
-                        textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }
-                }
+            onClick.accept(id);
+        });
 
+        binding.goalTextView.setOnLongClickListener(v -> {
+            if (!goal.getIsPending()) {
+                return false;
+            }
+
+            activityModel.setLongPressGoalId(goal.getId());
+            var goalOptionsFragment = GoalOptionsFragment.newInstance();
+            goalOptionsFragment.show(activity.getSupportFragmentManager(), "GoalOptionsFragment");
+
+            return true;
         });
 
         // Set the text and background color of the goal context circle based on the context

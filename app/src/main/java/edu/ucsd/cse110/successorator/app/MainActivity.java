@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.changeView.ChangeViewFragment;
+import edu.ucsd.cse110.successorator.app.ui.focusMode.FocusModeFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.GoalListFragment;
 import edu.ucsd.cse110.successorator.app.ui.goalList.dialog.AddGoalDialogFragment;
 import edu.ucsd.cse110.successorator.app.ui.noGoals.NoGoalsFragment;
@@ -51,15 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            Calendar mutableDate = new MockDateProvider(date)
-                    .getCurrentViewDate(activityModel.getView().getValue());
-
-            // Displays the title on the app bar
-            if (getSupportActionBar() != null) {
-                getSupportActionBar()
-                        .setTitle(new ViewTitleFormatter()
-                                .formatViewTitle(this.activityModel.getView().getValue(), mutableDate));
-            }
+            updateDateTitle();
         });
 
         // Listen for changes to view to update the action bar and isDisplayed values of goals
@@ -68,48 +62,29 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            Calendar mutableDate = new MockDateProvider(activityModel.getDate().getValue())
-                    .getCurrentViewDate(viewType);
+            updateDateTitle();
 
-            // Displays the title on the app bar
-            if (getSupportActionBar() != null) {
-                getSupportActionBar()
-                        .setTitle(new ViewTitleFormatter()
-                                .formatViewTitle(viewType, mutableDate));
-            }
-
-            var goals = activityModel.getOrderedGoals().getValue();
-            if (goals == null) return;
-            if (goals.size() == 0) {
-                if (!isShowingNoGoals && viewType == ViewOptions.TODAY) {
-                    // Replace GoalsListFragment with NoGoalsFragment
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    if (!fragmentManager.isDestroyed()) {
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.goals_container, NoGoalsFragment.newInstance())
-                                .commit();
-                    }
-                }
-                isShowingNoGoals = true;
-            }
-
-            if (goals.size() > 0 || viewType != ViewOptions.TODAY) {
-                if (isShowingNoGoals) {
-                    // Replace NoGoalsFragment with GoalsListFragment
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    if (!fragmentManager.isDestroyed()) {
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.goals_container, GoalListFragment.newInstance())
-                                .commit();
-                    }
-                }
-                isShowingNoGoals = false;
-            }
+            updateGoalsFragment();
 
             // Update isDisplayed value of all goals and update database
+            activityModel.updateAllGoalsIsDisplayed();
+        });
 
+        this.activityModel.getFocusContext().observe(context -> {
+            var view = findViewById(R.id.add_bar_manu_hamburger);
+            if (view == null) {
+                return;
+            }
+
+            if(context == null) {
+                 view.setBackgroundColor(Color.TRANSPARENT);
+            } else {
+                view.setBackgroundColor(Color.parseColor(context.getColor()));
+            }
+
+            updateGoalsFragment();
+
+            // Update isDisplayed value of all goals and update database
             activityModel.updateAllGoalsIsDisplayed();
         });
 
@@ -117,39 +92,75 @@ public class MainActivity extends AppCompatActivity {
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
 
-            /*
-             * If there are no goals and we are on Today's view, then we want to show
-             * NoGoalsFragment. Otherwise, we want to show GoalListFragment.
-             * We use isShowingNoGoals to track whether we are currently showing 
-             * NoGoalsFragment, and we only replace the fragment when the fragment
-             * we should show doesn't match what we're already showing.
-             */
-            if (goals.size() == 0) {
-                if (!isShowingNoGoals && activityModel.getView().getValue() == ViewOptions.TODAY) {
-                    // Replace GoalsListFragment with NoGoalsFragment
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    if (!fragmentManager.isDestroyed()) {
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.goals_container, NoGoalsFragment.newInstance())
-                                .commit();
-                    }
-                }
-                isShowingNoGoals = true;
-            } else {
-                if (isShowingNoGoals) {
-                    // Replace NoGoalsFragment with GoalsListFragment
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    if (!fragmentManager.isDestroyed()) {
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.goals_container, GoalListFragment.newInstance())
-                                .commit();
-                    }
-                }
-                isShowingNoGoals = false;
-            }
+            updateGoalsFragment();
         });
+    }
+
+    /*
+     * Updates the date/view title (e.g. Today, Mar 10) shown at the top of the screen
+     */
+    void updateDateTitle() {
+        Calendar date = activityModel.getDate().getValue();
+        if (date == null) {
+            return;
+        }
+
+        Calendar mutableDate = new MockDateProvider(date)
+                .getCurrentViewDate(activityModel.getView().getValue());
+
+        // Displays the title on the app bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar()
+                    .setTitle(new ViewTitleFormatter()
+                            .formatViewTitle(activityModel.getView().getValue(), mutableDate));
+        }
+    }
+
+    /*
+     * Updates the fragment (either GoalListFragment or NoGoalsFragment) shown in MainActivity
+     */
+    void updateGoalsFragment() {
+        var goals = activityModel.getOrderedGoals().getValue();
+        if (goals == null) return;
+
+        /*
+         * If there are no goals, we are on Today's view, and are NOT in focus mode, then we want to show
+         * NoGoalsFragment. Otherwise, we want to show GoalListFragment.
+         * We use isShowingNoGoals to track whether we are currently showing
+         * NoGoalsFragment, and we only replace the fragment when the fragment
+         * we should show doesn't match what we're already showing.
+         */
+        boolean shouldShowNoGoals = goals.size() == 0
+                && activityModel.getFocusContext().getValue() == null
+                && activityModel.getView().getValue() == ViewOptions.TODAY;
+
+        if (shouldShowNoGoals) {
+            if (!isShowingNoGoals) {
+                // Replace GoalsListFragment with NoGoalsFragment
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if (!fragmentManager.isDestroyed()) {
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.goals_container, NoGoalsFragment.newInstance())
+                            .commit();
+                }
+            }
+            isShowingNoGoals = true;
+        }
+
+        if (!shouldShowNoGoals) {
+            if (isShowingNoGoals) {
+                // Replace NoGoalsFragment with GoalsListFragment
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if (!fragmentManager.isDestroyed()) {
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.goals_container, GoalListFragment.newInstance())
+                            .commit();
+                }
+            }
+            isShowingNoGoals = false;
+        }
     }
 
     @Override
@@ -161,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
          * update our current date.
          */
         activityModel.setDate(new CurrentDateProvider());
+        activityModel.setFocusContext(null);
     }
 
     /**
@@ -183,6 +195,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
+
+        if (itemId == R.id.add_bar_manu_hamburger) {
+            var dialogFragment = FocusModeFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "FocusModeFragment");
+        }
 
         if (itemId == R.id.add_bar_manu_swap_views) {
             var dialogFragment = AddGoalDialogFragment.newInstance();
