@@ -8,10 +8,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import android.graphics.drawable.ColorDrawable;
 
 import java.util.Calendar;
 
@@ -180,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
          * update our current date.
          */
         activityModel.setDate(new CurrentDateProvider());
+        activityModel.setFocusContext(null);
     }
 
     /**
