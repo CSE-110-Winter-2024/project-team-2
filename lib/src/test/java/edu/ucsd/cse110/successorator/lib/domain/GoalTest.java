@@ -285,6 +285,32 @@ public class GoalTest {
     }
 
     @Test
+    public void updateIsDisplayedFocusMode() {
+        Calendar currDate = Calendar.getInstance();
+        Calendar todayGoalDate = Calendar.getInstance();
+        GoalContext goalContext = GoalContext.getGoalContextById(1);
+
+        // When not goal is not completed, TODAY view, goal made TODAY
+        Goal goal = new Goal(0, "test Goal", 0, false, null, true,
+                new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, goalContext,
+                Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+
+        // When not in focus mode, goal should be displayed
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
+        assertTrue(goal.getIsDisplayed());
+
+        // When in focus mode for the goal's context, goal should be displayed
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, goalContext);
+        assertTrue(goal.getIsDisplayed());
+
+        // When in focus mode for another context, goal should not be displayed
+        for (int i = 2; i <= 4; i++) {
+            goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, GoalContext.getGoalContextById(i));
+            assertFalse(goal.getIsDisplayed());
+        }
+    }
+
+    @Test
     public void getNextRecurrenceDate() throws ParseException {
         // Date format for parsing date strings
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd hh:mm:ss a yyyy", Locale.ENGLISH);
