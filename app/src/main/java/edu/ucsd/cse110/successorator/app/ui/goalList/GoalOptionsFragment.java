@@ -83,7 +83,7 @@ public class GoalOptionsFragment extends DialogFragment {
         });
 
         view.deleteAction.setOnClickListener(view -> {
-            // TODO: implement deleting (US13)
+            activityModel.deleteGoal(activityModel.getLongPressGoalId().getValue());
 
             activityModel.setLongPressGoalId(null);
             dialog.dismiss();

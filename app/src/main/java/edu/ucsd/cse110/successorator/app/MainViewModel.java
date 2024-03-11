@@ -247,4 +247,6 @@ public class MainViewModel extends ViewModel {
     public Subject<ViewOptions> getView() {
         return view;
     }
+
+    public void deleteGoal(int id){goalRepository.deleteGoal(id);}
 }

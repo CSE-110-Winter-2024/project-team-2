@@ -41,4 +41,6 @@ public interface GoalRepository {
     void setNextRecurrence(Integer id, Calendar nextRecurrence);
 
     void setPastRecurrenceId(Integer id, Integer pastRecurrenceId);
+
+    void deleteGoal(int id);
 }

@@ -127,4 +127,8 @@ public class RoomGoalRepository implements GoalRepository {
     public void setPastRecurrenceId(Integer id, Integer pastRecurrenceId) {
         goalsDao.setPastRecurrenceId(id, pastRecurrenceId);
     }
+
+    public void deleteGoal(int id){
+        goalsDao.delete(id);
+    }
 }
