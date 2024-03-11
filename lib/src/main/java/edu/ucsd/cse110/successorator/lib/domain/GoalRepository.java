@@ -30,6 +30,8 @@ public interface GoalRepository {
 
     void changeIsCompleteStatus(Integer id);
 
+    void moveFromPending(Integer id, Calendar date);
+
     void moveToTop(Integer id);
 
     void setDateCompleted(Integer id, Calendar dateCompleted);
@@ -39,4 +41,10 @@ public interface GoalRepository {
     void setNextRecurrence(Integer id, Calendar nextRecurrence);
 
     void setPastRecurrenceId(Integer id, Integer pastRecurrenceId);
+
+    void deleteGoal(int id);
+
+    List<Goal> findGoalsByTemplateId(int templateId);
+
+    void setTemplateId(int id, Integer templateId);
 }

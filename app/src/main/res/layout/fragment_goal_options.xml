@@ -24,6 +24,7 @@
 
     <!-- Divider between today and tomorrow -->
     <View
+        android:id="@+id/today_tomorrow_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#AAAAAA"
@@ -46,6 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/today_action" />
 
     <View
+        android:id="@+id/tomorrow_finish_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#AAAAAA"
@@ -68,6 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tomorrow_action" />
 
     <View
+        android:id="@+id/finish_delete_border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#AAAAAA"
