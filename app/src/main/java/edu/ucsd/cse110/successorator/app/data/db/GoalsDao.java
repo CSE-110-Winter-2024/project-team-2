@@ -107,6 +107,6 @@ public interface GoalsDao {
     @Query("UPDATE goals SET templateId = :templateId WHERE id = :id")
     void setTemplateId(int id, Integer templateId);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, (CASE WHEN isComplete = 0 THEN contextId ELSE dateCompleted END), sort_order ")
+    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, CASE WHEN isComplete THEN dateCompleted ELSE NULL END DESC, contextId, sort_order ")
     LiveData<List<GoalEntity>> sortByContextAsLiveData();
 }
