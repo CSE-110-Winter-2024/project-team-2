@@ -174,7 +174,7 @@ public class RoomGoalRepositoryTest {
         goalsDao.insert(goalEntity7);
         goalsDao.insert(goalEntity8);
 
-        //Sort by completion -> contextId-> sort_order
+        //Sort by completion -> contextId-> sort_order , if Completed: sort by dateCompleted
         LiveData<List<GoalEntity>> sortedGoalsLiveData = goalsDao.sortByContextAsLiveData();
 
         // Verify the results
@@ -185,9 +185,9 @@ public class RoomGoalRepositoryTest {
             assertEquals(goalEntity7.id, sortedGoals.get(1).id); //Active goal, context 2
             assertEquals(goalEntity4.id, sortedGoals.get(2).id); //Active goal, context 3
             assertEquals(goalEntity1.id, sortedGoals.get(3).id); //Active goal, context 4
-            assertEquals(goalEntity6.id, sortedGoals.get(4).id); //Completed goal, secondCompletion
-            assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal, firstCompletion
-            assertEquals(goalEntity2.id, sortedGoals.get(6).id); //Completed goal, firstCompletion
+            assertEquals(goalEntity6.id, sortedGoals.get(4).id); //Completed goal, fourthCompletion
+            assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal, thirdCompletion
+            assertEquals(goalEntity2.id, sortedGoals.get(6).id); //Completed goal, secondCompletion
             assertEquals(goalEntity5.id, sortedGoals.get(7).id); //Completed goal, firstCompletion
 
         });
