@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -295,5 +296,4 @@ public class GoalsDaoTest {
         assertEquals(goalsDao.find(3).nextRecurrence, nextRecurrence);
         assertNotEquals(goalsDao.find(3).goalDate, goalsDao.find(3).nextRecurrence);
     }
-
 }
