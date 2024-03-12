@@ -137,6 +137,14 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         return true;
     }
 
+    public void addAll(List<Goal> goals) {
+        // Add all goals to the adapter
+        for (Goal goal : goals) {
+            add(goal);
+        }
+        // Notify the adapter that the data set has changed
+        notifyDataSetChanged();
+    }
     @Override
     public long getItemId(int position) {
         var goal = getItem(position);

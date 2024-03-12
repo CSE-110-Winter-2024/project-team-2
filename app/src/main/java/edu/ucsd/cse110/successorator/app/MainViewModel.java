@@ -140,6 +140,10 @@ public class MainViewModel extends ViewModel {
         return goalRepository.append(goal);
     }
 
+    public Subject<List<Goal>> findAllSortedByContext(){
+        return goalRepository.findAllSortedByContext();
+    }
+
     public void advanceDateOneDayForward() {
         dateRepository.advanceDateOneDayForward();
     }
