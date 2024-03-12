@@ -76,7 +76,7 @@ public class MainViewModel extends ViewModel {
         this.focusContext = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
-        goalRepository.findAll().observe(goals -> {
+        goalRepository.findAllSortedByContext().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
             var newOrderedGoals = new ArrayList<>(goals);
@@ -138,6 +138,10 @@ public class MainViewModel extends ViewModel {
      */
     public int append(Goal goal) {
         return goalRepository.append(goal);
+    }
+
+    public Subject<List<Goal>> findAllSortedByContext(){
+        return goalRepository.findAllSortedByContext();
     }
 
     public void advanceDateOneDayForward() {

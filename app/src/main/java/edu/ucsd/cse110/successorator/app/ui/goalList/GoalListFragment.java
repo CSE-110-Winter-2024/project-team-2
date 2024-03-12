@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentGoalListBinding;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
@@ -64,13 +65,6 @@ public class GoalListFragment  extends Fragment{
                 activityModel.changeIsCompleteStatus(id);
             }
         }, activityModel);
-
-        activityModel.getOrderedGoals().observe(goals -> {
-            if (goals == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals)); //remember the mutable copy here
-            adapter.notifyDataSetChanged();
-        });
     }
     
     /**
@@ -92,6 +86,14 @@ public class GoalListFragment  extends Fragment{
 
         // Set adapter on the listView
         view.goalList.setAdapter(adapter);
+
+        activityModel.findAllSortedByContext().observe(goals -> {
+            if (goals == null) return;
+            adapter.clear();
+            adapter.addAll(goals);
+            adapter.notifyDataSetChanged();
+        });
+
         return view.getRoot();
     }
 }

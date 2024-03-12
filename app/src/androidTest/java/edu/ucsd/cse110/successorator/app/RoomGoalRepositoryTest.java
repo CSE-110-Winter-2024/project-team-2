@@ -1,10 +1,12 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
@@ -121,5 +124,45 @@ public class RoomGoalRepositoryTest {
 
         // Ensure that the save() call propagated to the database
         assertEquals(2, goalsDao.count());
+    }
+
+    @Test
+    public void sortByContextAsLiveData() {
+        //Goals with different attributes in different creation orders to fully test sorting method
+        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(4), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal2 = new Goal(2, "Goal 2", 2, true, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal3 = new Goal(3, "Goal 3", 3, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal4 = new Goal(4, "Goal 4", 4, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(3), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal5 = new Goal(5, "Goal 5", 5, true, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal6 = new Goal(6, "Goal 6", 6, false, null, true, Calendar.getInstance(), false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+
+        GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
+        GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
+        GoalEntity goalEntity3 = GoalEntity.fromGoal(goal3);
+        GoalEntity goalEntity4 = GoalEntity.fromGoal(goal4);
+        GoalEntity goalEntity5 = GoalEntity.fromGoal(goal5);
+        GoalEntity goalEntity6 = GoalEntity.fromGoal(goal6);
+
+        goalsDao.insert(goalEntity1);
+        goalsDao.insert(goalEntity2);
+        goalsDao.insert(goalEntity3);
+        goalsDao.insert(goalEntity4);
+        goalsDao.insert(goalEntity5);
+        goalsDao.insert(goalEntity6);
+
+        //Sort by completion -> contextId-> sort_order
+        LiveData<List<GoalEntity>> sortedGoalsLiveData = goalsDao.sortByContextAsLiveData();
+
+        // Verify the results
+        sortedGoalsLiveData.observeForever(sortedGoals -> {
+            assertNotNull(sortedGoals);
+            assertEquals(6, sortedGoals.size());
+            assertEquals(goalEntity3.id, sortedGoals.get(0).id);
+            assertEquals(goalEntity6.id, sortedGoals.get(1).id);
+            assertEquals(goalEntity4.id, sortedGoals.get(2).id);
+            assertEquals(goalEntity1.id, sortedGoals.get(3).id);
+            assertEquals(goalEntity5.id, sortedGoals.get(4).id);
+            assertEquals(goalEntity2.id, sortedGoals.get(5).id);
+        });
     }
 }

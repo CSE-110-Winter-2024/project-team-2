@@ -144,4 +144,15 @@ public class RoomGoalRepository implements GoalRepository {
     public void setTemplateId(int id, Integer templateId) {
         goalsDao.setTemplateId(id, templateId);
     }
+
+    @Override
+    public Subject<List<Goal>> findAllSortedByContext(){
+        var entitiesLiveData = goalsDao.sortByContextAsLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
 }
