@@ -16,6 +16,8 @@ public class GoalContext {
     private final @Nullable Integer id;
     private final @NonNull String color;
 
+    public static final String GRAY = "#808080";
+
     public GoalContext(@NonNull String name, @Nullable Integer id, @NonNull String color) {
         this.name = name;
         this.id = id;

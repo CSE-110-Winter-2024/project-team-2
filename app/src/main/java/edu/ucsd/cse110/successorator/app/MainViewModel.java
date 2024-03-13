@@ -179,8 +179,8 @@ public class MainViewModel extends ViewModel {
 
     public void updateAllGoalsIsDisplayed() {
         if (getAllGoals().getValue() != null && getDate().getValue() != null) {
-            Calendar date = (Calendar) getDate().getValue().clone();
-            date.add(Calendar.DATE, 1);
+            // We should only create new recurring instances for goals that are on tomorrow or earlier
+            Calendar creationDateCutoff = (Calendar) new MockDateProvider((Calendar) getDate().getValue().clone()).getCurrentViewDate(ViewOptions.TOMORROW);
 
             for (Goal goal : getAllGoals().getValue()) {
                 /*
@@ -191,7 +191,7 @@ public class MainViewModel extends ViewModel {
                 // Step 1: Check whether we should make a recurrence for this goal
                 Goal templateGoal = goal.getTemplateId() == null ? null : goalRepository.rawFind(goal.getTemplateId());
                 boolean shouldMakeNextOccurrence = goal.recurType == Goal.RecurType.RECURRING_INSTANCE
-                        && getDate().getValue() != null && new DateComparer().compareDates(goal.getGoalDate(), date) < 0
+                        && getDate().getValue() != null && new DateComparer().compareDates(goal.getGoalDate(), creationDateCutoff) < 0
                         && templateGoal != null
                         && goal.getNextRecurrence() == null;
 
