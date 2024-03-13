@@ -136,23 +136,14 @@ public class RoomGoalRepositoryTest {
     @Test
     public void sortByContextAsLiveData() {
         Calendar currDate = Calendar.getInstance();
-        currDate.set(Calendar.HOUR_OF_DAY, 0);
-        Calendar fourthCompletion = Calendar.getInstance();
-        Calendar thirdCompletion = (Calendar) fourthCompletion.clone();
-        thirdCompletion.add(Calendar.HOUR_OF_DAY, -1);
-        Calendar secondCompletion = (Calendar) thirdCompletion.clone();
-        secondCompletion.add(Calendar.HOUR_OF_DAY, -1);
-        Calendar firstCompletion = (Calendar) secondCompletion.clone();
-        firstCompletion.add(Calendar.HOUR_OF_DAY, -1);
-
 
         //Goals with different attributes in different creation orders to fully test sorting method
         Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, currDate, false, GoalContext.getGoalContextById(4), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        Goal goal2 = new Goal(2, "Goal 2", 2, true, secondCompletion, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        Goal goal3 = new Goal(3, "Goal 3", 3, true, thirdCompletion, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal2 = new Goal(2, "Goal 2", 2, true, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal3 = new Goal(3, "Goal 3", 3, true, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         Goal goal4 = new Goal(4, "Goal 4", 4, false, null, true, currDate, false, GoalContext.getGoalContextById(3), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        Goal goal5 = new Goal(5, "Goal 5", 5, true, firstCompletion, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        Goal goal6 = new Goal(6, "Goal 6", 6, true, fourthCompletion, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal5 = new Goal(5, "Goal 5", 5, true, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal6 = new Goal(6, "Goal 6", 6, true, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         Goal goal7 = new Goal(7, "Goal 7", 7, false, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
         Goal goal8 = new Goal(8, "Goal 8", 8, false, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
 
@@ -185,10 +176,10 @@ public class RoomGoalRepositoryTest {
             assertEquals(goalEntity7.id, sortedGoals.get(1).id); //Active goal, context 2
             assertEquals(goalEntity4.id, sortedGoals.get(2).id); //Active goal, context 3
             assertEquals(goalEntity1.id, sortedGoals.get(3).id); //Active goal, context 4
-            assertEquals(goalEntity6.id, sortedGoals.get(4).id); //Completed goal, fourthCompletion
-            assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal, thirdCompletion
-            assertEquals(goalEntity2.id, sortedGoals.get(6).id); //Completed goal, secondCompletion
-            assertEquals(goalEntity5.id, sortedGoals.get(7).id); //Completed goal, firstCompletion
+            assertEquals(goalEntity2.id, sortedGoals.get(4).id); //Completed goal -> sortOrder 2
+            assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal -> sortOrder 3
+            assertEquals(goalEntity5.id, sortedGoals.get(6).id); //Completed goal -> sortOrder 5
+            assertEquals(goalEntity6.id, sortedGoals.get(7).id); //Completed goal -> sortOrder 6
 
         });
     }
