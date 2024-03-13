@@ -82,6 +82,7 @@ public class AddGoalDialogFragment extends DialogFragment {
         Calendar currDate = new MockDateProvider(activityModel.getDate().getValue()).getCurrentViewDate(currentView);
         updateStartDateText(currDate);
         view.datePicker.setMinDate(currDate.getTimeInMillis());
+        view.datePicker.updateDate(currDate.get(Calendar.YEAR), currDate.get(Calendar.MONTH), currDate.get(Calendar.DAY_OF_MONTH));
 
         if (currentView == ViewOptions.RECURRING) {
             view.oneTimeButton.setVisibility(View.GONE);
