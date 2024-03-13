@@ -77,6 +77,8 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public void changeIsCompleteStatus(Integer id, Calendar date) {
         goalsDao.changeIsCompleteStatus(id);
+        goalsDao.ensureFutureGoalsNotCompleted(id);
+        
         // If goal is pending, then crossing it off should move it to Today's list
         if (goalsDao.getIsPendingStatus(id)) {
             goalsDao.changeIsPendingStatus(id, false);
