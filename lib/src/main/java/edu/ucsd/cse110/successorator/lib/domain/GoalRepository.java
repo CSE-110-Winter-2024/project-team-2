@@ -47,4 +47,6 @@ public interface GoalRepository {
     List<Goal> findGoalsByTemplateId(int templateId);
 
     void setTemplateId(int id, Integer templateId);
+
+    Subject<List<Goal>> findAllSortedByContext();
 }
