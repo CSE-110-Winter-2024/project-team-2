@@ -6,7 +6,7 @@ Andy Huynh, Benjamin Johnson, Hannah Coates, Keisuke Hirano, Vivian Liu
 ## Updates
 
 Andy + Keisuke
-- What you’ve been working on: PRs for US15 and US18 merged
+- What you’ve been working on: PRs for US15 merged, US18 in review
 - Blockers: N/A
 - Goals for next standup: N/A
 
@@ -22,7 +22,7 @@ Hannah + Vivian
 
 ## Notes
 
-- Ben: bug fixes PR for recurring goals
+- Ben: bug fixes for recurring goals on US18 PR
   - Wasn't working between midnight and 2AM
   - Needs more testing before it gets merged
 - To do: testing
