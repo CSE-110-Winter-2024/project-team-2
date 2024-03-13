@@ -2,7 +2,6 @@ package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
@@ -18,23 +17,17 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
-import edu.ucsd.cse110.successorator.lib.domain.DateRepository;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import edu.ucsd.cse110.successorator.lib.util.date.CurrentDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.date.DateComparer;
-import edu.ucsd.cse110.successorator.lib.util.date.DateProvider;
-import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
-import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
+
 
 /**
  * Tests the RoomGoalRepository by mocking a Room database and ensuring our app's CRUD operations
@@ -180,7 +173,6 @@ public class RoomGoalRepositoryTest {
             assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal -> sortOrder 3
             assertEquals(goalEntity5.id, sortedGoals.get(6).id); //Completed goal -> sortOrder 5
             assertEquals(goalEntity6.id, sortedGoals.get(7).id); //Completed goal -> sortOrder 6
-
         });
     }
 }
