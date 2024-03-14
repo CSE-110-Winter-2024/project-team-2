@@ -23,6 +23,7 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
@@ -119,8 +120,14 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         Button goalContextButton = binding.goalContextButton;
         goalContextButton.setText(Character.toString(goalContext.getFirstLetterOfName()));
 
-        // Always set goal context color to full brightness for list display
-        int goalContextColor = Color.parseColor(goalContext.getColor());
+        // Check if goal is complete and set goal context color accordingly to full brightness for list display
+        int goalContextColor;
+        if (goal.getIsComplete()){
+            goalContextColor = Color.parseColor(GoalContext.GRAY);
+        } else{
+            goalContextColor = Color.parseColor(goalContext.getColor());
+        }
+
         goalContextButton.getBackground().setColorFilter(goalContextColor, PorterDuff.Mode.MULTIPLY );
 
         return binding.getRoot();
