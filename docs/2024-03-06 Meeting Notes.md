@@ -18,9 +18,9 @@ Iteration 2 planning
 - New pair programming groups to ensure everyone's availabilities align
 - Hannah + Vivian: US16 (Filter Goals by a Single Context) and US17 (Exit Focus Mode)
   - Can start over the weekend
-- Andy + Keisuke: US12 (Move Goals Between Views) and US13 (Delete Goals)
+- Andy + Keisuke: US15 (Group Goals by Contexts) and US18 (Gray Circle for Finished Goals)
   - Not available over the weekend, will start early next week
-- Ben + Tian: US15 (Group Goals by Contexts) and US18 (Gray Circle for Finished Goals)
+- Ben + Tian: US12 (Move Goals Between Views) and US13 (Delete Goals)
   - Available to start working whenever
 - Iteration 2 BDD testing: Keisuke, Vivian, Tian
 - Iteration 2 E2E testing: Hannah, Andy, Ben
