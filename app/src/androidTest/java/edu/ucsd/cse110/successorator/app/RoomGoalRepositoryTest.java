@@ -1,10 +1,12 @@
 package edu.ucsd.cse110.successorator.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.app.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.app.data.db.GoalsDao;
 import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
@@ -24,7 +27,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
-import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
+
 
 /**
  * Tests the RoomGoalRepository by mocking a Room database and ensuring our app's CRUD operations
@@ -121,5 +124,55 @@ public class RoomGoalRepositoryTest {
 
         // Ensure that the save() call propagated to the database
         assertEquals(2, goalsDao.count());
+    }
+
+    @Test
+    public void sortByContextAsLiveData() {
+        Calendar currDate = Calendar.getInstance();
+
+        //Goals with different attributes in different creation orders to fully test sorting method
+        Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, currDate, false, GoalContext.getGoalContextById(4), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal2 = new Goal(2, "Goal 2", 2, true, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal3 = new Goal(3, "Goal 3", 3, true, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal4 = new Goal(4, "Goal 4", 4, false, null, true, currDate, false, GoalContext.getGoalContextById(3), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal5 = new Goal(5, "Goal 5", 5, true, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal6 = new Goal(6, "Goal 6", 6, true, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal7 = new Goal(7, "Goal 7", 7, false, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+        Goal goal8 = new Goal(8, "Goal 8", 8, false, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+
+        GoalEntity goalEntity1 = GoalEntity.fromGoal(goal1);
+        GoalEntity goalEntity2 = GoalEntity.fromGoal(goal2);
+        GoalEntity goalEntity3 = GoalEntity.fromGoal(goal3);
+        GoalEntity goalEntity4 = GoalEntity.fromGoal(goal4);
+        GoalEntity goalEntity5 = GoalEntity.fromGoal(goal5);
+        GoalEntity goalEntity6 = GoalEntity.fromGoal(goal6);
+        GoalEntity goalEntity7 = GoalEntity.fromGoal(goal7);
+        GoalEntity goalEntity8 = GoalEntity.fromGoal(goal8);
+
+        goalsDao.insert(goalEntity1);
+        goalsDao.insert(goalEntity2);
+        goalsDao.insert(goalEntity3);
+        goalsDao.insert(goalEntity4);
+        goalsDao.insert(goalEntity5);
+        goalsDao.insert(goalEntity6);
+        goalsDao.insert(goalEntity7);
+        goalsDao.insert(goalEntity8);
+
+        //Sort by completion -> contextId-> sort_order , if Completed: sort by dateCompleted
+        LiveData<List<GoalEntity>> sortedGoalsLiveData = goalsDao.sortByContextAsLiveData();
+
+        // Verify the results
+        sortedGoalsLiveData.observeForever(sortedGoals -> {
+            assertNotNull(sortedGoals);
+            assertEquals(8, sortedGoals.size());
+            assertEquals(goalEntity8.id, sortedGoals.get(0).id); //Active goal, context 1
+            assertEquals(goalEntity7.id, sortedGoals.get(1).id); //Active goal, context 2
+            assertEquals(goalEntity4.id, sortedGoals.get(2).id); //Active goal, context 3
+            assertEquals(goalEntity1.id, sortedGoals.get(3).id); //Active goal, context 4
+            assertEquals(goalEntity2.id, sortedGoals.get(4).id); //Completed goal -> sortOrder 2
+            assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal -> sortOrder 3
+            assertEquals(goalEntity5.id, sortedGoals.get(6).id); //Completed goal -> sortOrder 5
+            assertEquals(goalEntity6.id, sortedGoals.get(7).id); //Completed goal -> sortOrder 6
+        });
     }
 }

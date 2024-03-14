@@ -151,56 +151,56 @@ public class GoalTest {
         // When not goal is not completed, TODAY view, goal made TODAY
         Goal goal = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(goal.getIsDisplayed());
 
         // When not goal is not completed, TODAY view, goal made yesterday
         goal = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(yesterdayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(goal.getIsDisplayed());
 
         // When not goal is not completed, TODAY view, goal made TOMORROW
         Goal goal1 = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(tommorowGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal1.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal1.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(goal1.getIsDisplayed());
 
         // When not goal is not completed, TODAY view, goal is PENDING
         Goal goal2 = new Goal(0, "test Goal", 0, false, null, true, null, isPending, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal2.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal2.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(goal2.getIsDisplayed());
 
         // When not goal is not completed, TOMORROW view, goal made TOMORROW
         Goal goal3 = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(tommorowGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW);
+        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW, null);
         assertTrue(goal3.getIsDisplayed());
 
         // When not goal is not completed, TOMORROW view, goal made TODAY
         goal3 = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW);
+        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW, null);
         assertFalse(goal3.getIsDisplayed());
 
         // When not goal is not completed, TOMORROW view, goal made yesterday
         goal3 = new Goal(0, "test Goal", 0, false, null, true, new MockDateProvider(yesterdayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW);
+        goal3.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW, null);
         assertFalse(goal3.getIsDisplayed());
 
         // Today list: Same day goal is crossed off
         Goal goal4 = new Goal(0, "test Goal", 0, true, dateCompleted, true, new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal4.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal4.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(goal4.getIsDisplayed());
 
         // Today list: Day after goal is crossed off
         currDate.add(Calendar.DATE, 1);
         Goal goal5 = new Goal(0, "test Goal", 0, true, dateCompleted, true, new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal5.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal5.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(goal5.getIsDisplayed());
     }
 
@@ -228,12 +228,12 @@ public class GoalTest {
                 true, new MockDateProvider(goalDate).getCurrentViewDate(ViewOptions.TODAY),
                 false, GoalContext.getGoalContextById(1),
                 Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(goal.getIsDisplayed());
 
         // Goal should not be displayed anymore at 2:01 AM
         currDate.setTime(sdf.parse("Feb 17 02:01:00 AM 2024"));
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(goal.getIsDisplayed());
 
         // Goal is marked as complete at 11:00 PM on 2/17
@@ -242,12 +242,12 @@ public class GoalTest {
 
         // Goal should still be displayed at 1:30 AM on 2/18
         currDate.setTime(sdf.parse("Feb 18 01:30:00 AM 2024"));
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(goal.getIsDisplayed());
 
         // Goal should not be displayed anymore at 2:01 AM on 2/18
         currDate.setTime(sdf.parse("Feb 18 02:01:00 AM 2024"));
-        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(goal.getIsDisplayed());
     }
 
@@ -265,23 +265,49 @@ public class GoalTest {
         var recurInstance = goalFactory.makeRecurringInstance("Goal 1", new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), 1, Goal.RecurrencePattern.DAILY, null);
 
         // Recurring template should only be shown in recurring view
-        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.RECURRING), ViewOptions.RECURRING);
+        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.RECURRING), ViewOptions.RECURRING, null);
         assertTrue(recurTemplate.getIsDisplayed());
-        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.PENDING), ViewOptions.PENDING);
+        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.PENDING), ViewOptions.PENDING, null);
         assertFalse(recurTemplate.getIsDisplayed());
-        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertFalse(recurTemplate.getIsDisplayed());
-        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW);
+        recurTemplate.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TOMORROW), ViewOptions.TOMORROW, null);
         assertFalse(recurTemplate.getIsDisplayed());
 
         // Recurring instance should initially be shown on the today view
-        recurInstance.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        recurInstance.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(recurInstance.getIsDisplayed());
 
         // Recurring instance should still be shown the next day
         currDate.setTime(sdf.parse("Mar 2 09:00:00 AM 2024"));
-        recurInstance.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY);
+        recurInstance.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
         assertTrue(recurInstance.getIsDisplayed());
+    }
+
+    @Test
+    public void updateIsDisplayedFocusMode() {
+        Calendar currDate = Calendar.getInstance();
+        Calendar todayGoalDate = Calendar.getInstance();
+        GoalContext goalContext = GoalContext.getGoalContextById(1);
+
+        // When not goal is not completed, TODAY view, goal made TODAY
+        Goal goal = new Goal(0, "test Goal", 0, false, null, true,
+                new MockDateProvider(todayGoalDate).getCurrentViewDate(ViewOptions.TODAY), false, goalContext,
+                Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
+
+        // When not in focus mode, goal should be displayed
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, null);
+        assertTrue(goal.getIsDisplayed());
+
+        // When in focus mode for the goal's context, goal should be displayed
+        goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, goalContext);
+        assertTrue(goal.getIsDisplayed());
+
+        // When in focus mode for another context, goal should not be displayed
+        for (int i = 2; i <= 4; i++) {
+            goal.updateIsDisplayed(new MockDateProvider(currDate).getCurrentViewDate(ViewOptions.TODAY), ViewOptions.TODAY, GoalContext.getGoalContextById(i));
+            assertFalse(goal.getIsDisplayed());
+        }
     }
 
     @Test

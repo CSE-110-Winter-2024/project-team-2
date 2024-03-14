@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +23,18 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.GoalListItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.Goal.RecurType;
+import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 /**
  * This class maintains the list of goals
  */
 public class GoalListAdapter extends ArrayAdapter<Goal> {
+    FragmentActivity activity;
     Consumer<Integer> onClick;
     MainViewModel activityModel;
 
-    public GoalListAdapter(Context context, List<Goal> goals, Consumer<Integer> onClick, MainViewModel activityModel) {
+    public GoalListAdapter(FragmentActivity activity, List<Goal> goals, Consumer<Integer> onClick, MainViewModel activityModel) {
        /*
         * This sets a bunch of stuff internally, which we can access
         * with getContext() and getItem() for example.
@@ -39,7 +42,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         * Also note that ArrayAdapter NEEDS a mutable List (ArrayList),
         * or it will crash!
         */
-        super(context, 0, new ArrayList<>(goals));
+        super(activity, 0, new ArrayList<>(goals));
+        this.activity = activity;
         this.onClick = onClick;
         this.activityModel = activityModel;
     }
@@ -80,28 +84,34 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Bind the goal text view to the callback.
         binding.goalTextView.setOnClickListener(v -> {
-                // For US12: if (!goal.getIsPending()) {
-                var id = goal.getId();
+            // For pending goals, don't do anything on single tap
+            if (goal.getIsPending()) {
+                return;
+            }
 
-                if (ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)) {
-                    // Show a dialog box with the message
-                    Toast.makeText(getContext(), "This goal is still active for Today. Mark it finished in the Today view.", Toast.LENGTH_LONG).show();
-                    return;
-                }
+            var id = goal.getId();
 
-                onClick.accept(id);
+            if (ViewOptions.TOMORROW == activityModel.getView().getValue() && activityModel.hasActivePrevGoal(goal)) {
+                // Show a dialog box with the message
+                Toast.makeText(getContext(), "This goal is still active for Today. Mark it finished in the Today view.", Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                if(goal.getRecurType() != Goal.RecurType.RECURRING_TEMPLATE) {
-                    TextView textView = (TextView) v;
-                    int flags = textView.getPaintFlags();
-                    // Toggle the strike through
-                    if ((flags & Paint.STRIKE_THRU_TEXT_FLAG) == Paint.STRIKE_THRU_TEXT_FLAG) {
-                        textView.setPaintFlags(flags & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    } else {
-                        textView.setPaintFlags(flags | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }
-                }
+            onClick.accept(id);
+        });
 
+        binding.goalTextView.setOnLongClickListener(v -> {
+            // Only display long-press options for pending goals and recurring TEMPLATES (NOT recurring instances)
+            boolean showOptionsMenu = goal.getIsPending() || goal.getRecurType() == RecurType.RECURRING_TEMPLATE;
+            if (!showOptionsMenu) {
+                return false;
+            }
+
+            activityModel.setLongPressGoalId(goal.getId());
+            var goalOptionsFragment = GoalOptionsFragment.newInstance();
+            goalOptionsFragment.show(activity.getSupportFragmentManager(), "GoalOptionsFragment");
+
+            return true;
         });
 
         // Set the text and background color of the goal context circle based on the context
@@ -110,8 +120,14 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         Button goalContextButton = binding.goalContextButton;
         goalContextButton.setText(Character.toString(goalContext.getFirstLetterOfName()));
 
-        // Always set goal context color to full brightness for list display
-        int goalContextColor = Color.parseColor(goalContext.getColor());
+        // Check if goal is complete and set goal context color accordingly to full brightness for list display
+        int goalContextColor;
+        if (goal.getIsComplete()){
+            goalContextColor = Color.parseColor(GoalContext.GRAY);
+        } else{
+            goalContextColor = Color.parseColor(goalContext.getColor());
+        }
+
         goalContextButton.getBackground().setColorFilter(goalContextColor, PorterDuff.Mode.MULTIPLY );
 
         return binding.getRoot();
@@ -128,6 +144,14 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         return true;
     }
 
+    public void addAll(List<Goal> goals) {
+        // Add all goals to the adapter
+        for (Goal goal : goals) {
+            add(goal);
+        }
+        // Notify the adapter that the data set has changed
+        notifyDataSetChanged();
+    }
     @Override
     public long getItemId(int position) {
         var goal = getItem(position);

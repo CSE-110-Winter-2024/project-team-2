@@ -64,6 +64,7 @@ public class AddGoalDialogFragment extends DialogFragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+        activityModel.setSelectedGoalContextId(null);
     }
 
     /**
@@ -96,12 +97,10 @@ public class AddGoalDialogFragment extends DialogFragment {
 
             view.setDateButton.setOnClickListener(v -> {
                 Calendar datePicked = Calendar.getInstance();
-                datePicked.set(Calendar.MONTH, view.datePicker.getMonth());
-                datePicked.set(Calendar.YEAR, view.datePicker.getYear());
-                datePicked.set(Calendar.DAY_OF_MONTH, view.datePicker.getDayOfMonth());
                 // Set date past 2 AM to ensure it doesn't get counted as previous day
                 datePicked.set(Calendar.HOUR, 5);
-                if (new DateComparer().compareDates(datePicked, activityModel.getDate().getValue()) >= 0) {
+                datePicked.set(this.view.datePicker.getYear(), this.view.datePicker.getMonth(), this.view.datePicker.getDayOfMonth());
+                if (new DateComparer().compareDates(datePicked, new MockDateProvider(activityModel.getDate().getValue()).getCurrentViewDate(ViewOptions.TODAY)) >= 0) {
                     toggleDatePickerVisibility();
                     updateStartDateText(datePicked);
                 }
