@@ -107,6 +107,17 @@ public interface GoalsDao {
     @Query("UPDATE goals SET templateId = :templateId WHERE id = :id")
     void setTemplateId(int id, Integer templateId);
 
-    @Query("SELECT * FROM goals WHERE isDisplayed = True ORDER BY isComplete, CASE WHEN isComplete = false THEN contextId ELSE NULL END, sort_order ")
+    @Query("SELECT * FROM goals " +
+            // Only select displayed goals
+            "WHERE isDisplayed = True ORDER BY " +
+
+            // Completed goals should always be at the end
+            "isComplete, " +
+
+            // Order by context ID, but only for goals that are not completed and not recurring templates
+            "(CASE WHEN isComplete = false AND recurType != 'RECURRING_TEMPLATE' THEN contextId ELSE NULL END), " +
+
+            // Order recurring templates from earliest to latest start date; order others by sort order
+            "(CASE WHEN recurType = 'RECURRING_TEMPLATE' THEN goalDate ELSE sort_order END)")
     LiveData<List<GoalEntity>> sortByContextAsLiveData();
 }
