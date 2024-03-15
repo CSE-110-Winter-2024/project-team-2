@@ -27,6 +27,8 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalContext;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
+import edu.ucsd.cse110.successorator.lib.util.date.MockDateProvider;
+import edu.ucsd.cse110.successorator.lib.util.views.ViewOptions;
 
 
 /**
@@ -128,7 +130,7 @@ public class RoomGoalRepositoryTest {
 
     @Test
     public void sortByContextAsLiveData() {
-        Calendar currDate = Calendar.getInstance();
+        Calendar currDate = new MockDateProvider(Calendar.getInstance()).getCurrentViewDate(ViewOptions.TODAY);
 
         //Goals with different attributes in different creation orders to fully test sorting method
         Goal goal1 = new Goal(1, "Goal 1", 1, false, null, true, currDate, false, GoalContext.getGoalContextById(4), Goal.RecurType.NOT_RECURRING, Goal.RecurrencePattern.NONE, null, null, null);
@@ -173,6 +175,53 @@ public class RoomGoalRepositoryTest {
             assertEquals(goalEntity3.id, sortedGoals.get(5).id); //Completed goal -> sortOrder 3
             assertEquals(goalEntity5.id, sortedGoals.get(6).id); //Completed goal -> sortOrder 5
             assertEquals(goalEntity6.id, sortedGoals.get(7).id); //Completed goal -> sortOrder 6
+        });
+    }
+
+    @Test
+    public void sortByContextAsLiveDataRecurring() {
+        Calendar currDate = new MockDateProvider(Calendar.getInstance()).getCurrentViewDate(ViewOptions.TODAY);
+
+        // Goal 1 is 2 days in the future
+        currDate = (Calendar) currDate.clone();
+        currDate.add(Calendar.DATE, 2);
+        long goal1Id = goalsDao.insert(GoalEntity.fromGoal(
+                new Goal(null, "Goal 1", 100, false, null, true, currDate, false, GoalContext.getGoalContextById(2), Goal.RecurType.RECURRING_TEMPLATE, Goal.RecurrencePattern.DAILY, null, null, null)
+        ));
+
+        // Goal 2 is 1 day in the future
+        currDate = (Calendar) currDate.clone();
+        currDate.add(Calendar.DATE, -1);
+        long goal2Id = goalsDao.insert(GoalEntity.fromGoal(
+            new Goal(null, "Goal 2", 1, false, null, true, currDate, false, GoalContext.getGoalContextById(4), Goal.RecurType.RECURRING_TEMPLATE, Goal.RecurrencePattern.DAILY, null, null, null)
+        ));
+
+        // Goal 3 is today
+        currDate = (Calendar) currDate.clone();
+        currDate.add(Calendar.DATE, -1);
+        long goal3Id = goalsDao.insert(GoalEntity.fromGoal(
+                new Goal(null, "Goal 3", 150, false, null, true, currDate, false, GoalContext.getGoalContextById(3), Goal.RecurType.RECURRING_TEMPLATE, Goal.RecurrencePattern.DAILY, null, null, null)
+        ));
+
+        // Goal 4 is 3 days in the future
+        currDate = (Calendar) currDate.clone();
+        currDate.add(Calendar.DATE, 3);
+        long goal4Id = goalsDao.insert(GoalEntity.fromGoal(
+                new Goal(null, "Goal 4", 2, false, null, true, currDate, false, GoalContext.getGoalContextById(1), Goal.RecurType.RECURRING_TEMPLATE, Goal.RecurrencePattern.DAILY, null, null, null)
+        ));
+
+        // For recurring templates, sort by goalDate, regardless of sort_order
+        LiveData<List<GoalEntity>> sortedGoalsLiveData = goalsDao.sortByContextAsLiveData();
+
+        // Verify the results
+        sortedGoalsLiveData.observeForever(sortedGoals -> {
+            assertNotNull(sortedGoals);
+            assertEquals(4, sortedGoals.size());
+
+            assertEquals((Integer) (int) goal3Id, sortedGoals.get(0).id); // Goal 3 is today
+            assertEquals((Integer) (int) goal2Id, sortedGoals.get(1).id); // Goal 2 is 1 day in the future
+            assertEquals((Integer) (int) goal1Id, sortedGoals.get(2).id); // Goal 1 is 2 days in the future
+            assertEquals((Integer) (int) goal4Id, sortedGoals.get(3).id); // Goal 4 is 3 days in the future
         });
     }
 }
