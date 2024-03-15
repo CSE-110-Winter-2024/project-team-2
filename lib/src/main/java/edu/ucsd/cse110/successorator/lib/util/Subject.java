@@ -11,7 +11,6 @@ public interface Subject<T> {
     @Nullable
     T getValue();
 
-
     /**
      * Adds an observer to the subject. The observer will be notified immediately of the subject's
      * current value (will be null if the subject has no value yet).

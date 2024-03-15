@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "edu.ucsd.cse110.successorator"
+    namespace = "edu.ucsd.cse110.successorator.app"
     compileSdk = 34
 
     defaultConfig {
@@ -28,6 +28,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     compileOptions {
@@ -37,11 +38,18 @@ android {
 }
 
 dependencies {
-    project(":lib")
+    implementation("androidx.room:room-common:2.6.1")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    implementation(project(":lib"))
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">Successorator</string>
     <string name="placeholder">Placeholder</string>
-    <string name="hello_world">Hello, World!</string>
+    <string name="noGoalsText">No goals for the Day.  Click the + at the upper right to enter your Most Important Thing.</string>
+    <string name="add_goal">Add Goal</string>
+    <string name="enter_your_goal">Enter your goal</string>
+    <string name="date_mock_button_description">Advance date forward</string>
+    <string name="change_view">Change View</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="pending">Pending</string>
+    <string name="recurring">Recurring</string>
+    <string name="one_time_text">One-Time</string>
+    <string name="daily_text">Daily</string>
+    <string name="set_the_date">Set the date</string>
+    <string name="starting">Starting:</string>
+
+    <string name="move_to_today">Move to Today</string>
+    <string name="move_to_tomorrow">Move to Tomorrow</string>
+    <string name="finish">Finish</string>
+    <string name="delete">Delete</string>
+    <string name="home">Home</string>
+    <string name="work">Work</string>
+    <string name="school">School</string>
+    <string name="errands">Errands</string>
+    <string name="cancel">Cancel</string>
 </resources>
